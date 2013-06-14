@@ -1,0 +1,29 @@
+
+*************UM UL experiment**************
+NumberofUeNodes = 1
+NumberOfEnodeBs = 1
+Distance = 100
+Interval = 2000
+Packet size = 900
+Rate = 500kb/s
+Number of Packets = 0
+S1uLink 1Gb/s 0.01
+p2pLink 1Gb/s 0.01
+CellId         Imsi           PdcpUL(ms)     PdcpDL(ms)     RlcUl(ms)      RlcDl(ms)      ULPDCPTxs      ULRLCTxs       UlPathloss     DlPathloss     OnOffSent      packetSinkReceived  OnOffSentTotal packetSinkReceivedTotal
+1              1              12.3295        0              4.71428        0              1354           1353           inf            inf            1354           1351           1218600        1215900        
+***Flow ID: 1 Src Addr 7.0.0.2 Dst Addr 1.0.0.2
+Tx Packets 1354
+Rx Packets 1351
+Lost packets 0
+Lost ratio 0
+Average delay received +32.06356601143863037748
+Mean received bitrate +503.15590535243366044964
+Mean transmitted bitrate +503.15575926638441240277
+Total Error UlRx 0
+Total Error DlRx 0
+Total UlTx HARQ 0
+Total DlTx HARQ 0
+Phy UlRx = 3101076
+Phy DlRx = 0
+Phy UlTx = 3101076
+Phy DlTx = 0

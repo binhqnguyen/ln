@@ -1,0 +1,89 @@
+#======== d=1000,v=1 ========
+set title "Distance 1000m, 1kmph: TCP throughput vs link capacity Uplink 100RBs PfffScheduler"
+set key inside bottom right box
+set xlabel "Time (s)"
+set xtic 10
+set ylabel "TCP throughput (kbps)"
+#set y2label "Radio maximum capacity (kbps) "
+set output "Tcp-link-trace-1000-1.svg"
+#set log y
+#set autoscale y
+#set autoscale y2
+#set yrange [0:30000]
+#set y2range [0:30000]
+#set y2tics nomirror tc lt  2
+#set y2tic 10
+
+
+set terminal svg
+
+plot "tcp-put-ul-send-100-1-1000m.txt" using ($1/1000):3 title "TCP Throughput" with line ,\
+"udp-put-ul-send-100-1-1000m.txt" using ($1/1000):3 title "Radio maximum capacity" with line
+
+#======== d=1000,v=2 ========
+set title "Distance 1000m, 2kmph: TCP throughput vs link capacity Uplink 100RBs PfffScheduler"
+set key inside bottom right box
+set xlabel "Time (s)"
+set xtic 10
+set ylabel "TCP throughput (kbps)"
+#set y2label "Radio maximum capacity (kbps) "
+set output "Tcp-link-trace-1000-2.svg"
+#set log y
+#set autoscale y
+#set autoscale y2
+#set yrange [0:30000]
+#set y2range [0:30000]
+#set y2tics nomirror tc lt  2
+#set y2tic 10
+
+
+set terminal svg
+
+plot "tcp-put-ul-send-100-2-1000m.txt" using ($1/1000):3 title "TCP Throughput" with line ,\
+"udp-put-ul-send-100-2-1000m.txt" using ($1/1000):3 title "Radio maximum capacity" with line
+
+#======== d=1000,v=3 ========
+set title "Distance 1000m, 3kmph: TCP throughput vs link capacity Uplink 100RBs PfffScheduler"
+set key inside bottom right box
+set xlabel "Time (s)"
+set xtic 10
+set ylabel "TCP throughput (kbps)"
+set y2label "TCP Uplink Delay(ms)"
+set output "Tcp-link-trace-1000-3.svg"
+#set log y
+#set autoscale y
+#set autoscale y2
+#set yrange [0:30000]
+#set y2range [0:30000]
+set y2tics nomirror tc lt 3
+#set y2tic 10
+
+
+set terminal svg
+
+plot "tcp-put-ul-send-100-3-1000m.txt" using ($1/1000):3 title "TCP Throughput" with line ,\
+"udp-put-ul-send-100-3-1000m.txt" using ($1/1000):3 title "Radio maximum capacity" with line,\
+"tcp-put-ul-send-100-3-1000m.txt" using ($1/1000):4 title "TCP UL Delay" axis x2y2 with line
+
+
+#======== d=1000,v=4 ========
+set title "Distance 1000m, 4kmph: TCP throughput vs link capacity Uplink 100RBs PfffScheduler"
+set key inside bottom right box
+set xlabel "Time (s)"
+set xtic 10
+set ylabel "TCP throughput (kbps)"
+#set y2label "Radio maximum capacity (kbps) "
+set output "Tcp-link-trace-1000-4.svg"
+#set log y
+#set autoscale y
+#set autoscale y2
+#set yrange [0:30000]
+#set y2range [0:30000]
+#set y2tics nomirror tc lt  2
+#set y2tic 10
+
+
+set terminal svg
+
+plot "tcp-put-ul-send-100-4-1000m.txt" using ($1/1000):3 title "TCP Throughput" with line ,\
+"udp-put-ul-send-100-4-1000m.txt" using ($1/1000):3 title "Radio maximum capacity" with line

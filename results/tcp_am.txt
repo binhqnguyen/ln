@@ -1,0 +1,39 @@
+Waf: Entering directory `/Users/binh/Documents/workspace/lena/build'
+Waf: Leaving directory `/Users/binh/Documents/workspace/lena/build'
+'build' finished successfully (1.669s)
+*************UL experiment**************
+NumberofUeNodes = 1
+NumberOfEnodeBs = 1
+Distance = 100
+Interval = 2000
+Packet size = 900
+Rate = 500kb/s
+Number of Packets = 0
+S1uLink 1Gb/s 0.01
+p2pLink 1Gb/s 0.01
+CellId         Imsi           PdcpUL(ms)     PdcpDL(ms)     RlcUl(ms)      RlcDl(ms)      ULPDCPTxs      ULRLCTxs       UlPathloss     DlPathloss     OnOffSent      packetSinkReceived  OnOffSentTotal packetSinkReceivedTotal
+1              1              8.77776        3.55078        1.63365        0.906379       2105           1024           inf            inf            1354           2065           1218600        933300         
+***Flow ID: 1 Src Addr 7.0.0.2 Dst Addr 1.0.0.2
+Tx Packets 2105
+Rx Packets 2067
+Lost packets 0
+Lost ratio 0
+Average delay received +28.14555485498032989037
+Mean received bitrate +531.11090117896358951279
+Mean transmitted bitrate +449.09114669202736519728
+***Flow ID: 2 Src Addr 1.0.0.2 Dst Addr 7.0.0.2
+Tx Packets 1034
+Rx Packets 1034
+Lost packets 0
+Lost ratio 0
+Average delay received +23.10178450837577380226
+Mean received bitrate +21.11774885455741994189
+Mean transmitted bitrate +21.11828036160060353564
+Total Error UlRx 0
+Total Error DlRx 0
+Total UlTx HARQ 0
+Total DlTx HARQ 0
+Phy UlRx = 4098096
+Phy DlRx = 14881470
+Phy UlTx = 6701808
+Phy DlTx = 14881470

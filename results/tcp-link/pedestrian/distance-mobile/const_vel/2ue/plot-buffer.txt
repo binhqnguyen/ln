@@ -1,0 +1,41 @@
+#======== d=700,v=3 ========
+set title "Distance 700m, 3kmph: UDP buffer 100RBs PfffScheduler"
+set key inside bottom right box
+set xlabel "Time (s)"
+set xtic 10
+set ylabel "RLC Buffer (bytes)"
+#set y2label "Radio maximum capacity (kbps) "
+set output "udp-700m-buffer.svg"
+#set log y
+#set autoscale y
+#set autoscale y2
+#set yrange [0:30000]
+#set y2range [0:30000]
+set ytics nomirror tc lt 0
+#set y2tic 10
+
+
+set terminal svg
+
+plot "udp-700m-buffer.txt" using ($2/1000):4 title "RCL Buffer Tx Size" pt 0
+
+#======== d=700,v=3 ========
+set title "Distance 700m, 3kmph: UE's RLC Tx buffer"
+set key inside top right box
+set xlabel "Time (s)"
+set xtic 10
+set ylabel "RLC Buffer (bytes)"
+#set y2label "Radio maximum capacity (kbps) "
+set output "tcp-700m-buffer.svg"
+#set log y
+#set autoscale y
+#set autoscale y2
+#set yrange [0:30000]
+#set y2range [0:30000]
+set ytics tc lt 0
+#set y2tic 10
+
+
+set terminal svg
+
+plot "tcp-700m-buffer.txt" using ($2/1000):4 title "RCL Buffer Tx Size" pt 0

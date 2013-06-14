@@ -1,0 +1,146 @@
+##======CONST=======
+DISTANCE="700m"
+VEL="3kmph"
+CONST=200
+
+#======== d=700,v=3 ========
+reset
+set title "(Compare) Delays: Distance ".DISTANCE.", ".VEL
+set key inside bottom right box
+set xlabel "Time (s)"
+#set xtic 10
+#set ylabel "Delay (ms)"
+set yrange [0:2000]
+set xrange [0:100]
+set ylabel "Throughput (kbps)"
+set output "tcp-delay-compare.svg"
+#set y2tics nomirror tc lt 3
+
+cnt=0
+avg=0
+filter(x)=(x=(x<cnt)?(1/0):x,cnt=x)
+filter_y(x)=(x>20000 || x <0)?(1/0):x
+set terminal svg
+
+
+plot "udp-put.txt" using (filter($1)/1000):3 title "Radio bandwidth" with lines,\
+"tcp-put.txt" using (filter($1)/1000):(filter_y($3)) title "TCP throughput (Rx rate)" with lines,\
+"tcp-put.txt" using (filter($1)/1000):(filter_y($11)) title "TCP Tx rate" with lines,\
+"tcp_lost.txt" using ($1/1000):(3000) title "TCP-lost",\
+"tcp_buffer_discarded.txt" using ($1/1000):(10) title "buffer discarded" 
+
+#======== d=700,v=3 ========	
+#===========================================
+#===========================================
+reset
+set title "Congestion window ".DISTANCE.", ".VEL.": Uplink UDP"
+set key inside top right box
+set xlabel "Time (s)"
+set xtic 10
+set ylabel "value (bytes)"
+#set y2label "delay (ms)"
+set output "cwnd.svg"
+#set y2tics nomirror tc lt 2
+#set y2range [0:150000]
+#set yrange [0:1200]
+set xrange [0:100]
+#set y2tics nomirror tc lt 4
+
+set terminal svg
+
+
+cnt=0
+avg=0
+filter(x)=(x=(x<cnt)?(1/0):x,cnt=x)
+IGNORE_ABOVE=100
+filter_h(x)=(x<=IGNORE_ABOVE)?(x):(1/0)
+
+filter_x(x)=(x<=200000)?(x):(1/0)
+
+a=0
+c=0
+cum_avg(x)=(a=a+x,c=c+1,a/c)
+
+plot "cwnd.txt" using ($1/1000):5 title "cwnd" with lines,\
+"tcp_lost.txt" using ($1/1000):(0) title "TCP lost",\
+"harq.txt" using ($6/1000):(100) title "HARQ retransmittion"
+#"tcp-queue.txt" using ($1/1000):6 title "Discrete queuing delay" pt 0 lc 4 axis x2y2
+#"tcp-queue-averaged.txt" using (filter_h($1/1000)):2 title "Average queuing delay" with lines axis x2y2,\
+#"udp-put.txt" using ($1/1000):($3*1024*0.00471429) title "BDP" pt 0,\
+#"udp-put.txt" using (filter($1/1000)):3 title "Udp put" pt 0 lc 1 axis x2y2a
+
+
+#======== d=700,v=3 ========	
+#===========================================
+#===========================================
+reset
+set title "Distance ".DISTANCE.", ".VEL.": Uplink UDP"
+set key inside top right box
+set xlabel "Time (s)"
+#set xtic 10
+set ylabel "Delay (ms)"
+set y2label "Queue size (bytes)"
+set output "udp.svg"
+set y2tics nomirror tc lt 2
+#set y2range [0:150000]
+#set yrange [0:1200]
+
+
+
+set terminal svg
+
+IGNORE_BELOW=0
+filter(x)=(x>IGNORE_BELOW)?(x):(1/0)
+
+IGNORE_ABOVE=100
+filter_h(x)=(x<=IGNORE_ABOVE)?(x):(1/0)
+
+a=0
+c=0
+cum_avg(x)=(a=a+x,c=c+1,a/c)
+
+plot "udp-queue.txt" using (filter_h($1/1000)):6 title "Queuing delay" with lines,\
+"udp-queue.txt" using (filter_h($1/1000)):4 title "Queue size" with lines axis x2y2
+#"udp-put.txt" using (filter_h($1/1000)):3 title "Udp put" pt 0 lc 1 axis x2y2 
+#==========================================
+#==========================================
+
+#======== d=700,v=3 ========	
+#===========================================
+#===========================================
+reset
+set title "Distance ".DISTANCE.", ".VEL.": Delays, queue size, discrete queuing delay"
+set key inside top right box
+set xlabel "Time (s)"
+#set xtic 10
+set ylabel "Delay (ms)"
+set y2label "Queue size (bytes)"
+set output "tcp-averaged.svg"
+set y2tics nomirror tc lt 3
+set y2range [0:100000]
+#set yrange [0:1200]
+
+
+
+set terminal svg
+
+IGNORE_BELOW=0
+filter(x)=(x>IGNORE_BELOW)?(x):(1/0)
+
+IGNORE_ABOVE=100
+filter_h(x)=(x<=IGNORE_ABOVE)?(x):(1/0)
+
+a=0
+c=0
+cum_avg(x)=(a=a+x,c=c+1,a/c)
+
+plot "tcp-queue-averaged.txt" using (filter_h($1/1000)):2 title "Average queuing delay" with lines,\
+"tcp-queue-averaged.txt" using (filter_h($1/1000)):3 title "Average queue size" axis x2y2 with lines,\
+"tcp_lost.txt" using ($1/1000):(400) title "TCP-lost",\
+"tcp_buffer_discarded.txt" using ($1/1000):(500) title "buffer discarded",\
+"tcp-queue.txt" using (filter_h($1/1000)):4 title "Queue size" pt 0 lc 6 axis x2y2
+#"tcp-queue.txt" using (filter_h($1/1000)):6 title "Discrete queuing delay" pt 0 lc 4,\
+#==========================================
+#==========================================
+
+

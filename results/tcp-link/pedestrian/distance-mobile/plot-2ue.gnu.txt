@@ -1,0 +1,142 @@
+#=======================================================
+#======== d=700,2 ues ========
+set title "Distance 700m, 3kmph, 2ues: TCP throughput vs link capacity Uplink 100RBs PfffScheduler"
+set key inside bottom right box
+set xlabel "Time (s)"
+set xtic 10
+set ylabel "TCP throughput (Kbps)"
+set output "Tcp-link-trace-700-3-2ue.svg"
+#set log y
+#set autoscale y
+#set autoscale y2
+set yrange [0:3000]
+set y2range [0:450]
+#set y2tic 10
+
+
+set terminal svg
+
+plot "tcp-put-ul-send-100-3-700m-ue1.txt" using ($1/1000):3 title "TCP Throughput 1" with line ,\
+"tcp-put-ul-send-100-3-700m-ue2.txt" using ($1/1000):3 title "TCP Throughput 2" with line ,\
+"udp-put-ul-send-100-3-700m-ue1.txt" using ($1/1000):3 title "Radio maximum capacity 1" with line,\
+"udp-put-ul-send-100-3-700m-ue2.txt" using ($1/1000):3 title "Radio maximum capacity 2" with line
+
+
+#======== d=700,2 ues, ue1 ========
+set title "Distance 700m, 3kmph, 2ues: TCP throughput vs link capacity Uplink 100RBs PfffScheduler UE #1"
+set key inside bottom right box
+set xlabel "Time (s)"
+set xtic 10
+set ylabel "TCP throughput (Kbps)"
+set y2label "TCP UL Delay (ms)"
+set output "Tcp-link-trace-700-3-2ue-1.svg"
+#set log y
+#set autoscale y
+#set autoscale y2
+set yrange [0:3000]
+set y2range [0:450]
+set y2tics nomirror tc lt  3
+#set y2tic 10
+
+
+set terminal svg
+
+plot "tcp-put-ul-send-100-3-700m-ue1.txt" using ($1/1000):3 title "TCP Throughput" with line ,\
+"udp-put-ul-send-100-3-700m-ue1.txt" using ($1/1000):3 title "Radio maximum capacity" with line,\
+"tcp-put-ul-send-100-3-700m-ue1.txt" using ($1/1000):4 title "TCP UL Delay" axis x2y2 with line
+
+
+#======== d=700,2 ues, ue2 ========
+set title "Distance 700m, 3kmph, 2ues: TCP throughput vs link capacity Uplink 100RBs PfffScheduler UE #2"
+set key inside bottom right box
+set xlabel "Time (s)"
+set xtic 10
+set ylabel "TCP throughput (Kbps)"
+set y2label "TCP UL Delay (ms)"
+set output "Tcp-link-trace-700-3-2ue-2.svg"
+#set log y
+#set autoscale y
+#set autoscale y2
+set yrange [0:3000]
+set y2range [0:450]
+set y2tics nomirror tc lt  3
+#set y2tic 10
+
+
+set terminal svg
+
+plot "tcp-put-ul-send-100-3-700m-ue2.txt" using ($1/1000):3 title "TCP Throughput" with line ,\
+"udp-put-ul-send-100-3-700m-ue2.txt" using ($1/1000):3 title "Radio maximum capacity" with line,\
+"tcp-put-ul-send-100-3-700m-ue2.txt" using ($1/1000):4 title "TCP UL Delay" axis x2y2 with line
+
+#=======================================================
+#======== d=700,2 ues ========
+set title "Distance 700m, 3kmph, 2ues: TCP throughput vs link capacity Uplink 100RBs PfffScheduler"
+set key inside bottom right box
+set xlabel "Time (s)"
+set xtic 10
+set ylabel "TCP throughput (Kbps)"
+set output "Tcp-link-trace-700-3-2ue-x1.svg"
+#set log y
+#set autoscale y
+#set autoscale y2
+set yrange [0:3000]
+set y2range [0:450]
+#set y2tic 10
+
+
+set terminal svg
+
+plot "tcp-put-ul-send-100-3-700m-ue1-x1.txt" using ($1/1000):3 title "TCP Throughput 1" with line ,\
+"tcp-put-ul-send-100-3-700m-ue2-x1.txt" using ($1/1000):3 title "TCP Throughput 2" with line ,\
+"udp-put-ul-send-100-3-700m-ue1-x1.txt" using ($1/1000):3 title "Radio maximum capacity 1" with line,\
+"udp-put-ul-send-100-3-700m-ue2-x1.txt" using ($1/1000):3 title "Radio maximum capacity 2" with line
+
+
+#======== d=700,2 ues, ue1 ========
+set title "Distance 700m, 3kmph, 2ues: TCP throughput vs link capacity Uplink 100RBs PfffScheduler UE #1"
+set key inside bottom right box
+set xlabel "Time (s)"
+set xtic 10
+set ylabel "TCP throughput (Kbps)"
+set y2label "TCP UL Delay (ms)"
+set output "Tcp-link-trace-700-3-2ue-1-x1.svg"
+#set log y
+#set autoscale y
+#set autoscale y2
+set yrange [0:3000]
+set y2range [0:450]
+set y2tics nomirror tc lt  3
+#set y2tic 10
+
+
+set terminal svg
+
+plot "tcp-put-ul-send-100-3-700m-ue1-x1.txt" using ($1/1000):3 title "TCP Throughput" with line ,\
+"udp-put-ul-send-100-3-700m-ue1-x1.txt" using ($1/1000):3 title "Radio maximum capacity" with line,\
+"tcp-put-ul-send-100-3-700m-ue1-x1.txt" using ($1/1000):4 title "TCP UL Delay" axis x2y2 with line
+
+
+#======== d=700,2 ues, ue2 ========
+set title "Distance 700m, 3kmph, 2ues: TCP throughput vs link capacity Uplink 100RBs PfffScheduler UE #2"
+set key inside bottom right box
+set xlabel "Time (s)"
+set xtic 10
+set ylabel "TCP throughput (Kbps)"
+set y2label "TCP UL Delay (ms)"
+set output "Tcp-link-trace-700-3-2ue-2-x1.svg"
+#set log y
+#set autoscale y
+#set autoscale y2
+set yrange [0:3000]
+set y2range [0:450]
+set y2tics nomirror tc lt  3
+#set y2tic 10
+
+
+set terminal svg
+
+plot "tcp-put-ul-send-100-3-700m-ue2-x1.txt" using ($1/1000):3 title "TCP Throughput" with line ,\
+"udp-put-ul-send-100-3-700m-ue2-x1.txt" using ($1/1000):3 title "Radio maximum capacity" with line,\
+"tcp-put-ul-send-100-3-700m-ue2-x1.txt" using ($1/1000):4 title "TCP UL Delay" axis x2y2 with line
+

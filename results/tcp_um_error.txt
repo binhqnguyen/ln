@@ -1,0 +1,52 @@
+Waf: Entering directory `/Users/binh/Documents/workspace/lena/build'
+Waf: Leaving directory `/Users/binh/Documents/workspace/lena/build'
+'build' finished successfully (1.637s)
+*Tx: UlTx resend frame at 629
+*Tx: UlTx resend frame at 630
+*Tx: UlTx resend frame at 1166
+*Tx: UlTx resend frame at 2038
+*Tx: UlTx resend frame at 3158
+*Tx: UlTx resend frame at 5511
+*Tx: UlTx resend frame at 5768
+*Tx: UlTx resend frame at 5888
+*Tx: UlTx resend frame at 6379
+*Tx: UlTx resend frame at 6908
+*Tx: UlTx resend frame at 7851
+*Tx: UlTx resend frame at 9739
+*Tx: UlTx resend frame at 13515
+*************UL experiment**************
+NumberofUeNodes = 1
+NumberOfEnodeBs = 1
+Distance = 100
+Interval = 2000
+Packet size = 900
+Rate = 500kb/s
+Number of Packets = 0
+S1uLink 1Gb/s 0.01
+p2pLink 1Gb/s 0.01
+CellId         Imsi           PdcpUL(ms)     PdcpDL(ms)     RlcUl(ms)      RlcDl(ms)      ULPDCPTxs      ULRLCTxs       UlPathloss     DlPathloss     OnOffSent      packetSinkReceived  OnOffSentTotal packetSinkReceivedTotal
+1              1              30.0397        3.06149        6.12938        3              33             53             inf            inf            1354           13             1218600        8576           
+***Flow ID: 1 Src Addr 7.0.0.2 Dst Addr 1.0.0.2
+Tx Packets 33
+Rx Packets 18
+Lost packets 14
+Lost ratio 0.4375
+Average delay received +50.00890888579497148413
+Mean received bitrate +11.08594020818936143161
+Mean transmitted bitrate +10.14413071190843936965
+***Flow ID: 2 Src Addr 1.0.0.2 Dst Addr 7.0.0.2
+Tx Packets 14
+Rx Packets 14
+Lost packets 0
+Lost ratio 0
+Average delay received +23.01152470877001617785
+Mean received bitrate +0.1274147542192578125
+Mean transmitted bitrate +0.12741458170465820312
+Total Error UlRx 6513
+Total Error DlRx 0
+Total UlTx HARQ 6513
+Total DlTx HARQ 0
+Phy UlRx = 26553
+Phy DlRx = 61530
+Phy UlTx = 26553
+Phy DlTx = 61530

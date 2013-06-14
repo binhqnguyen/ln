@@ -1,0 +1,44 @@
+#======== d=700,v=3 ========
+set title "Distance vs TCP performance, pedestrian, 3kmph, PfffMacscheduler"
+set key inside top right box
+set xlabel "Distance from eNodeB (m)"
+set xtic 100
+set ylabel "Mean throughput (kbps)"
+set y2label "Mean TCP uplink delay (ms)"
+set output "aggregate-3kmph.svg"
+#set log y
+#set autoscale y
+set autoscale y2
+#set yrange [0:30000]
+#set y2range [0:1000]
+set y2tics nomirror tc lt 3
+#set y2tic 10
+
+
+set terminal svg
+
+plot "aggregate-3kmph.txt" using 1:3 title "Mean Radio link capacity" with lines,\
+"aggregate-3kmph.txt" using 1:5 title "Mean TCP throughput" with lines,\
+"aggregate-3kmph.txt" using 1:7 title "TCP uplink delay" with lines axes x2y2
+
+#===========================
+reset
+set title "Aggregated link utilization, pedestrian, 3kmph, PfffMacscheduler"
+set key inside top right box
+set xlabel "Distance from eNodeB (m)"
+set xtic 100
+set ylabel "Mean TCP throughput/ Mean Radio link capacity"
+#set y2label "Mean TCP uplink delay (ms)"
+set output "aggregate-utilization-3kmph.svg"
+#set log y
+#set autoscale y
+#set autoscale y2
+#set yrange [0:30000]
+#set y2range [0:1000]
+#set y2tics nomirror tc lt 3
+#set y2tic 10
+
+
+set terminal svg
+
+plot "aggregate-3kmph.txt" using 1:12 title "link utilization" with lines
