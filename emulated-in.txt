@@ -1,6 +1,6 @@
 
 default ns3::DropTailQueue::Mode "QUEUE_MODE_PACKETS"
-default ns3::DropTailQueue::MaxPackets "105"
+default ns3::DropTailQueue::MaxPackets "50"
 default ns3::DropTailQueue::MaxBytes "999999"
 
 default ns3::TcpL4Protocol::SocketType "ns3::TcpTahoe"

@@ -1,8 +1,8 @@
 
 ##======CONST=======
 TCP="TcpTahoe"
-BUFF="105 pkts"
-BUFFSIZE=105
+BUFF="50 pkts"
+BUFFSIZE=50
 x1 = 0
 x2 = 100
 SEGSIZE=536
@@ -28,7 +28,7 @@ reset
 set title "Rate: ".TCP.", Buffer ".BUFF
 set key inside bottom right box
 set xlabel "Time (s)"
-#set xtic 10
+set xtic 10
 set xrange [x1:x2]
 set x2range [x1:x2]
 #set y2label "Congestion window (Bytes)"
@@ -42,8 +42,8 @@ set terminal svg
 
 
 plot "udp-put.txt" using 1:3 title "Radio bandwidth" with lines,\
-"tcp-put.txt" using 1:(filter($3)) title "TCP throughput (Rx rate)" with lines,\
-"tcp-put.txt" using 1:(filter($11)) title "TCP Tx rate" with lines,\
+"tcp-put.txt" using 1:3 title "TCP throughput (Rx rate)" with lines,\
+"tcp-put.txt" using 1:11 title "TCP Tx rate" with lines,\
 "RTO.txt" using 3:(0) title "Tcp Timeout",\
 "3ACKs.txt" using 3:(10) title "3AKCs"
 #"cwnd.txt" using 1:5 title "cwnd" with lines axis x2y2
@@ -87,10 +87,10 @@ set key inside top right box
 set xlabel "Time (s)"
 #set xtic 10
 set ylabel "value (packets)"
-set y2label "number of queue dropped (packets)"
+#set y2label ""
 set output "cwnd.svg"
 #set y2tics nomirror tc lt 2
-#set y2range [0:1200]
+set y2range [0:10]
 #set yrange [0:1200]
 set xrange [x1:x2]
 set x2range [x1:x2]
@@ -130,7 +130,7 @@ set key inside bottom right box
 set xlabel "Time (s)"
 #set xtic 10
 set ylabel "packet sequence #"
-set y2label "queue droptail"
+#set y2label "queue droptail"
 set output "sequence.svg"
 #set y2tics nomirror tc lt 2
 set y2range [0:1]

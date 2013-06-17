@@ -1,0 +1,4 @@
+13.4875s 2 13.4875 [node 2] TcpTahoe:Retransmit(): 0x7fbb9b492eb0 ReTxTimeout Expired at time 13.4875
+37.2006s 2 37.2006 [node 2] TcpTahoe:Retransmit(): 0x7fbb9b492eb0 ReTxTimeout Expired at time 37.2006
+60.9137s 2 60.9137 [node 2] TcpTahoe:Retransmit(): 0x7fbb9b492eb0 ReTxTimeout Expired at time 60.9137
+84.6269s 2 84.6269 [node 2] TcpTahoe:Retransmit(): 0x7fbb9b492eb0 ReTxTimeout Expired at time 84.6269

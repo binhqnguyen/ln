@@ -118,29 +118,29 @@ if __name__ == "__main__":
 		last_sampling_time += 1
 
 
-	INPUT_FILE =  "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/rtt_value_tmp.txt" 
-	OUTPUT_FILE = "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/rtt_value.txt"
+	# INPUT_FILE =  "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/rtt_value_tmp.txt" 
+	# OUTPUT_FILE = "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/rtt_value.txt"
 
 
-	file = open (INPUT_FILE)
-	line = file.readline()
-	tokens = {}
+	# file = open (INPUT_FILE)
+	# line = file.readline()
+	# tokens = {}
 
-	if (os.path.isfile(OUTPUT_FILE)):      ##if output file not exist
-	    open(OUTPUT_FILE,'w').close()
-	outfile = open (OUTPUT_FILE,'w+')
+	# if (os.path.isfile(OUTPUT_FILE)):      ##if output file not exist
+	#     open(OUTPUT_FILE,'w').close()
+	# outfile = open (OUTPUT_FILE,'w+')
 
-	# last_sampling_time = 0
-	# last_value = "0"
-	while (line):
-		tokens = line.split()
-		# while (float (tokens[0]) > last_sampling_time ):
-			# if (last_sampling_time > 0.7):
-		outfile.write(tokens[0][:-1]+"\t"+tokens[5]+"\n")
-	  	# last_sampling_time += INTERVAL
-	  	# last_value = tokens[2]
-	  	# last_sampling_time = float (tokens[0])
-	  	line = file.readline()
+	# # last_sampling_time = 0
+	# # last_value = "0"
+	# while (line):
+	# 	tokens = line.split()
+	# 	# while (float (tokens[0]) > last_sampling_time ):
+	# 		# if (last_sampling_time > 0.7):
+	# 	outfile.write(tokens[0][:-1]+"\t"+tokens[5]+"\n")
+	#   	# last_sampling_time += INTERVAL
+	#   	# last_value = tokens[2]
+	#   	# last_sampling_time = float (tokens[0])
+	#   	line = file.readline()
 
 
 	INPUT_FILE =  "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/enb_dev_queue_drop_tmp.txt" 
@@ -179,44 +179,6 @@ if __name__ == "__main__":
 	    line = file.readline()
 
 
-	INPUT_FILE =  "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/cwnd.txt"
-	OUTPUT_FILE = "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/cwnd_tmp.txt"
-
-
-	file = open (INPUT_FILE)
-	line = file.readline()
-
-	if (os.path.isfile(OUTPUT_FILE)):      ##if output file not exist
-	    open(OUTPUT_FILE,'w').close()
-	outfile = open (OUTPUT_FILE,'w+')
-
-	while (line):
-	    tokens = line.split()
-	    pktseq = (int (tokens[4])-1)/536
-	    outfile.write(tokens[0] + "\t\t"+ str(pktseq)+ "\n")
-	    line = file.readline()
-
-	#cwnd_interval
-	INPUT_FILE =  "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/cwnd_tmp.txt"
-	OUTPUT_FILE = "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/cwnd_interval.txt"
-
-
-	file = open (INPUT_FILE)
-	line = file.readline()
-
-	if (os.path.isfile(OUTPUT_FILE)):      ##if output file not exist
-	    open(OUTPUT_FILE,'w').close()
-	outfile = open (OUTPUT_FILE,'w+')
-	last_cwnd = 0
-	last_time = 0
-	while (line):
-	    tokens = line.split()
-	    if (last_cwnd < float (tokens[1])):
-	    	outfile.write(tokens[0] + "\t" + str (float (tokens[0])-last_time) + "\n")
-	    	last_cwnd = float (tokens[1])
-	    	last_time = float (tokens[0])
-	    line = file.readline()
-
 	#rwnd
 	INPUT_FILE =  "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/rwnd_tmp.txt"
 	OUTPUT_FILE = "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/rwnd.txt"
@@ -232,38 +194,3 @@ if __name__ == "__main__":
 		tokens = line.split()
 		outfile.write(tokens[2] + "\t" + tokens[7][4:] + "\n")
 		line = file.readline()
-
-
-	# ####rto_estimator_rto_tmp.txt "s" cutting
-	# INPUT_FILE =  "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/rtt_estimator_rto_tmp.txt" 
-	# OUTPUT_FILE = "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/rtt_estimator_rto.txt"
-
-
-	# file = open (INPUT_FILE)
-	# line = file.readline()
-
-	# if (os.path.isfile(OUTPUT_FILE)):      ##if output file not exist
-	#     open(OUTPUT_FILE,'w').close()
-	# outfile = open (OUTPUT_FILE,'w+')
-
-	# while (line):
-	#     tokens = line.split()
-	#     outfile.write(tokens[0][:-1]+"\t"+tokens[5]+"\n")
-	#     line = file.readline()
-
-	# ####measured_rtt_tmp.txt "s" cutting
-	# INPUT_FILE =  "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/measured_rtt_tmp.txt" 
-	# OUTPUT_FILE = "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/measured_rtt.txt"
-
-
-	# file = open (INPUT_FILE)
-	# line = file.readline()
-
-	# if (os.path.isfile(OUTPUT_FILE)):      ##if output file not exist
-	#     open(OUTPUT_FILE,'w').close()
-	# outfile = open (OUTPUT_FILE,'w+')
-
-	# while (line):
-	#     tokens = line.split()
-	#     outfile.write(tokens[0][:-1]+"\t"+tokens[3][1:-5]+"\n")
-	#     line = file.readline()

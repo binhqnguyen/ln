@@ -1,13 +1,13 @@
-# project ns (3-dev) configured on Fri Jun 14 16:32:07 2013 by
+# project ns (3-dev) configured on Sat Jun 15 22:30:36 2013 by
 # waf 1.7.10 (abi 98, python 20702f0 on darwin)
 # using ./waf configure --enable-test --enable-examples
 #
 ----------------------------------------
 Setting top to
-/Users/binh/Documents/workspace/ln
+/Users/binh/Documents/workspace/lena
 ----------------------------------------
 Setting out to
-/Users/binh/Documents/workspace/ln/build
+/Users/binh/Documents/workspace/lena/build
 ----------------------------------------
 Checking for 'gcc' (c compiler)
 find program=['gcc', 'cc'] paths=['/usr/local/bin', '/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin', '/opt/X11/bin', '/usr/texbin'] var='CC' -> '/usr/bin/gcc'
@@ -87,7 +87,7 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-arch', 'i386', '-arch', 'x86_64', '-fno-strict-aliasing', '-fno-common', '-dynamic', '-fno-common', '-fno-strict-aliasing', '-fwrapv', '-mno-fused-madd', '-arch', 'i386', '-arch', 'x86_64', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/site-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/site-packages"', '-DENABLE_DTRACE', '-DMACOSX', '-DNDEBUG', '-DNDEBUG', '-DENABLE_DTRACE', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_05738d3e0a613d90d68203cf1221bbed/testbuild/test.cpp.1.o -> build/.conf_check_05738d3e0a613d90d68203cf1221bbed/testbuild/testprog
 [0m
-['/usr/bin/g++', '-Wl,-F.', '-arch', 'i386', '-arch', 'x86_64', '-arch', 'i386', '-arch', 'x86_64', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_05738d3e0a613d90d68203cf1221bbed/testbuild/testprog', '-L/System/Library/Frameworks/Python.framework/Versions/2.7/lib', '-lpython2.7']
+['/usr/bin/g++', '-Wl,-F.', '-arch', 'i386', '-arch', 'x86_64', '-arch', 'i386', '-arch', 'x86_64', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_05738d3e0a613d90d68203cf1221bbed/testbuild/testprog', '-L/System/Library/Frameworks/Python.framework/Versions/2.7/lib', '-lpython2.7']
 yes
 ------------------------------------------------------------------------------------------------
 Checking for program /usr/bin/python-config,python2.7-config,python-config-2.7,python2.7m-config
@@ -125,7 +125,7 @@ int main(int argc, char **argv)
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-arch', 'i386', '-arch', 'x86_64', '-fno-strict-aliasing', '-fno-common', '-dynamic', '-fno-common', '-fno-strict-aliasing', '-fwrapv', '-mno-fused-madd', '-arch', 'i386', '-arch', 'x86_64', '-fno-strict-aliasing', '-I/System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/site-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/site-packages"', '-DENABLE_DTRACE', '-DMACOSX', '-DNDEBUG', '-DNDEBUG', '-DENABLE_DTRACE', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_1f933b02106127ce3a9f4633a0e368e7/testbuild/test.cpp.1.o -> build/.conf_check_1f933b02106127ce3a9f4633a0e368e7/testbuild/testprog
 [0m
-['/usr/bin/g++', '-Wl,-F.', '-arch', 'i386', '-arch', 'x86_64', '-arch', 'i386', '-arch', 'x86_64', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_1f933b02106127ce3a9f4633a0e368e7/testbuild/testprog', '-L/System/Library/Frameworks/Python.framework/Versions/2.7/lib', '-lpython2.7']
+['/usr/bin/g++', '-Wl,-F.', '-arch', 'i386', '-arch', 'x86_64', '-arch', 'i386', '-arch', 'x86_64', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_1f933b02106127ce3a9f4633a0e368e7/testbuild/testprog', '-L/System/Library/Frameworks/Python.framework/Versions/2.7/lib', '-lpython2.7']
 yes
 ------------------------------------------------------------------------------------------------
 Checking for compilation flag -fvisibility=hidden... support
@@ -139,7 +139,7 @@ int main() { return 0; }
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-fvisibility=hidden', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/site-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/site-packages"', '-DHAVE_PYTHON_H=1', '../test.cc', '-c', '-o', 'test.cc.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/test.cc.1.o -> build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cc.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog']
+['/usr/bin/g++', 'test.cc.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog']
 ok
 ------------------------------------------------------------------------------------------------
 Checking for compilation flag -Wno-array-bounds... support
@@ -153,14 +153,14 @@ int main() { return 0; }
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-Wno-array-bounds', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/site-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/site-packages"', '-DHAVE_PYTHON_H=1', '../test.cc', '-c', '-o', 'test.cc.1.o']
 err: cc1plus: error: unrecognized command line option "-Wno-array-bounds"
 
-from /Users/binh/Documents/workspace/ln/bindings/python: Test does not build: Traceback (most recent call last):
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
+from /Users/binh/Documents/workspace/lena/bindings/python: Test does not build: Traceback (most recent call last):
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
     bld.compile()
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4551672912: cxx test.cc -> test.cc.1.o}
+	{task 4338619536: cxx test.cc -> test.cc.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-Wno-array-bounds', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/site-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/site-packages"', '-DHAVE_PYTHON_H=1', '../test.cc', '-c', '-o', 'test.cc.1.o']
 
 not found
@@ -175,14 +175,14 @@ err: Traceback (most recent call last):
 ImportError: No module named pybindgen
 
 not found
-from /Users/binh/Documents/workspace/ln/bindings/python: Could not find the python module 'pybindgen'
+from /Users/binh/Documents/workspace/lena/bindings/python: Could not find the python module 'pybindgen'
 ------------------------------------------------------------------------------------------------
 Checking boost includes
-from /Users/binh/Documents/workspace/ln/src: headers not found, please provide a --boost-includes argument (see help)
+from /Users/binh/Documents/workspace/lena/src: headers not found, please provide a --boost-includes argument (see help)
 not found
 ------------------------------------------------------------------------------------------------
 Checking boost includes
-from /Users/binh/Documents/workspace/ln/src: headers not found, please provide a --boost-includes argument (see help)
+from /Users/binh/Documents/workspace/lena/src: headers not found, please provide a --boost-includes argument (see help)
 not found
 ------------------------------------------------------------------------------------------------
 Checking for click location
@@ -191,12 +191,12 @@ not found
 Checking for program pkg-config
 not found
 find program=['pkg-config'] paths=['/usr/local/bin', '/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin', '/opt/X11/bin', '/usr/texbin'] var='PKGCONFIG' -> ''
-from /Users/binh/Documents/workspace/ln/src/config-store: Could not find the program pkg-config
+from /Users/binh/Documents/workspace/lena/src/config-store: Could not find the program pkg-config
 ------------------------------------------------------------------------------------------------
 Checking for program pkg-config
 not found
 find program=['pkg-config'] paths=['/usr/local/bin', '/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin', '/opt/X11/bin', '/usr/texbin'] var='PKGCONFIG' -> ''
-from /Users/binh/Documents/workspace/ln/src/config-store: Could not find the program pkg-config
+from /Users/binh/Documents/workspace/lena/src/config-store: Could not find the program pkg-config
 ------------------------------------------------------------------------------------------------
 Checking for type uint128_t
 ==>
@@ -219,18 +219,18 @@ err: ../test.cpp: In function ‘int main(int, char**)’:
 ../test.cpp:5: error: expected `)' before numeric constant
 ../test.cpp:6: error: ‘uint128_t’ was not declared in this scope
 
-from /Users/binh/Documents/workspace/ln/src/core: Test does not build: Traceback (most recent call last):
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
+from /Users/binh/Documents/workspace/lena/src/core: Test does not build: Traceback (most recent call last):
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
     bld.compile()
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4551777360: cxx test.cpp -> test.cpp.1.o}
+	{task 4338736272: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
-from /Users/binh/Documents/workspace/ln/src/core: The configuration failed
+from /Users/binh/Documents/workspace/lena/src/core: The configuration failed
 ------------------------------------------------------------------------------------------------
 Checking for type __uint128_t
 ==>
@@ -249,7 +249,7 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_ace1886511f08627ee2e4ca020806295/testbuild/test.cpp.1.o -> build/.conf_check_ace1886511f08627ee2e4ca020806295/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_ace1886511f08627ee2e4ca020806295/testbuild/testprog']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_ace1886511f08627ee2e4ca020806295/testbuild/testprog']
 yes
 ------------------------------------------------------------------------------------------------
 Checking high precision time implementation
@@ -270,7 +270,7 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/test.cpp.1.o -> build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/testprog']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/testprog']
 yes
 ------------------------------------------------------------------------------------------------
 Checking for header inttypes.h
@@ -288,7 +288,7 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/test.cpp.1.o -> build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/testprog']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/testprog']
 yes
 ------------------------------------------------------------------------------------------------
 Checking for header sys/inttypes.h
@@ -306,18 +306,18 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 err: ../test.cpp:1:26: error: sys/inttypes.h: No such file or directory
 
-from /Users/binh/Documents/workspace/ln/src/core: Test does not build: Traceback (most recent call last):
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
+from /Users/binh/Documents/workspace/lena/src/core: Test does not build: Traceback (most recent call last):
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
     bld.compile()
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4549081616: cxx test.cpp -> test.cpp.1.o}
+	{task 4338866768: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
-from /Users/binh/Documents/workspace/ln/src/core: The configuration failed
+from /Users/binh/Documents/workspace/lena/src/core: The configuration failed
 ------------------------------------------------------------------------------------------------
 Checking for header sys/types.h
 ==>
@@ -334,7 +334,7 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_8d38681417ac64f5b5b7d4ca87b0e4f3/testbuild/test.cpp.1.o -> build/.conf_check_8d38681417ac64f5b5b7d4ca87b0e4f3/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_8d38681417ac64f5b5b7d4ca87b0e4f3/testbuild/testprog']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_8d38681417ac64f5b5b7d4ca87b0e4f3/testbuild/testprog']
 yes
 ------------------------------------------------------------------------------------------------
 Checking for header sys/stat.h
@@ -352,7 +352,7 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_8dd79274749d59bf459dfbeb1200c7d7/testbuild/test.cpp.1.o -> build/.conf_check_8dd79274749d59bf459dfbeb1200c7d7/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_8dd79274749d59bf459dfbeb1200c7d7/testbuild/testprog']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_8dd79274749d59bf459dfbeb1200c7d7/testbuild/testprog']
 yes
 ------------------------------------------------------------------------------------------------
 Checking for header dirent.h
@@ -370,7 +370,7 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_c94d96928742c001335a0559791a93d8/testbuild/test.cpp.1.o -> build/.conf_check_c94d96928742c001335a0559791a93d8/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_c94d96928742c001335a0559791a93d8/testbuild/testprog']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_c94d96928742c001335a0559791a93d8/testbuild/testprog']
 yes
 ------------------------------------------------------------------------------------------------
 Checking for header stdlib.h
@@ -388,7 +388,7 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_3a82ef2f96ebcc67f6086c98d2e6291e/testbuild/test.cpp.1.o -> build/.conf_check_3a82ef2f96ebcc67f6086c98d2e6291e/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_3a82ef2f96ebcc67f6086c98d2e6291e/testbuild/testprog']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_3a82ef2f96ebcc67f6086c98d2e6291e/testbuild/testprog']
 yes
 ------------------------------------------------------------------------------------------------
 Checking for header signal.h
@@ -406,7 +406,7 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_48955ac54d2136a572805353a7b9b62d/testbuild/test.cpp.1.o -> build/.conf_check_48955ac54d2136a572805353a7b9b62d/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_48955ac54d2136a572805353a7b9b62d/testbuild/testprog']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_48955ac54d2136a572805353a7b9b62d/testbuild/testprog']
 yes
 ------------------------------------------------------------------------------------------------
 Checking for header pthread.h
@@ -426,7 +426,7 @@ int main ()
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_2be466e82e703a744ee152afe2b58299/testbuild/test.cpp.1.o -> build/.conf_check_2be466e82e703a744ee152afe2b58299/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_2be466e82e703a744ee152afe2b58299/testbuild/testprog']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_2be466e82e703a744ee152afe2b58299/testbuild/testprog']
 yes
 ------------------------------------------------------------------------------------------------
 Checking for header stdint.h
@@ -444,7 +444,7 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/test.cpp.1.o -> build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/testprog']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/testprog']
 yes
 ------------------------------------------------------------------------------------------------
 Checking for header inttypes.h
@@ -462,7 +462,7 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/test.cpp.1.o -> build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/testprog']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/testprog']
 yes
 ------------------------------------------------------------------------------------------------
 Checking for header sys/inttypes.h
@@ -480,18 +480,18 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 err: ../test.cpp:1:26: error: sys/inttypes.h: No such file or directory
 
-from /Users/binh/Documents/workspace/ln/src/core: Test does not build: Traceback (most recent call last):
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
+from /Users/binh/Documents/workspace/lena/src/core: Test does not build: Traceback (most recent call last):
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
     bld.compile()
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4549108368: cxx test.cpp -> test.cpp.1.o}
+	{task 4338813072: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
-from /Users/binh/Documents/workspace/ln/src/core: The configuration failed
+from /Users/binh/Documents/workspace/lena/src/core: The configuration failed
 ------------------------------------------------------------------------------------------------
 Checking for library rt
 ==>
@@ -507,22 +507,22 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_5ef57bc0d8aa3565949b6ce1186fd4a7/testbuild/test.cpp.1.o -> build/.conf_check_5ef57bc0d8aa3565949b6ce1186fd4a7/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_5ef57bc0d8aa3565949b6ce1186fd4a7/testbuild/testprog', '-lrt']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_5ef57bc0d8aa3565949b6ce1186fd4a7/testbuild/testprog', '-lrt']
 err: ld: library not found for -lrt
 collect2: ld returned 1 exit status
 
-from /Users/binh/Documents/workspace/ln/src/core: Test does not build: Traceback (most recent call last):
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
+from /Users/binh/Documents/workspace/lena/src/core: Test does not build: Traceback (most recent call last):
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
     bld.compile()
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4549110736: cxxprogram test.cpp.1.o -> testprog}
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_5ef57bc0d8aa3565949b6ce1186fd4a7/testbuild/testprog', '-lrt']
+	{task 4339275536: cxxprogram test.cpp.1.o -> testprog}
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_5ef57bc0d8aa3565949b6ce1186fd4a7/testbuild/testprog', '-lrt']
 
 not found
-from /Users/binh/Documents/workspace/ln/src/core: The configuration failed
+from /Users/binh/Documents/workspace/lena/src/core: The configuration failed
 ------------------------------------------------------------------------------------------------
 Checking for header netpacket/packet.h
 ==>
@@ -539,18 +539,18 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 err: ../test.cpp:1:30: error: netpacket/packet.h: No such file or directory
 
-from /Users/binh/Documents/workspace/ln/src/emu: Test does not build: Traceback (most recent call last):
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
+from /Users/binh/Documents/workspace/lena/src/emu: Test does not build: Traceback (most recent call last):
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
     bld.compile()
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4549148880: cxx test.cpp -> test.cpp.1.o}
+	{task 4339276752: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
-from /Users/binh/Documents/workspace/ln/src/emu: The configuration failed
+from /Users/binh/Documents/workspace/lena/src/emu: The configuration failed
 ------------------------------------------------------------------------------------------------
 Checking for header sys/ioctl.h
 ==>
@@ -567,7 +567,7 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_ebd591dbc3bb45aa25214505e9aa0d0f/testbuild/test.cpp.1.o -> build/.conf_check_ebd591dbc3bb45aa25214505e9aa0d0f/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_ebd591dbc3bb45aa25214505e9aa0d0f/testbuild/testprog']
+['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_ebd591dbc3bb45aa25214505e9aa0d0f/testbuild/testprog']
 yes
 ------------------------------------------------------------------------------------------------
 Checking for header net/if.h
@@ -593,18 +593,18 @@ err: In file included from ../test.cpp:1:
 /usr/include/net/if.h:437: error: field ‘addr’ has incomplete type
 /usr/include/net/if.h:438: error: field ‘dstaddr’ has incomplete type
 
-from /Users/binh/Documents/workspace/ln/src/fd-net-device: Test does not build: Traceback (most recent call last):
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
+from /Users/binh/Documents/workspace/lena/src/fd-net-device: Test does not build: Traceback (most recent call last):
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
     bld.compile()
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4549110032: cxx test.cpp -> test.cpp.1.o}
+	{task 4338735632: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
-from /Users/binh/Documents/workspace/ln/src/fd-net-device: The configuration failed
+from /Users/binh/Documents/workspace/lena/src/fd-net-device: The configuration failed
 ------------------------------------------------------------------------------------------------
 Checking for header linux/if_tun.h
 ==>
@@ -621,18 +621,18 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 err: ../test.cpp:1:26: error: linux/if_tun.h: No such file or directory
 
-from /Users/binh/Documents/workspace/ln/src/fd-net-device: Test does not build: Traceback (most recent call last):
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
+from /Users/binh/Documents/workspace/lena/src/fd-net-device: Test does not build: Traceback (most recent call last):
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
     bld.compile()
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4549108304: cxx test.cpp -> test.cpp.1.o}
+	{task 4339274960: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
-from /Users/binh/Documents/workspace/ln/src/fd-net-device: The configuration failed
+from /Users/binh/Documents/workspace/lena/src/fd-net-device: The configuration failed
 ------------------------------------------------------------------------------------------------
 Checking for header netpacket/packet.h
 ==>
@@ -649,18 +649,18 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 err: ../test.cpp:1:30: error: netpacket/packet.h: No such file or directory
 
-from /Users/binh/Documents/workspace/ln/src/fd-net-device: Test does not build: Traceback (most recent call last):
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
+from /Users/binh/Documents/workspace/lena/src/fd-net-device: Test does not build: Traceback (most recent call last):
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
     bld.compile()
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4549108816: cxx test.cpp -> test.cpp.1.o}
+	{task 4338813328: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
-from /Users/binh/Documents/workspace/ln/src/fd-net-device: The configuration failed
+from /Users/binh/Documents/workspace/lena/src/fd-net-device: The configuration failed
 ------------------------------------------------------------------------------------------------
 Checking for NSC location
 not found
@@ -668,7 +668,7 @@ not found
 Checking for program pkg-config
 not found
 find program=['pkg-config'] paths=['/usr/local/bin', '/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin', '/opt/X11/bin', '/usr/texbin'] var='PKGCONFIG' -> ''
-from /Users/binh/Documents/workspace/ln/src/stats: Could not find the program pkg-config
+from /Users/binh/Documents/workspace/lena/src/stats: Could not find the program pkg-config
 ------------------------------------------------------------------------------------------------
 Checking for header linux/if_tun.h
 ==>
@@ -685,18 +685,18 @@ int main(int argc, char **argv) {
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 err: ../test.cpp:1:26: error: linux/if_tun.h: No such file or directory
 
-from /Users/binh/Documents/workspace/ln/src/tap-bridge: Test does not build: Traceback (most recent call last):
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
+from /Users/binh/Documents/workspace/lena/src/tap-bridge: Test does not build: Traceback (most recent call last):
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
     bld.compile()
-  File "/Users/binh/Documents/workspace/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
+  File "/Users/binh/Documents/workspace/lena/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4549079376: cxx test.cpp -> test.cpp.1.o}
+	{task 4338864656: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
-from /Users/binh/Documents/workspace/ln/src/tap-bridge: The configuration failed
+from /Users/binh/Documents/workspace/lena/src/tap-bridge: The configuration failed
 ------------------------------------------------------------------------------------------------
 Checking for program sudo
 /usr/bin/sudo
@@ -705,12 +705,12 @@ find program=['sudo'] paths=['/usr/local/bin', '/usr/bin', '/bin', '/usr/sbin', 
 Checking for program valgrind
 not found
 find program=['valgrind'] paths=['/usr/local/bin', '/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin', '/opt/X11/bin', '/usr/texbin'] var='VALGRIND' -> ''
-from /Users/binh/Documents/workspace/ln: Could not find the program valgrind
+from /Users/binh/Documents/workspace/lena: Could not find the program valgrind
 ------------------------------------------------------------------------------------------------
 Checking for program pkg-config
 not found
 find program=['pkg-config'] paths=['/usr/local/bin', '/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin', '/opt/X11/bin', '/usr/texbin'] var='PKGCONFIG' -> ''
-from /Users/binh/Documents/workspace/ln: Could not find the program pkg-config
+from /Users/binh/Documents/workspace/lena: Could not find the program pkg-config
 ------------------------------------------------------------------------------------------------
 Checking for compilation flag -Wno-error=deprecated-d... support
 ==>
@@ -723,7 +723,7 @@ int main() { return 0; }
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-Wno-error=deprecated-declarations', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cc', '-c', '-o', 'test.cc.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/test.cc.1.o -> build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cc.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog']
+['/usr/bin/g++', 'test.cc.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog']
 ok
 ------------------------------------------------------------------------------------------------
 Checking for compilation flag -Wno-error=deprecated-d... support
@@ -737,7 +737,7 @@ int main() { return 0; }
 ['/usr/bin/gcc', '-Wno-error=deprecated-declarations', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.c', '-c', '-o', 'test.c.1.o']
 [2/2] [33mcprogram: build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/test.c.1.o -> build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog
 [0m
-['/usr/bin/gcc', 'test.c.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog']
+['/usr/bin/gcc', 'test.c.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog']
 ok
 ------------------------------------------------------------------------------------------------
 Checking for compilation flag -fstrict-aliasing... support
@@ -751,7 +751,7 @@ int main() { return 0; }
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-Wno-error=deprecated-declarations', '-fstrict-aliasing', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cc', '-c', '-o', 'test.cc.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/test.cc.1.o -> build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cc.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog']
+['/usr/bin/g++', 'test.cc.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog']
 ok
 ------------------------------------------------------------------------------------------------
 Checking for compilation flag -fstrict-aliasing... support
@@ -765,7 +765,7 @@ int main() { return 0; }
 ['/usr/bin/gcc', '-fstrict-aliasing', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.c', '-c', '-o', 'test.c.1.o']
 [2/2] [33mcprogram: build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/test.c.1.o -> build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog
 [0m
-['/usr/bin/gcc', 'test.c.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog']
+['/usr/bin/gcc', 'test.c.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog']
 ok
 ------------------------------------------------------------------------------------------------
 Checking for compilation flag -Wstrict-aliasing... support
@@ -779,7 +779,7 @@ int main() { return 0; }
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-Wno-error=deprecated-declarations', '-fstrict-aliasing', '-Wstrict-aliasing', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cc', '-c', '-o', 'test.cc.1.o']
 [2/2] [33mcxxprogram: build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/test.cc.1.o -> build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog
 [0m
-['/usr/bin/g++', 'test.cc.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog']
+['/usr/bin/g++', 'test.cc.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog']
 ok
 ------------------------------------------------------------------------------------------------
 Checking for compilation flag -Wstrict-aliasing... support
@@ -793,10 +793,10 @@ int main() { return 0; }
 ['/usr/bin/gcc', '-Wstrict-aliasing', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.c', '-c', '-o', 'test.c.1.o']
 [2/2] [33mcprogram: build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/test.c.1.o -> build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog
 [0m
-['/usr/bin/gcc', 'test.c.1.o', '-o', '/Users/binh/Documents/workspace/ln/build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog']
+['/usr/bin/gcc', 'test.c.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog']
 ok
 ------------------------------------------------------------------------------------------------
 Checking for program doxygen
 not found
 find program=['doxygen'] paths=['/usr/local/bin', '/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin', '/opt/X11/bin', '/usr/texbin'] var='DOXYGEN' -> ''
-from /Users/binh/Documents/workspace/ln: Could not find the program doxygen
+from /Users/binh/Documents/workspace/lena: Could not find the program doxygen
