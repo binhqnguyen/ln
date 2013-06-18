@@ -49,7 +49,7 @@ main (int argc, char *argv[])
   double simTime = 1.0;
   double distance = 60.0;
   double interPacketInterval = 100;
-
+  LogComponentEnable("EpcFirstExample",LOG_LEVEL_INFO);
   // Command line arguments
   CommandLine cmd;
   cmd.AddValue("numberOfNodes", "Number of eNodeBs + UE pairs", numberOfNodes);
@@ -94,6 +94,7 @@ main (int argc, char *argv[])
   Ipv4InterfaceContainer internetIpIfaces = ipv4h.Assign (internetDevices);
   // interface 0 is localhost, 1 is the p2p device
   Ipv4Address remoteHostAddr = internetIpIfaces.GetAddress (1);
+
 
   Ipv4StaticRoutingHelper ipv4RoutingHelper;
   Ptr<Ipv4StaticRouting> remoteHostStaticRouting = ipv4RoutingHelper.GetStaticRouting (remoteHost->GetObject<Ipv4> ());
@@ -140,6 +141,7 @@ main (int argc, char *argv[])
         // side effect: the default EPS bearer will be activated
       }
 
+  NS_LOG_UNCOND ("remoteHostAddr=" << remoteHostAddr << "UEaddr=" << ueIpIface.GetAddress(0) << "SPGWAddr=" << internetIpIfaces.GetAddress(0));
 
   // Install and start applications on UEs and remote host
   uint16_t dlPort = 1234;

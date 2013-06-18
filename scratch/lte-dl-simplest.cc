@@ -57,44 +57,12 @@
 using namespace ns3;
 NS_LOG_COMPONENT_DEFINE ("lte-dl-simplest");
 
-void 
-init_log_and_cmd(int argc, char *argv[]);
-
-void 
-p2p_setup();
-
-void
-ran_setup();
-
-void 
-install_apps_on_nodes();
-
-void 
-print_final_outputs();
-
-void 
-init_wrappers();
-
-double
-CalculateAverageDelay(std::map <uint64_t, uint32_t> delayArray);
-
-static void 
-CwndTracer (uint32_t oldval, uint32_t newval)
-{
-  NS_LOG_UNCOND (Simulator::Now().GetMilliSeconds() << " cwnd_from " << oldval << " to " << newval);
-}
-static void enable_cwnd_trace(Ptr<Application> app);
-
-
-
-static void
-getTcpPut();
-
-
 /************* typedef ****************/
 #define kilo 1000
 #define KILO 1024
 #define ONEBIL kilo*kilo*kilo
+#define PUT_SAMPLING_INTERVAL 0.010    /*sample TCP thoughput for each 50ms*/
+
 
 /******** Nodes and devs***********/
 static Ptr<Node> remote_host_node;
@@ -120,6 +88,7 @@ static InternetStackHelper internet_helper;
 static PointToPointHelper p2ph;
 static Ptr<LteHelper> lteHelper;
 static Ptr<EpcHelper>  epcHelper;
+static Ipv4StaticRoutingHelper ipv4RoutingHelper;
 static AsciiTraceHelper asciiTraceHelper;
 static Ipv4AddressHelper ipv4h;  //Ipv4AddressHelper is used to assign Ip Address for a typical node.
 static Ipv4InterfaceContainer ue_ip_ifaces;
@@ -131,8 +100,7 @@ static ApplicationContainer serverApps;
 static CommandLine cmd;
 static ConfigStore inputConfig;
 static ConfigStore outputConfig;
-static double PUT_SAMPLING_INTERVAL = 0.010;    /*sample TCP thoughput for each 50ms*/
-static double t = 0.0;
+// static double client_start = 0.6;
 static uint16_t dlPort = 2000;
 static double last_tx_time = 0;
 static double last_rx_time = 0;
@@ -155,20 +123,6 @@ static std::map<Ipv4Address, double> meanRxRate_ack;
 static std::map<Ipv4Address, double> meanTcpDelay_ack;
 static std::map<Ipv4Address, uint64_t> numOfLostPackets_ack;
 static std::map<Ipv4Address, uint64_t> numOfTxPacket_ack;
-// Ptr<ns3::Ipv4FlowClassifier> classifier;
-// std::map <FlowId, FlowMonitor::FlowStats> stats;
-
-static uint64_t errorUlRx = 0;  //Error detected on the Ul Received side (eNB).
-static uint64_t errorDlRx = 0; //Error detected on the Dl Received side (UE).
-// static uint64_t harqUl = 0;   //HARQ transmitted from eNB.
-// static uint64_t harqDl = 0;  //HAEQ transmitted from Ue.
-// // Imsi_timecap time_ulcap; /*uplink link capacity histogram*/
-// // Imsi_timecap time_dlcap; /*downlink link capacity histogram*/
-// // std::ofstream link_cap_ul;
-// // std::ofstream link_cap_dl;
-
-// const uint32_t ONEBIL = 1000000000;
-
 
 // /******* Topology specs ************/
 static uint16_t numberOfUeNodes = 1;
@@ -202,16 +156,18 @@ static uint16_t isTcp = 1;
 
 
 /********* Ascii output files name *********/
-static std::string cwnd = "cwnd.txt";
-static std::string rto = "rto_value_tmp.txt";
-static std::string rwnd = "rwnd_tmp.txt";
-static std::string rtt = "last_rtt_sample_tmp.txt";
-static std::string highesttxseq = "highest_tx_seq.txt";
-static std::string nexttxseq = "next_tx_seq.txt";
-static std::string queues = "queues.txt";
-static std::string macro = "macro_output.txt";
+static std::string DIR = "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/radio/";
+static std::string cwnd = DIR+"cwnd.txt";
+static std::string rto = DIR+"rto_value_tmp.txt";
+static std::string rwnd = DIR+"rwnd_tmp.txt";
+static std::string rtt = DIR+"last_rtt_sample_tmp.txt";
+static std::string highesttxseq = DIR+"highest_tx_seq.txt";
+static std::string nexttxseq = DIR+"next_tx_seq.txt";
+static std::string queues = DIR+"queues.txt";
+static std::string macro = DIR+"macro_output.txt";
 static std::string put_send;
 static std::string put_ack;
+static std::string debugger = "debugger.txt";
 
 /********wrappers**********/
 Ptr<OutputStreamWrapper> cwnd_wp;
@@ -224,116 +180,61 @@ Ptr<OutputStreamWrapper> dev_queues_wp;
 Ptr<OutputStreamWrapper> put_send_wp;
 Ptr<OutputStreamWrapper> put_ack_wp;
 Ptr<OutputStreamWrapper> macro_wp;
+Ptr<OutputStreamWrapper> debugger_wp;
 
 
-int
-main (int argc, char *argv[])
-{
-    /*** commands parsing and default configuration setting up*****/
-    init_log_and_cmd(argc, argv);
-
-    /****init wrappers****/
-    init_wrappers();
-
-    /**************p2p and core network setting up*****************/
-    p2p_setup();
-
-    /**************RAN setting up**************/
-    ran_setup();
-    
-    /************** install apps on Ues and remote host *********/
-    install_apps_on_nodes();
-
-
-    *put_send_wp->GetStream() << "#DestinationIp\t"
-                  << "Time\t"
-                  << "Send Tcp throughput\t"
-                  << "Send Tcp delay\t"
-                  << "Number of Lost Pkts\t"
-                  << "Number of Tx Pkts\t"
-                  << "ErrorUlTx\t"
-                  << "ErrorDlTx\t"
-                  << "HarqUlTx\t"
-                  << "HarqDlTx\n";
-
-    *put_ack_wp->GetStream() << "#ScrAdd\t"
-                  << "Time\t"
-                  << "Ack Tcp throughput\t"
-                  << "Ack Tcp delay\t"
-                  << "Number of Lost Pkts\t"
-                  << "Number of Tx Pkts\t"
-                  << "ErrorUlTx\t"
-                  << "ErrorDlTx\t"
-                  << "HarqUlTx\t"
-                  << "HarqDlTx\n";
-
-
-
-    /*******************Start client and server apps***************/
-    serverApps.Start (Seconds (0.01));		//All server start at 0.01s.
-    clientApps.Start(Seconds(0.5));
-    
-    
-    /*********Tracing settings***************/
-    lteHelper->EnableTraces ();
-    lteHelper->GetPdcpStats()->SetAttribute("EpochDuration", TimeValue( Seconds (0.010)) );		//set collection interval for PDCP.
-    lteHelper->GetRlcStats()->SetAttribute("EpochDuration", TimeValue ( Seconds (0.010)))	;		//same for RLC
-    // Uncomment to enable PCAP tracing
-    //p2ph.EnablePcapAll("pcaps/"+pcapName);
-
-
-    monitor = flowHelper.Install(ueNodes);
-    monitor = flowHelper.Install(remote_host_node);
-    monitor = flowHelper.GetMonitor();
-
-    /**Pathloss**/
-    DownlinkLteGlobalPathlossDatabase dlPathlossDb;
-    UplinkLteGlobalPathlossDatabase ulPathlossDb;
-
-    /*=============schedule to get TCP throughput============*/
-    Time t = Seconds(0.0);
-    Simulator::ScheduleWithContext (0 ,Seconds (0.0), &getTcpPut, lteHelper);
-    Simulator::Schedule(Seconds(0.6) + NanoSeconds(1.0), &enable_cwnd_trace, remote_host_node->GetApplication(0));///*Note: enable_cwnd_trace must be scheduled after the OnOffApplication starts (OnOffApplication's socket is created after the application starts) 
-
-
-
-    /*********Start the simulation*****/
-    Simulator::Stop(Seconds(simTime));
-    Simulator::Run();
-    
-
-    /**************Simulation stops here. Start printing out information (if needed)***********/
-    print_final_outputs();
-
-    Simulator::Destroy();
-    return 0;
-}
-
-/***Calculate average of a map**/
 double
 CalculateAverageDelay(std::map <uint64_t, uint32_t> delayArray){
-	double sum = 0;
-	uint64_t counter = 0;
-	for (std::map<uint64_t, uint32_t>::iterator ii = delayArray.begin(); ii != delayArray.end(); ++ii){
-		sum += (*ii).second;
-		counter++;
-	}
-	return (sum/counter);
+  double sum = 0;
+  uint64_t counter = 0;
+  for (std::map<uint64_t, uint32_t>::iterator ii = delayArray.begin(); ii != delayArray.end(); ++ii){
+    sum += (*ii).second;
+    counter++;
+  }
+  return (sum/counter);
 }
 
-static void enable_cwnd_trace(Ptr<Application> app)
+static void 
+CwndTracer (Ptr<OutputStreamWrapper> cwnd_wp, uint32_t oldval, uint32_t newval)
 {
-    
-    Ptr<OnOffApplication> on_off_app = app->GetObject<OnOffApplication>();
-    if (on_off_app != NULL)
-    {
-        Ptr<Socket> socket = on_off_app->GetSocket();
-        socket->TraceConnectWithoutContext("CongestionWindow", MakeCallback(&CwndTracer));//, stream));
-    }
+  // NS_LOG_UNCOND (Simulator::Now().GetSeconds() << " cwnd_from " << oldval << " to " << newval);
+  *cwnd_wp->GetStream() << Simulator::Now().GetSeconds() << " cwnd_from " << oldval << " to " << newval << std::endl;
+}
+
+static void 
+RTOTracer (Ptr<OutputStreamWrapper> rto_wp, ns3::Time oldval, ns3::Time newval)
+{
+  // NS_LOG_UNCOND (Simulator::Now().GetSeconds() << " \t RTO_value \t " << newval.GetSeconds());
+  *rto_wp->GetStream() << Simulator::Now().GetSeconds() << " \t RTO_value \t " << newval.GetSeconds() << std::endl;
+}
+
+static void 
+LastRttTracer (Ptr<OutputStreamWrapper> rtt_wp, ns3::Time oldval, ns3::Time newval)
+{
+  // NS_LOG_UNCOND (Simulator::Now().GetSeconds() << " \t last_rtt_sample \t " << newval.GetSeconds());
+  *rtt_wp->GetStream() << Simulator::Now().GetSeconds() << " \t last_rtt_sample \t " << newval.GetSeconds() << std::endl;
+
 }
 
 
-static void
+static void 
+HighestSentSeqTracer (Ptr<OutputStreamWrapper> highest_tx_seq_wp, ns3::SequenceNumber32 oldval, ns3::SequenceNumber32 newval)
+{
+  // NS_LOG_UNCOND (Simulator::Now().GetSeconds() << " \t highest_sent_seq \t " << newval);
+  *highest_tx_seq_wp->GetStream() << Simulator::Now().GetSeconds() << " \t highest_sent_seq \t " << newval << std::endl;
+}
+
+
+static void 
+NextTxSeqTracer (Ptr<OutputStreamWrapper> next_tx_seq_wp, ns3::SequenceNumber32 oldval, ns3::SequenceNumber32 newval)
+{
+  // NS_LOG_UNCOND (Simulator::Now().GetSeconds() << " \t next_tx_seq \t " << newval);
+  *next_tx_seq_wp->GetStream() << Simulator::Now().GetSeconds() << " \t next_tx_seq \t " << newval << std::endl;
+}
+
+
+
+void
 getTcpPut(){
   monitor->CheckForLostPackets();
   classifier = DynamicCast<ns3::Ipv4FlowClassifier> (flowHelper.GetClassifier());
@@ -344,7 +245,7 @@ getTcpPut(){
     ns3::Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow(iter->first);
 
     /*sending flows, from endhost (1.0.0.2:49153) to Ues (7.0.0.2:200x)*/
-    if (t.destinationPort >= 2001 && t.destinationPort <= 3000) {
+    if (t.destinationPort >= 2000 && t.destinationPort <= 3000) {
         if (iter->second.rxPackets > 1){
           if (last_tx_time < iter->second.timeLastTxPacket.GetDouble()){
               meanTxRate_send[t.destinationAddress] = 8*(iter->second.txBytes-last_tx_bytes)/(iter->second.timeLastTxPacket.GetDouble()-last_tx_time)*ONEBIL/kilo;
@@ -372,19 +273,17 @@ getTcpPut(){
       }
       numOfLostPackets_ack[t.sourceAddress] = iter->second.lostPackets;
       numOfTxPacket_ack[t.sourceAddress] = iter->second.txPackets;
+     }
     }
-  }
 
-    // errorUlRx = lteHelper->GetPhyRxStatsCalculator()->GetTotalErrorUl();    //Error detected on the Ul Received side (eNB).
-    // errorDlRx = lteHelper->GetPhyRxStatsCalculator()->GetTotalErrorDl(); //Error detected on the Dl Received side (UE).
-    // harqUl = lteHelper->GetPhyTxStatsCalculator()->GetTotalUlHarqRetransmission();    //HARQ transmitted from eNB.
-    // harqDl = lteHelper->GetPhyTxStatsCalculator()->GetTotalDlHarqRetransmission();    //HAEQ transmitted from Ue.
-
+  
     std::map<Ipv4Address,double>::iterator it1 = meanRxRate_send.begin();
     std::map<Ipv4Address,double>::iterator it2 = meanTcpDelay_send.begin();
     std::map<Ipv4Address,uint64_t>::iterator it3 = numOfLostPackets_send.begin();
     std::map<Ipv4Address,uint64_t>::iterator it4 = numOfTxPacket_send.begin();
     std::map<Ipv4Address,double>::iterator it5 = meanTxRate_send.begin();
+
+    std::cout << "xxx\n";
 
     for (;it1 != meanRxRate_send.end(); ){
       *put_send_wp->GetStream() << Simulator::Now().GetMilliSeconds() << "\t\t"
@@ -393,45 +292,44 @@ getTcpPut(){
       << (*it2).second << "\t\t"
       << (*it3).second << "\t\t"
       << (*it4).second << "\t\t"
-      // << errorUlRx << "\t\t"
-      // << errorDlRx << "\t\t"
-      // << harqUl << "\t\t"
-      // << harqDl << "\t"
-		  << (*it5).second << "\n";
+      << (*it5).second << "\n";
       ++it1;
       ++it2;
       ++it3;
       ++it4;
-		  ++it5;
+      ++it5;
+      std::cout << "yyyyyyyy\n";
     }
 
-    while (t < simTime){
-        t += PUT_SAMPLING_INTERVAL;
-        Simulator::Schedule(Seconds(t),&getTcpPut, lteHelper);
-    }
+    // while (client_start < simTime){
+    //     std::cout << "client_start=" << client_start << "PUT_SAMPLING_INTERVAL=" << PUT_SAMPLING_INTERVAL << std::endl;
+    //     client_start += PUT_SAMPLING_INTERVAL;
+    //     Simulator::Schedule(Seconds(client_start),&getTcpPut);
+    // }
 }
 
-void init_log_and_cmd(int argc, char *argc[]){
+void init_log_and_cmd(int argc, char *argv[]){
   //*************Enable logs********************/
+  // LogLevel level = (LogLevel) (LOG_LEVEL_ALL | LOG_PREFIX_TIME | LOG_PREFIX_NODE | LOG_PREFIX_FUNC);
+
   //To enable all components inside the LTE module.
   //      lteHelper->EnableLogComponents();
-  //  LogComponentEnable("UdpEchoClientApplication",LOG_LEVEL_INFO);
+   //  LogComponentEnable("UdpEchoClientApplication",LOG_LEVEL_INFO);
   //  LogComponentEnable("UdpEchoClientApplication",LOG_PREFIX_ALL);
   // LogComponentEnable("UdpEchoServerApplication", LOG_LEVEL_INFO);
   // LogComponentEnable("UdpClient",LOG_LEVEL_INFO);
   // LogComponentEnable("UdpServer", LOG_LEVEL_INFO);
-  //    LogComponentEnable("OnOffApplication",LOG_LEVEL_INFO);
+     // LogComponentEnable("OnOffApplication",level);
   //    LogComponentEnable("PacketSink",LOG_LEVEL_INFO);
-   LogLevel level = (LogLevel) (LOG_LEVEL_ALL | LOG_PREFIX_TIME | LOG_PREFIX_NODE | LOG_PREFIX_FUNC);
-   LogComponentEnable("TcpTahoe", level);
-   LogComponentEnable("TcpTahoe",level);
-   LogComponentEnable("RttEstimator",level);
-   LogComponentEnable("TcpSocketBase",level);
+   // LogComponentEnable("TcpTahoe", level);
+   // LogComponentEnable("TcpTahoe",level);
+   // LogComponentEnable("RttEstimator",level);
+   // LogComponentEnable("TcpSocketBase",level);
 
   //        LogComponentEnable("OnOffApplication",level);
   //        LogComponentEnable("PacketSink",level);
   //       LogComponentEnable ("LteRlcUm", level);
-  //   LogComponentEnable ("LteHelper",level);
+    // LogComponentEnable ("LteHelper",level);
   //       LogComponentEnable ("LteUeMac", level);
   //   LogComponentEnable ("LteEnbMac", level);
   //       LogComponentEnable ("LtePdcp", level);
@@ -471,14 +369,8 @@ void init_log_and_cmd(int argc, char *argc[]){
     Config::SetDefault("ns3::ConfigStore::Mode", StringValue("Load"));
     inputConfig.ConfigureDefaults();
     inputConfig.ConfigureAttributes();
-    cmd.Parse(argc, argv);
 
-    /****ConfigStore setting****/
-    Config::SetDefault("ns3::ConfigStore::Filename", StringValue("lte-dl-simplest-config-out.txt"));
-    Config::SetDefault("ns3::ConfigStore::FileFormat", StringValue("RawText"));
-    Config::SetDefault("ns3::ConfigStore::Mode", StringValue("Save"));
-    outputConfig.ConfigureDefaults();
-    outputConfig.ConfigureAttributes();
+    cmd.Parse(argc, argv);
 }
 
 
@@ -487,13 +379,18 @@ p2p_setup(){
     /**********************************1.Create nodes*******************************/
     enbNodes.Create(numberOfEnodebs);
     ueNodes.Create(numberOfUeNodes);
-    p_gateway_node = epcHelper->GetPgwNode ();
+    NodeContainer remoteHostContainer;
+    remoteHostContainer.Create (1);
+    remote_host_node = remoteHostContainer.Get (0);
+
 
     //************lteHeper, epcHelper**************//
     lteHelper = CreateObject<LteHelper> ();
     epcHelper = CreateObject<EpcHelper> ();
     lteHelper->SetEpcHelper (epcHelper);
     lteHelper->SetSchedulerType("ns3::PfFfMacScheduler");    
+    p_gateway_node = epcHelper->GetPgwNode ();
+
 
     //*********************Set S1u link parameters (link between EnodeB and SPGW)********************//
     epcHelper->SetAttribute("S1uLinkDataRate", DataRateValue (DataRate (s1uLinkDataRate)));
@@ -506,17 +403,12 @@ p2p_setup(){
     p2ph.SetDeviceAttribute ("Mtu", UintegerValue (p2pLinkMtu));
     p2ph.SetChannelAttribute ("Delay", TimeValue (Seconds (p2pLinkDelay)));
     p2p_net_devs = p2ph.Install (p_gateway_node, remote_host_node);   //The interfaces between the SPGW and remoteHost were saved in p2p_net_devs.
-    SPGW_dev = p2p_net_devs->Get(0)->GetObject<ns3::PointToPointNetDevice>();
-    remote_host_dev = p2p_net_devs->Get(1)->GetObject<ns3::PointToPointNetDevice>();
+    SPGW_dev = p2p_net_devs.Get(0)->GetObject<ns3::PointToPointNetDevice>();
+    remote_host_dev = p2p_net_devs.Get(1)->GetObject<ns3::PointToPointNetDevice>();
     
 
     //***********Install Internet stack on edge nodes*************//
-    // NodeContainer remoteHostContainer;
-    // remoteHostContainer.Create (1);
-    // remote_host_node = remoteHostContainer.Get (0);
-    //Install Internet stack on the remoteHost.
     internet_helper.Install (remote_host_node);
-    internet_helper.Install (ueNodes);  //internet (InternetStackHelper) again be used to install an Internet stack for a node.
     
     
     // Create the Internet
@@ -524,10 +416,10 @@ p2p_setup(){
     Ipv4InterfaceContainer internetIpIfaces = ipv4h.Assign (p2p_net_devs);    //assign IP addresses in starting at "1.0.0.0" to the SPGW and remoteHost.
     remoteHostAddr = internetIpIfaces.GetAddress (1);
     SPGW_address = internetIpIfaces.GetAddress(0);
+    *debugger_wp->GetStream() << "remoteHostAddr=" << remoteHostAddr << "SPGW_address=" << SPGW_address << std::endl;
     
     
     //***************************Let's the remoteHost know how to route to UE "7.0.0.0"**************************//
-    Ipv4StaticRoutingHelper ipv4RoutingHelper;
     //get the static routing method to the remoteHost. The parameter for GetStaticRouting() is the Ptr<Ipv4> of the destination.
     Ptr<Ipv4StaticRouting> remoteHostStaticRouting = ipv4RoutingHelper.GetStaticRouting (remote_host_node->GetObject<Ipv4> ()); //remoteHostStaticRouting now knows how to route to the remoteHost.
     //Add the routing entry to the remoteHostStaticRouting table.
@@ -567,6 +459,7 @@ ran_setup(){
 
     //**********************Assign Ipv4 addresses for UEs. Install the IP stack on the UEs******************//
     // Assign IP address to UEs, and install applications
+    internet_helper.Install (ueNodes);  //internet (InternetStackHelper) again be used to install an Internet stack for a node.
     ue_ip_ifaces = epcHelper->AssignUeIpv4Address (NetDeviceContainer (ueLteDevs));
     // Add routing entries to routing table.
     for (uint32_t u = 0; u < ueNodes.GetN (); ++u)
@@ -584,6 +477,7 @@ ran_setup(){
             lteHelper->Attach (ueLteDevs.Get(t), enbLteDevs.Get(i));    //Attach function takes Interfaces as parameters.
         }
     }
+    *debugger_wp->GetStream() << "UEaddress=" << ue_ip_ifaces.GetAddress(0) << std::endl;
 }
 
 void
@@ -603,7 +497,7 @@ install_apps_on_nodes(){
           onOffHelper.SetConstantRate( DataRate(dataRate), packetSize );
           if (numberOfPackets != 0)
             onOffHelper.SetAttribute("MaxBytes",UintegerValue(packetSize*numberOfPackets));
-            clientApps.Add(onOffHelper.Install(remote_host_node));
+          clientApps.Add(onOffHelper.Install(remote_host_node));
         }
         else{
           /*********UDP Application********/
@@ -631,6 +525,8 @@ init_wrappers(){
     highest_tx_seq_wp = asciiTraceHelper.CreateFileStream(highesttxseq);
     next_tx_seq_wp = asciiTraceHelper.CreateFileStream(nexttxseq);
     dev_queues_wp = asciiTraceHelper.CreateFileStream(queues);
+    macro_wp = asciiTraceHelper.CreateFileStream(macro);
+    debugger_wp = asciiTraceHelper.CreateFileStream(debugger);
 
     //********************Initialize wrappers*********************/
     if (isTcp==1){
@@ -642,115 +538,48 @@ init_wrappers(){
     }
     put_send_wp = asciiTraceHelper.CreateFileStream(put_send);
     put_ack_wp = asciiTraceHelper.CreateFileStream(put_ack);
-}
 
+    *put_send_wp->GetStream() << "#DestinationIp\t"
+                  << "Time\t"
+                  << "Send Tcp throughput\t"
+                  << "Send Tcp delay\t"
+                  << "Number of Lost Pkts\t"
+                  << "Number of Tx Pkts\t"
+                  << "ErrorUlTx\t"
+                  << "ErrorDlTx\t"
+                  << "HarqUlTx\t"
+                  << "HarqDlTx\n";
+
+    *put_ack_wp->GetStream() << "#ScrAdd\t"
+                  << "Time\t"
+                  << "Ack Tcp throughput\t"
+                  << "Ack Tcp delay\t"
+                  << "Number of Lost Pkts\t"
+                  << "Number of Tx Pkts\t"
+                  << "ErrorUlTx\t"
+                  << "ErrorDlTx\t"
+                  << "HarqUlTx\t"
+                  << "HarqDlTx\n";
+
+}
 
 void 
 print_final_outputs(){
-    /******Print out simulation settings, client/server sent/received status*******/
-    // NS_LOG_UNCOND( "*************DL experiment**************"
-    // << "\nNumberofUeNodes = " << numberOfUeNodes
-    // << "\nNumberOfEnodeBs = " << numberOfEnodebs
-    // << "\nDistance = " << distance
-    // << "\nInterval = " << interPacketInterval
-    // << "\nPacket size = " << packetSize
-    // << "\nRate = " << dataRate
-    // << "\nNumber of Packets = " << numberOfPackets
-    // << "\nS1uLink " << s1uLinkDataRate << " " << s1uLinkDelay
-    // << "\np2pLink " << p2pLinkDataRate << " " << p2pLinkDelay );
     
-    *macro_wp->GetStream() << "*************DL experiment**************"
-    << "\nNumberofUeNodes = " << numberOfUeNodes
-    << "\nNumberOfEnodeBs = " << numberOfEnodebs
-    << "\nDistance = " << distance
-    << "\nInterval = " << interPacketInterval
-    << "\nPacket size = " << packetSize
-    << "\nRate = " << dataRate
-    << "\nNumber of Packets = " << numberOfPackets
-    << "\nS1uLink " << s1uLinkDataRate << " " << s1uLinkDelay
-    << "\np2pLink " << p2pLinkDataRate << " " << p2pLinkDelay 
-    << std::endl;
+  *macro_wp->GetStream() << "*************DL experiment**************"
+  << "\nNumberofUeNodes = " << numberOfUeNodes
+  << "\nNumberOfEnodeBs = " << numberOfEnodebs
+  << "\nDistance = " << distance
+  << "\nPacket size = " << packetSize
+  << "\nRate = " << dataRate
+  << "\nNumber of Packets = " << numberOfPackets
+  << "\nS1uLink " << s1uLinkDataRate << " " << s1uLinkDelay
+  << "\np2pLink " << p2pLinkDataRate << " " << p2pLinkDelay 
+  << std::endl;
     
-    /*******Print out simulation results, MULTIPLE CELLs enabled********/
-    // NS_LOG_UNCOND ( std::left << std::setw(SPC) << "CellId"
-    // << std::left << std::setw(SPC) << "Imsi"
-    // << std::left << std::setw(SPC) << "PdcpUL(ms)"
-    // << std::left << std::setw(SPC) << "PdcpDL(ms)"
-    // << std::left << std::setw(SPC) << "RlcUl(ms)"
-    // << std::left << std::setw(SPC) << "RlcDl(ms)"
-    // << std::left << std::setw(SPC) << "ULPDCPTxs"
-    // << std::left << std::setw(SPC) << "ULRLCTxs"
-    // << std::left << std::setw(SPC) << "DLPDCPTxs"
-    // << std::left << std::setw(SPC) << "DLRLCTxs"
-    // << std::left << std::setw(SPC) << "UlPathloss"
-    // << std::left << std::setw(SPC) << "DlPathloss"
-    // << std::left << std::setw(SPC) << "OnOffSent"
-    // << std::left << std::setw(SPC+5) << "packetSinkReceived"
-    // << std::left << std::setw(SPC) << "OnOffSentTotal"
-    // << std::left << std::setw(SPC) << "packetSinkReceivedTotal");
-
-    // *macro_wp->GetStream() << std::left << std::setw(SPC) << "CellId"
-    // << std::left << std::setw(SPC) << "Imsi"
-    // << std::left << std::setw(SPC) << "PdcpUL(ms)"
-    // << std::left << std::setw(SPC) << "PdcpDL(ms)"
-    // << std::left << std::setw(SPC) << "RlcUl(ms)"
-    // << std::left << std::setw(SPC) << "RlcDl(ms)"
-    // << std::left << std::setw(SPC) << "ULPDCPTxs"
-    // << std::left << std::setw(SPC) << "ULRLCTxs"
-    // << std::left << std::setw(SPC) << "DLPDCPTxs"
-    // << std::left << std::setw(SPC) << "DLRLCTxs"
-    // << std::left << std::setw(SPC) << "UlPathloss"
-    // << std::left << std::setw(SPC) << "DlPathloss"
-    // << std::left << std::setw(SPC) << "OnOffSent"
-    // << std::left << std::setw(SPC+5) << "packetSinkReceived"
-    // << std::left << std::setw(SPC) << "OnOffSentTotal"
-    // << std::left << std::setw(SPC) << "packetSinkReceivedTotal"
-    // << std::endl;
-    
-
-
-    // Ptr<LteEnbNetDevice> lteEnbDev;
-
-    // for ( uint32_t i = 0 ; i < enbNodes.GetN(); ++i){
-    //     for ( uint32_t j = 0; j < ueNodes.GetN(); ++j){
-    //         lteEnbDev = enbLteDevs.Get (i)->GetObject<ns3::LteEnbNetDevice> ();
-    //         std::cout << std::left << std::setw(SPC) << i+1;
-    //         std::cout << std::left << std::setw(SPC) << j+1;
-    //         std::cout << std::left << std::setw(SPC) << getUlPdcpDelay(lteHelper,j+1,3);
-    //         std::cout << std::left << std::setw(SPC) << getDlPdcpDelay(lteHelper,j+1,3);
-    //         std::cout << std::left << std::setw(SPC) << getUlRlcDelay(lteHelper,j+1,3);
-    //         std::cout << std::left << std::setw(SPC) << getDlRlcDelay(lteHelper,j+1,3);
-    //         std::cout << std::left << std::setw(SPC) << getUlPdcpTxs( lteHelper, j+1, 3);
-    //         std::cout << std::left << std::setw(SPC) << getUlRlcTxs(lteHelper, j+1, 3);
-    //         std::cout << std::left << std::setw(SPC) << getDlPdcpTxs(lteHelper, j+1, 3);
-    //         std::cout << std::left << std::setw(SPC) << getDlRlcTxs(lteHelper, j+1, 3);
-    //         std::cout << std::left << std::setw(SPC) << ulPathlossDb.GetPathloss(i+1,j+1);
-    //         std::cout << std::left << std::setw(SPC) << dlPathlossDb.GetPathloss(i+1,j+1);
-    //         std::cout << std::left << std::setw(SPC) << clientApps.Get(j)->GetObject<ns3::OnOffApplication>()->GetSent();
-    //         std::cout << std::left << std::setw(SPC) << serverApps.Get(j)->GetObject<ns3::PacketSink>()->GetPacketReceived();
-    //         std::cout << std::left << std::setw(SPC) << clientApps.Get(j)->GetObject<ns3::OnOffApplication>()->GetSentBytes();
-    //         std::cout << std::left << std::setw(SPC) << serverApps.Get(j)->GetObject<ns3::PacketSink>()->GetTotalRx() << std::endl;
-    //     }
-    // }
-
   monitor->CheckForLostPackets();
   classifier = DynamicCast<ns3::Ipv4FlowClassifier> (flowHelper.GetClassifier());
   stats = monitor->GetFlowStats();
-
-  // /**sending flow***/
-  // ns3::int64x64_t meanTxRate_1 = 0;
-  // ns3::int64x64_t meanRxRate_1 = 0;
-  // ns3::int64x64_t meanTcpDelay_1 = 0;
-  // uint64_t numOfLostPackets_1 = 0;
-  // uint64_t numOfTxPacket_1 = 0;
-
-  // /***ack flow***/
-  // ns3::int64x64_t meanTxRate_2 = 0;
-  // ns3::int64x64_t meanRxRate_2 = 0;
-  // ns3::int64x64_t meanTcpDelay_2 = 0;
-  // uint64_t numOfLostPackets_2 = 0;
-  // uint64_t numOfTxPacket_2 = 0;
-
 
   for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator iter = stats.begin(); iter != stats.end(); ++iter){
     ns3::Ipv4FlowClassifier::FiveTuple tuple = classifier->FindFlow(iter->first);
@@ -791,110 +620,110 @@ print_final_outputs(){
         << "Mean transmitted bitrate " << 8*iter->second.txBytes/(iter->second.timeLastTxPacket-iter->second.timeFirstTxPacket)*ONEBIL/(1024) << std::endl;
     }
   }
+}
 
-  // /****Radio link error and HARQ*******/
-  // errorUlRx = lteHelper->GetPhyRxStatsCalculator()->GetTotalErrorUl();  //Error detected on the Ul Received side (eNB).
-  // errorDlRx = lteHelper->GetPhyRxStatsCalculator()->GetTotalErrorDl(); //Error detected on the Dl Received side (UE).
-  // harqUl = lteHelper->GetPhyTxStatsCalculator()->GetTotalUlHarqRetransmission();  //HARQ transmitted from eNB.
-  // harqDl = lteHelper->GetPhyTxStatsCalculator()->GetTotalDlHarqRetransmission();  //HAEQ transmitted from Ue.
+// static void 
+// CwndTracer (uint32_t oldval, uint32_t newval)
+// {
+//   NS_LOG_UNCOND (Simulator::Now().GetMilliSeconds() << " cwnd_from " << oldval << " to " << newval);
+// }
 
-  // NS_LOG_UNCOND("Total Error UlRx " << errorUlRx);
-  // NS_LOG_UNCOND("Total Error DlRx " << errorDlRx);
-  // NS_LOG_UNCOND("Total UlTx HARQ " <<  harqUl);
-  // NS_LOG_UNCOND("Total DlTx HARQ " << harqDl);
+// static void 
+// enable_cwnd_trace(Ptr<Application> app)
+// {
+    
+//     Ptr<OnOffApplication> on_off_app = app->GetObject<OnOffApplication>();
+//     if (on_off_app != NULL)
+//     {
+//         Ptr<Socket> socket = on_off_app->GetSocket();
+//         socket->TraceConnectWithoutContext("CongestionWindow", MakeCallback(&CwndTracer));//, stream));
+//     }
+// }
 
-  // /*============Get link capacity histogram==============*/
-
-  // time_ulcap = lteHelper->GetPhyTxStatsCalculator()->GetUlCap();
-  // time_dlcap = lteHelper->GetPhyTxStatsCalculator()->GetDlCap();
-  // link_cap_ul << "#Imsi\tuple\t time stamp(ms)\t\t uplink link capacity(Mbps)\n";
-  // link_cap_dl << "#Imis\t\t time stamp(ms)\t\t downlink link capacity(Mbps)\n";
-  // /*uplink cap out*/
-  // for (std::map<uint32_t, Time_cap>::iterator ii = time_ulcap.begin(); ii != time_ulcap.end(); ++ii){
-  //     for (Time_cap::iterator it = (*ii).second.begin(); it != (*ii).second.end(); ++it){
-  //           link_cap_ul << "UE" << (*ii).first << "\t\t" << (*it).first << "\t\t" << (*it).second <<"\n";
-  //     }
-  // }
-  // /*downlink cap out*/
-  // for (std::map<uint32_t, Time_cap>::iterator ii = time_dlcap.begin(); ii != time_dlcap.end(); ++ii){
-  //     for (Time_cap::iterator it = (*ii).second.begin(); it != (*ii).second.end(); ++it){
-  //           link_cap_dl << "UE" << (*ii).first << "\t\t" << (*it).first << "\t\t" << (*it).second << "\n";
-  //     }
-  // }
+static void enable_tcp_socket_traces(Ptr<Application> app)
+{
+    Ptr<OnOffApplication> on_off_app = app->GetObject<OnOffApplication>();
+    if (on_off_app != NULL)
+    {
+        Ptr<Socket> socket = on_off_app->GetSocket();
+        socket->TraceConnectWithoutContext("CongestionWindow", MakeBoundCallback(&CwndTracer, cwnd_wp));
+        socket->TraceConnectWithoutContext("RTO", MakeBoundCallback(&RTOTracer, rto_wp));
+        socket->TraceConnectWithoutContext("RTT", MakeBoundCallback(&LastRttTracer, rtt_wp));
+        socket->TraceConnectWithoutContext("HighestSequence", MakeBoundCallback(&HighestSentSeqTracer,highest_tx_seq_wp));
+        socket->TraceConnectWithoutContext("NextTxSequence", MakeBoundCallback(&NextTxSeqTracer,next_tx_seq_wp));
+    }
+}
 
 
 
-  //#Distance AppRate MeanTx_1  Goodput(MeanRx)_1 TcpDelay_1  ul pdcp delay   ul rlc delay    ulPdcpTxs   ulRlcTxs lostPkt_1
-  //MeanTx_2  Goodput(MeanRx)_2 TcpDelay_2  dl pdcp delay   dl rlc delay    dlPdcpTxs   dlRlcTxs  lostPkt_2
-  //UlTx    UlRx  DlTx  DlRx
-  //ErrorUlRx ErrorDlRx UlTxHarq  DlTxHarq
+int
+main (int argc, char *argv[])
+{
+    /*** commands parsing and default configuration setting up*****/
+    init_log_and_cmd(argc, argv);
 
-  // /*Write to file*/
-  // //Application rate
-  // oFile << distance << " ";
-  // oFile << dataRate.substr(0,dataRate.length()-4) << "   ";
-  // /*sending flow*/
-  // //Mean transmitted
-  // oFile << meanTxRate_1.GetDouble()/1024 << "  ";
-  // //Goodput
-  // oFile << meanRxRate_1.GetDouble()/1024 << "  ";
-  // //TCP delay
-  // oFile << meanTcpDelay_1.GetDouble() << " ";
-  // //UL PDCP PDUs
-  // oFile << getUlPdcpDelay(lteHelper,1,3) << "    ";
-  // //UL RLC PDUs
-  // oFile << getUlRlcDelay(lteHelper,1,3) << "   ";
-  // //ulPdcpTxs
-  // oFile << getUlPdcpTxs(lteHelper,1,3) << "  ";
-  // //ulRlcTxs
-  // oFile << getUlRlcTxs(lteHelper,1,3) << "   ";
-  // //Lost packets
-  // oFile << numOfLostPackets_1 << " ";
+    /****init wrappers****/
+    init_wrappers();
 
-  // /*ack flow*/
-  // //Mean transmitted
-  // oFile << meanTxRate_2.GetDouble()/1024 << "  ";
-  // //Goodput
-  // oFile << meanRxRate_2.GetDouble()/1024 << "  ";
-  // //TCP delay
-  // oFile << meanTcpDelay_2.GetDouble() << " ";
-  // //DL PDCP PDUs
-  // oFile << getDlPdcpDelay(lteHelper,1,3) << "    ";
-  // //DL RLC PDUs
-  // oFile << getDlRlcDelay(lteHelper,1,3) << "   ";
-  // //dlPdcpTxs
-  // oFile << getDlPdcpTxs(lteHelper,1,3) << "  ";
-  // //dlRlcTxs
-  // oFile << getDlRlcTxs(lteHelper,1,3) << "   ";
-  // //Lost packets
-  // oFile << numOfLostPackets_2 << " ";
+    /**************p2p and core network setting up*****************/
+    p2p_setup();
 
-  // /*phy layer*/
-  // //Total Phy Ul Tx
-  // oFile << lteHelper->GetPhyTxStatsCalculator()->GetTotalUl() << " ";
-  // //Total Phy Ul Rx
-  // oFile << lteHelper->GetPhyRxStatsCalculator()->GetTotalUl() << " ";
-  // //Total Phy Dl Tx
-  //  oFile << lteHelper->GetPhyTxStatsCalculator()->GetTotalDl() << "    ";
-  //  //Total Phy Dl Rx
-  //  oFile << lteHelper->GetPhyRxStatsCalculator()->GetTotalDl() << "    ";
+    /**************RAN setting up**************/
+    ran_setup();
+    
+    /************** install apps on Ues and remote host *********/
+    install_apps_on_nodes();
 
-  //  /*Error and Harq*/
-  //  oFile << errorUlRx << " ";
-  //  oFile << errorDlRx << " ";
-  //  oFile << harqUl << "  ";
-  //  oFile << harqDl << "  ";
+    monitor = flowHelper.Install(ueNodes);
+    monitor = flowHelper.Install(remote_host_node);
+    monitor = flowHelper.GetMonitor();
 
-  //  if (harqUl != 0 or harqDl != 0){
-  //   NS_LOG_UNCOND("IsPhyError: True");
-  //   oFile << "true";
-  //  }
+    /*********Tracing settings***************/
+    lteHelper->EnableTraces ();
+    lteHelper->GetPdcpStats()->SetAttribute("EpochDuration", TimeValue( Seconds (0.010)) );   //set collection interval for PDCP.
+    lteHelper->GetRlcStats()->SetAttribute("EpochDuration", TimeValue ( Seconds (0.010))) ;   //same for RLC
+    // Uncomment to enable PCAP tracing
+    p2ph.EnablePcapAll(pcapName);
 
-  //  oFile << "\n";
 
-  // oFile.close();
-  // tcpThroughput.close();
-  // link_cap_ul.close();
-  // link_cap_dl.close();
+    /*******************Start client and server apps***************/
+    serverApps.Start (Seconds (0.01));		//All server start at 0.01s.
+    clientApps.Start(Seconds(0.5));
 
+    
+
+    /**Pathloss**/
+    // DownlinkLteGlobalPathlossDatabase dlPathlossDb;
+    // UplinkLteGlobalPathlossDatabase ulPathlossDb;
+
+    /*=============schedule to get TCP throughput============*/
+    // Simulator::Schedule(Seconds (0.0), &getTcpPut);
+    // getTcpPut();
+    // double client_start = 0;
+    // while (client_start < simTime){
+    //     // std::cout << "client_start=" << client_start << "PUT_SAMPLING_INTERVAL=" << PUT_SAMPLING_INTERVAL << std::endl;
+    //     client_start += PUT_SAMPLING_INTERVAL;
+    //     Simulator::Schedule(Seconds(client_start),&getTcpPut);
+    // }
+
+    Simulator::Schedule(Seconds(0.6) + NanoSeconds(1.0), &enable_tcp_socket_traces, remote_host_node->GetApplication(0));///*Note: enable_cwnd_trace must be scheduled after the OnOffApplication starts (OnOffApplication's socket is created after the application starts) 
+
+    /****Output settings****/
+    Config::SetDefault("ns3::ConfigStore::Filename", StringValue("lte-dl-simplest-config-out.txt"));
+    Config::SetDefault("ns3::ConfigStore::FileFormat", StringValue("RawText"));
+    Config::SetDefault("ns3::ConfigStore::Mode", StringValue("Save"));
+    outputConfig.ConfigureDefaults();
+    outputConfig.ConfigureAttributes();
+
+
+    /*********Start the simulation*****/
+    Simulator::Stop(Seconds(simTime));
+    Simulator::Run();
+    
+
+    /**************Simulation stops here. Start printing out information (if needed)***********/
+    print_final_outputs();
+
+    Simulator::Destroy();
+    return 0;
 }

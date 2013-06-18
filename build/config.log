@@ -1,6 +1,6 @@
-# project ns (3-dev) configured on Sat Jun 15 22:30:36 2013 by
+# project ns (3-dev) configured on Mon Jun 17 12:17:06 2013 by
 # waf 1.7.10 (abi 98, python 20702f0 on darwin)
-# using ./waf configure --enable-test --enable-examples
+# using ./waf -d debug --enable-examples --enable-tests configure
 #
 ----------------------------------------
 Setting top to
@@ -160,7 +160,7 @@ from /Users/binh/Documents/workspace/lena/bindings/python: Test does not build: 
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4338619536: cxx test.cc -> test.cc.1.o}
+	{task 4361643216: cxx test.cc -> test.cc.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-Wno-array-bounds', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/site-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/site-packages"', '-DHAVE_PYTHON_H=1', '../test.cc', '-c', '-o', 'test.cc.1.o']
 
 not found
@@ -226,7 +226,7 @@ from /Users/binh/Documents/workspace/lena/src/core: Test does not build: Traceba
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4338736272: cxx test.cpp -> test.cpp.1.o}
+	{task 4361682128: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
@@ -313,7 +313,7 @@ from /Users/binh/Documents/workspace/lena/src/core: Test does not build: Traceba
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4338866768: cxx test.cpp -> test.cpp.1.o}
+	{task 4361808528: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
@@ -487,7 +487,7 @@ from /Users/binh/Documents/workspace/lena/src/core: Test does not build: Traceba
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4338813072: cxx test.cpp -> test.cpp.1.o}
+	{task 4362217488: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
@@ -518,7 +518,7 @@ from /Users/binh/Documents/workspace/lena/src/core: Test does not build: Traceba
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4339275536: cxxprogram test.cpp.1.o -> testprog}
+	{task 4362218576: cxxprogram test.cpp.1.o -> testprog}
 ['/usr/bin/g++', 'test.cpp.1.o', '-o', '/Users/binh/Documents/workspace/lena/build/.conf_check_5ef57bc0d8aa3565949b6ce1186fd4a7/testbuild/testprog', '-lrt']
 
 not found
@@ -546,7 +546,7 @@ from /Users/binh/Documents/workspace/lena/src/emu: Test does not build: Tracebac
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4339276752: cxx test.cpp -> test.cpp.1.o}
+	{task 4362256720: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
@@ -600,7 +600,7 @@ from /Users/binh/Documents/workspace/lena/src/fd-net-device: Test does not build
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4338735632: cxx test.cpp -> test.cpp.1.o}
+	{task 4362218960: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
@@ -628,7 +628,7 @@ from /Users/binh/Documents/workspace/lena/src/fd-net-device: Test does not build
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4339274960: cxx test.cpp -> test.cpp.1.o}
+	{task 4362217872: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
@@ -656,7 +656,7 @@ from /Users/binh/Documents/workspace/lena/src/fd-net-device: Test does not build
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4338813328: cxx test.cpp -> test.cpp.1.o}
+	{task 4362216848: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found
@@ -692,7 +692,7 @@ from /Users/binh/Documents/workspace/lena/src/tap-bridge: Test does not build: T
     raise Errors.BuildError(self.producer.error)
 BuildError: Build failed
  -> task in 'testprog' failed (exit status 1): 
-	{task 4338864656: cxx test.cpp -> test.cpp.1.o}
+	{task 4361809680: cxx test.cpp -> test.cpp.1.o}
 ['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
 
 not found

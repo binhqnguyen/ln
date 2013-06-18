@@ -100,8 +100,6 @@ static Ptr<PointToPointNetDevice> enb_core_dev;		//device on the core side of th
 static Ptr<PointToPointNetDevice> ue_dev;
 static Ptr<PointToPointNetDevice> endhost_dev;
 
-// // static double last_sampling_time = 0;
-// static double last_total_enqueued = 0;
 
 static double last_tx_time = 0;
 static double last_rx_time = 0;
@@ -109,13 +107,13 @@ static double last_tx_bytes = 0;
 static double last_rx_bytes = 0;
 
 /* Ascii output files name*/
-// static std::string OUTPUT_DIR = "~/Documents/workspace/lena/results/tcp/data-scripts/emulated/";
-static std::string cwnd = "~/Documents/workspace/lena/results/tcp/data-scripts/emulated/cwnd.txt";
-static std::string rto = "~/Documents/workspace/lena/results/tcp/data-scripts/emulated/rto_value_tmp.txt";
-static std::string rtt = "~/Documents/workspace/lena/results/tcp/data-scripts/emulated/last_rtt_sample_tmp.txt";
-static std::string highesttxseq = "~/Documents/workspace/lena/results/tcp/data-scripts/emulated/highest_tx_seq.txt";
-static std::string nexttxseq = "~/Documents/workspace/lena/results/tcp/data-scripts/emulated/next_tx_seq.txt";
-static std::string queues = "~/Documents/workspace/lena/results/tcp/data-scripts/emulated/queues.txt";
+static std::string DIR = "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/";
+static std::string cwnd = DIR+"cwnd.txt";
+static std::string rto = DIR+"rto_value_tmp.txt";
+static std::string rtt = DIR+"last_rtt_sample_tmp.txt";
+static std::string highesttxseq = DIR+"highest_tx_seq.txt";
+static std::string nexttxseq = DIR+"next_tx_seq.txt";
+static std::string queues = DIR+"queues.txt";
 static std::string put;
 
 /********wrappers**********/
@@ -304,7 +302,7 @@ int main (int argc, char *argv[])
 
    if (is_tcp == 1){
                 LogComponentEnable("Queue",level);    //Only enable Queue monitoring for TCP to accelerate experiment speed.
-                put = "tcp-put.txt";
+                put = DIR + "tcp-put.txt";
                 put_wp = asciiTraceHelper.CreateFileStream(put);
 
         				/*********TCP Application********/
@@ -316,7 +314,7 @@ int main (int argc, char *argv[])
        					clientApps.Add(onOffHelper.Install(remote_host));
    }
               else{
-                put = "udp-put.txt";
+                put = DIR + "udp-put.txt";
                 put_wp = asciiTraceHelper.CreateFileStream(put);
         					/*********UDP Application********/
         				PacketSinkHelper sink("ns3::UdpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), ulPort));
@@ -509,7 +507,6 @@ getTcpPut(){
                   << meanTxRate_send << "\t" 
                   << tcp_delay << "\t" 
                   << tcp_delay_ack << std::endl;
-
     while (timer < sim_time){
         timer += TCP_SAMPLING_INTERVAL;
         Simulator::Schedule(Seconds(timer),&getTcpPut);
