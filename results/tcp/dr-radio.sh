@@ -13,11 +13,12 @@
 
 ######### queues logs from log file ###########
 	cat < TCP_LOG | grep "Queue:" > queue
-	grep "0 Queue:GetTotalReceivedBytes():" queue > ue_dev_total_received.txt
-	grep "2 Queue:Dequeue(): m_traceDequeue" queue > endhost_dev_dequeue_tmp.txt
-    grep "1 Queue:Enqueue(): m_traceEnqueue" queue > enb_dev_enqueue_tmp.txt	
-    grep "1 Queue:Dequeue(): m_traceDequeue" queue > enb_dev_dequeue_tmp.txt	
-    grep "1 Queue:Drop(): m_traceDrop" queue > enb_dev_queue_drop_tmp.txt
+	grep "0 Queue:GetTotalReceivedBytes():" queue > spgw_dev_total_received.txt
+	grep "1 Queue:Dequeue(): m_traceDequeue" queue > endhost_dev_dequeue_tmp.txt
+    grep "2 Queue:Enqueue(): m_traceEnqueue" queue > enb_dev_enqueue_tmp.txt	
+    grep "2 Queue:Dequeue(): m_traceDequeue" queue > enb_dev_dequeue_tmp.txt	
+    grep "2 Queue:Drop(): m_traceDrop" queue > enb_dev_queue_drop_tmp.txt
+    grep "Queue:Drop(): m_traceDrop" queue > all_p2p_netdev_queue_drop_tmp.txt
 ###############################################
 
 
@@ -38,6 +39,7 @@
 
 ############# post processing: *_tmp files processing ########
 	./get_queue_time.py
+	./check_radio_error.py
 
 ######plot and move graph files######
 	gnuplot plot-averaged.txt

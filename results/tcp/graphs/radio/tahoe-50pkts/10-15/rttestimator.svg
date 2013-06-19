@@ -95,7 +95,7 @@
 		<text>Time (s)</text>
 	</g>
 	<g transform="translate(323.4,31.6)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:middle">
-		<text>LTE, TCP rtt estimator TcpTahoe, 50 segments EnodeB RLC Tx Buffer(28650B)</text>
+		<text>LTE, TCP rtt estimator TcpTahoe, 50 pkts buffer EnodeB RLC Tx Buffer(28900B)</text>
 	</g>
 	<path  d='M300.4,135.1 L300.4,63.1 L566.7,63.1 L566.7,135.1 L300.4,135.1 Z  h0.01'/></g>
 	<g id="gnuplot_plot_1" ><title>gnuplot_plot_1</title>
@@ -159,7 +159,7 @@
 	<g transform="translate(507.9,112.6)" style="stroke:none; fill:black; font-family:Arial; font-size:12.00pt; text-anchor:end">
 		<text>3ACKs</text>
 	</g>
-	<use xlink:href='#gpPt3' transform='translate(200.0,409.0) scale(4.50)'/>
+	<use xlink:href='#gpPt3' transform='translate(355.8,409.0) scale(4.50)'/>
 	<use xlink:href='#gpPt3' transform='translate(537.3,108.1) scale(4.50)'/>
 </g>
 	</g>

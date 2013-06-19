@@ -50,14 +50,21 @@
 
 using namespace ns3;
 /**
- * Topology:     Ues (x numberOfNodes) ---------- EnodeB ---------- |
+ * Theory Topology:                Ues (x numberOfNodes) ---------- EnodeB ---------- |
  *																																	|
  * 							 Ues (x numberOfNodes) ---------- EnodeB ----------	|
  * 							 																										|
  * 							 Ues (x numberOfNodes) ---------- EnodeB ----------	|	SPGW -------------------------- RH
  *
- *                              										n2                 n0     <100Gbps, 0.01ms>      n1
+ *                              										n2                 n0                       n1
  */
+ /*
+  * Experiment topology:
+  *     
+  *             UE (n3) -------------------- ENB (n2) ==================== SPGW (n0) ==================== End-host (n1)
+  *                                                 2:2                  0:3        0:2                 1:1
+  *                             radio                  <1Gbps,15ms,1500>               <1Gbps,15ms,1500>
+  */
 /**
  * Sample simulation script for LTE+EPC. It instantiates several eNodeB,
  * attaches one UE per eNodeB starts a flow for each UE to  and from a remote host.
@@ -77,7 +84,7 @@ std::ofstream tcpThroughput;
 std::ofstream tcpThroughput_ack;
 Ptr<ns3::FlowMonitor> monitor;
 FlowMonitorHelper flowHelper;
-double samplingInterval = 0.060;    /*sample TCP thoughput for each 50ms*/
+double samplingInterval = 0.10;    /*sample TCP thoughput for each 50ms*/
 double t = 0.0;
 uint16_t isTcp = 1;
 //topology
@@ -86,18 +93,18 @@ uint16_t numberOfEnodebs = 1;
 
 //S1uLink
 std::string s1uLinkDataRate = "1Gb/s";
-double  s1uLinkDelay = 0.01;
+double  s1uLinkDelay = 0.015;
 uint16_t s1uLinkMtu = 1500;
 
 //p2pLink
 std::string p2pLinkDataRate = "1Gb/s";
-double p2pLinkDelay = 0.01;
+double p2pLinkDelay = 0.015;
 uint16_t p2pLinkMtu = 1500;
 
 //Simulation
 uint32_t numberOfPackets = 0;
 uint32_t packetSize = 900;
-double distance = 5000.0;    //With enbTxPower=5, Noise=37 and UeTxPower=50 (NEED TO BE THAT HIGH TO GUARANTEE UPLINK FOR TCP ACK FLOW), noise=9, we have roughly 1000Kb/s downlink bandwidth.
+double distance = 1000.0;    //With enbTxPower=5, Noise=37 and UeTxPower=50 (NEED TO BE THAT HIGH TO GUARANTEE UPLINK FOR TCP ACK FLOW), noise=9, we have roughly 1000Kb/s downlink bandwidth.
 uint16_t radioUlBandwidth = 100;  //the radio link bandwidth among UEs and EnodeB (in Resource Blocks). This is the configuration on LteEnbDevice.
 uint16_t radioDlBandwidth = 15;  //same as above, for downlink.
 std::string dataRate = "100Mb/s";
@@ -139,7 +146,7 @@ static std::string rwnd = DIR+"rwnd_tmp.txt";
 static std::string rtt = DIR+"last_rtt_sample_tmp.txt";
 static std::string highesttxseq = DIR+"highest_tx_seq.txt";
 static std::string nexttxseq = DIR+"next_tx_seq.txt";
-static std::string queues = DIR+"queues.txt";
+// static std::string queues = DIR+"queues.txt";
 static std::string macro = DIR+"macro_output.txt";
 static std::string put_send;
 static std::string put_ack;
@@ -153,7 +160,7 @@ Ptr<OutputStreamWrapper> rwnd_wp;
 Ptr<OutputStreamWrapper> highest_tx_seq_wp;
 Ptr<OutputStreamWrapper> next_tx_seq_wp;
 Ptr<OutputStreamWrapper> rtt_wp;
-Ptr<OutputStreamWrapper> dev_queues_wp;
+// Ptr<OutputStreamWrapper> dev_queues_wp;
 Ptr<OutputStreamWrapper> put_send_wp;
 Ptr<OutputStreamWrapper> put_ack_wp;
 Ptr<OutputStreamWrapper> macro_wp;
@@ -630,7 +637,7 @@ init_wrappers(){
     rtt_wp = asciiTraceHelper.CreateFileStream(rtt);
     highest_tx_seq_wp = asciiTraceHelper.CreateFileStream(highesttxseq);
     next_tx_seq_wp = asciiTraceHelper.CreateFileStream(nexttxseq);
-    dev_queues_wp = asciiTraceHelper.CreateFileStream(queues);
+    // dev_queues_wp = asciiTraceHelper.CreateFileStream(queues);
     macro_wp = asciiTraceHelper.CreateFileStream(macro);
     debugger_wp = asciiTraceHelper.CreateFileStream(debugger);
 

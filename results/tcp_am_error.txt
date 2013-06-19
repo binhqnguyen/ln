@@ -1,8 +1,0 @@
-Waf: Entering directory `/Users/binh/Documents/workspace/lena/build'
-Waf: Leaving directory `/Users/binh/Documents/workspace/lena/build'
-'build' finished successfully (1.650s)
-*Tx: UlTx resend frame at 629
-*Tx: UlTx resend frame at 630
-assert failed. cond="m_rxonBuffer[ m_vrR.GetValue () ].m_byteSegments.size () == 1", msg="Too many segments. PDU Reassembly process didn't work", file=../src/lte/model/lte-rlc-am.cc, line=805
-libc++abi.dylib: terminate called without an active exception
-Command ['/Users/binh/Documents/workspace/lena/build/scratch/e2e-tcp-ul', '--simTime=20', '--dataRate=500kb/s', '--isTcp=1'] terminated with signal SIGIOT. Run it under a debugger to get more information (./waf --run <program> --command-template="gdb --args %s <args>").
