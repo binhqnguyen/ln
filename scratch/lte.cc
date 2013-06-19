@@ -140,17 +140,17 @@ const uint32_t ONEBIL = 1000000000;
 
 /********* Ascii output files name *********/
 static std::string DIR = "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/radio/";
-static std::string cwnd = DIR+"cwnd.txt";
-static std::string rto = DIR+"rto_value_tmp.txt";
-static std::string rwnd = DIR+"rwnd_tmp.txt";
-static std::string rtt = DIR+"last_rtt_sample_tmp.txt";
-static std::string highesttxseq = DIR+"highest_tx_seq.txt";
-static std::string nexttxseq = DIR+"next_tx_seq.txt";
-// static std::string queues = DIR+"queues.txt";
-static std::string macro = DIR+"macro_output.txt";
+static std::string cwnd = DIR+"cwnd.dat";
+static std::string rto = DIR+"rto_value_tmp.tmp";
+static std::string rwnd = DIR+"rwnd_tmp.tmp";
+static std::string rtt = DIR+"last_rtt_sample_tmp.tmp";
+static std::string highesttxseq = DIR+"highest_tx_seq.dat";
+static std::string nexttxseq = DIR+"next_tx_seq.dat";
+// static std::string queues = DIR+"queues.dat";
+static std::string macro = DIR+"macro_output.dat";
 static std::string put_send;
 static std::string put_ack;
-static std::string debugger = "debugger.txt";
+static std::string debugger = "debugger.dat";
 
 /********wrappers**********/
 static AsciiTraceHelper asciiTraceHelper;
@@ -244,9 +244,10 @@ main (int argc, char *argv[])
     LogComponentEnable("TcpTahoe", level);
     LogComponentEnable("RttEstimator",level);
     LogComponentEnable("TcpSocketBase",level);
+    LogComponentEnable ("LteRlcUm", level);
+    LogComponentEnable ("LteRlcAm", level);
     		// LogComponentEnable("OnOffApplication",level);
 //     		LogComponentEnable("PacketSink",level);
-//       LogComponentEnable ("LteRlcUm", level);
     //   LogComponentEnable ("LteHelper",level);
 //       LogComponentEnable ("LteUeMac", level);
     //   LogComponentEnable ("LteEnbMac", level);
@@ -408,7 +409,7 @@ main (int argc, char *argv[])
         if (isTcp == 1){
 					/*********TCP Application********/
 					//Create a packet sink to receive packet on remoteHost
-          LogComponentEnable("Queue",level);    //Only enable Queue monitoring for TCP to accelerate experiment speed.
+                    LogComponentEnable("Queue",level);    //Only enable Queue monitoring for TCP to accelerate experiment speed.
 					PacketSinkHelper sink("ns3::TcpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), dlPort));
 					serverApps.Add(sink.Install(ueNodes.Get(u)));
 
@@ -643,11 +644,11 @@ init_wrappers(){
 
     //********************Initialize wrappers*********************/
     if (isTcp==1){
-      put_send = DIR + "tcp-put.txt";
-      put_ack = DIR + "tcp-put-ack.txt";
+      put_send = DIR + "tcp-put.dat";
+      put_ack = DIR + "tcp-put-ack.dat";
     } else{
-      put_send = DIR + "udp-put.txt";
-      put_ack = DIR + "udp-put-ack.txt";
+      put_send = DIR + "udp-put.dat";
+      put_ack = DIR + "udp-put-ack.dat";
     }
     put_send_wp = asciiTraceHelper.CreateFileStream(put_send);
     put_ack_wp = asciiTraceHelper.CreateFileStream(put_ack);
