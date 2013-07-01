@@ -1,1 +1,0 @@
-#ScrAdd	Time	Ack Tcp throughput	Ack Tcp delay	Number of Lost Pkts	Number of Tx Pkts	ErrorUlTx	ErrorDlTx	HarqUlTx	HarqDlTx

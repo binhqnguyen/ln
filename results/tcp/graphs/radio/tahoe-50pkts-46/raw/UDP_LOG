@@ -1,5 +1,0 @@
-Waf: Entering directory `/Users/binh/Documents/workspace/lena/build'
-[ 752/1902] cxx: scratch/lte.cc -> build/scratch/lte.cc.4.o
-[1901/1902] cxxprogram: build/scratch/lte.cc.4.o -> build/scratch/lte
-Waf: Leaving directory `/Users/binh/Documents/workspace/lena/build'
-'build' finished successfully (5.433s)
