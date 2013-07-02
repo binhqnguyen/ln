@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python26
 #
 # scons-time - run SCons timings and collect statistics
 #

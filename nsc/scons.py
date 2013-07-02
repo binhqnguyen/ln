@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python26
 #
 # SCons - a Software Constructor
 #
