@@ -3,3 +3,6 @@
 
 ###pcap files
 *.pcap
+
+*.so
+*.pyc
