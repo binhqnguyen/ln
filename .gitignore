@@ -6,3 +6,7 @@
 
 *.so
 *.pyc
+
+build/
+waf-tools/
+emulate-out.txt
