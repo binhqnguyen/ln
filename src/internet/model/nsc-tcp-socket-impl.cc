@@ -876,4 +876,56 @@ NscTcpSocketImpl::GetAllowBroadcast () const
   return false;
 }
 
+int
+NscTcpSocketImpl::UpdateTcpVars()
+{
+  char cwnd_t[4];
+  char srtt_t[4];
+  char ssthresh_t[4];
+  char seqno_t[4];
+  char ack_t[4];
+  char rttvar_t[4];
+  uint32_t cwnd = 0;
+  uint32_t srtt = 0;
+  double srtt_d = 0.0;
+  uint32_t ssthresh = 0;
+  uint32_t seqno = 0;
+  uint32_t ack = 0;
+  uint32_t rttvar = 0;
+  double rttvar_d = 0.0;
+  uint64_t ticks_per_second = 0;
+
+  //Get socket variables
+  //This function calls nsc/<linux>/nsc/sim_support.cpp/get_var() and then nsc/<linux>/nsc/support.c/nsc_get_tcp_var()
+  //More tcp's vars can be reveal by changing nsc/<linux>/nsc/support.c/nsc_get_tcp_var() 
+  //and by referring to nsc/<linux>/include/linux/tcp.h for variable names.
+  m_nscTcpSocket->get_var("cwnd_", cwnd_t, sizeof(cwnd_t));
+  m_nscTcpSocket->get_var("srtt_", srtt_t, sizeof(srtt_t));
+  m_nscTcpSocket->get_var("ssthresh_", ssthresh_t, sizeof(ssthresh_t));
+  m_nscTcpSocket->get_var("seqno_", seqno_t, sizeof(seqno_t));
+  m_nscTcpSocket->get_var("ack_", ack_t, sizeof(ack_t));
+  m_nscTcpSocket->get_var("rttvar_", rttvar_t, sizeof(rttvar_t));
+  //Convert char* to integer.
+  cwnd = atol(cwnd_t);
+  srtt = atol(srtt_t); //in ticks
+  ssthresh = atol(ssthresh_t);
+  seqno = atol(seqno_t);
+  ack = atol(ack_t);
+  rttvar = atol(rttvar_t); //in ticks
+  //convert srtt and rttvar to second
+  ticks_per_second = sysconf(_SC_CLK_TCK);
+  srtt_d = double (srtt)/ticks_per_second;
+  rttvar_d = double (rttvar)/ticks_per_second;
+  
+
+  NS_LOG_DEBUG("RemoteAdd=" << m_remoteAddress 
+	      	<< " cwnd= " << cwnd 
+ 	      	<< " srtt= " << srtt_d
+		<< " ssthresh= " << ssthresh
+		<< " seqno= " << seqno
+		<< " ack= " << ack
+		<< " rttvar= " << rttvar_d);
+  return 1;
+}
+
 } // namespace ns3

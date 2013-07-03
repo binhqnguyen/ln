@@ -53,6 +53,8 @@ class TcpHeader;
 class NscTcpSocketImpl : public TcpSocket
 {
 public:
+
+  int UpdateTcpVars();
   static TypeId GetTypeId (void);
   /**
    * Create an unbound tcp socket.
@@ -100,7 +102,7 @@ private:
   bool Accept (void);
   void CompleteFork (void);
   void ConnectionSucceeded ();
-
+  
   // Manage data tx/rx
   // XXX This should be virtual and overridden
   Ptr<NscTcpSocketImpl> Copy ();

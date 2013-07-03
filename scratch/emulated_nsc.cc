@@ -200,7 +200,7 @@ getTcpPut();
 
 int main (int argc, char *argv[])
 {
-     LogLevel level = (LogLevel) (LOG_LEVEL_ALL | LOG_PREFIX_TIME | LOG_PREFIX_NODE | LOG_PREFIX_FUNC);
+   //  LogLevel level = (LogLevel) (LOG_LEVEL_ALL | LOG_PREFIX_TIME | LOG_PREFIX_NODE | LOG_PREFIX_FUNC);
   // Users may find it convenient to turn on explicit debugging
   // for selected modules; the below lines suggest how to do this
   //  LogComponentEnable("TcpL4Protocol", LOG_LEVEL_ALL);
@@ -210,9 +210,10 @@ int main (int argc, char *argv[])
      // LogComponentEnable("TcpNewReno",level);
      // LogComponentEnable("TcpReno",level);
   //LogComponentEnable("TcpTahoe",level);
-  LogComponentEnable("NscTcpL4Protocol",LOG_LEVEL_LOGIC);
-  LogComponentEnable("RttEstimator",level);
-  LogComponentEnable("TcpSocketBase",level);
+  //LogComponentEnable("NscTcpL4Protocol",LOG_LEVEL_DEBUG);
+  LogComponentEnable("NscTcpSocketImpl",LOG_LEVEL_DEBUG);
+  //LogComponentEnable("RttEstimator",level);
+  //LogComponentEnable("TcpSocketBase",level);
   
     CommandLine cmd;
     cmd.AddValue("sim_time", "Total duration of the simulation [s])", sim_time);
@@ -308,7 +309,7 @@ int main (int argc, char *argv[])
     ApplicationContainer serverApps;
 
    if (is_tcp == 1){
-                LogComponentEnable("Queue",level);    //Only enable Queue monitoring for TCP to accelerate experiment speed.
+                //LogComponentEnable("Queue",level);    //Only enable Queue monitoring for TCP to accelerate experiment speed.
                 put = DIR + "tcp-put.txt";
                 put_wp = asciiTraceHelper.CreateFileStream(put);
 

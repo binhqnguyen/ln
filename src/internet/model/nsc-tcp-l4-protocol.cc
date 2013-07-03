@@ -343,12 +343,15 @@ NscTcpL4Protocol::Receive(Ptr<Packet>, Ipv6Header const &, Ptr<Ipv6Interface>)
 {
   return IpL4Protocol::RX_ENDPOINT_UNREACH;
 }
-
 void NscTcpL4Protocol::SoftInterrupt (void)
 {
   m_nscStack->timer_interrupt ();
   m_nscStack->increment_ticks ();
-  m_softTimer.Schedule ();
+  //Hacked, get tcp variables
+  for (uint32_t i = 0; i < m_sockets.size(); i++){
+            m_sockets[i]->UpdateTcpVars();
+   }
+    m_softTimer.Schedule ();
 }
 
 void NscTcpL4Protocol::send_callback (const void* data, int datalen)
