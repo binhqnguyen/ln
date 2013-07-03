@@ -200,7 +200,7 @@ getTcpPut();
 
 int main (int argc, char *argv[])
 {
-   //  LogLevel level = (LogLevel) (LOG_LEVEL_ALL | LOG_PREFIX_TIME | LOG_PREFIX_NODE | LOG_PREFIX_FUNC);
+   LogLevel level = (LogLevel) (LOG_LEVEL_ALL | LOG_PREFIX_TIME | LOG_PREFIX_NODE | LOG_PREFIX_FUNC);
   // Users may find it convenient to turn on explicit debugging
   // for selected modules; the below lines suggest how to do this
   //  LogComponentEnable("TcpL4Protocol", LOG_LEVEL_ALL);
@@ -282,10 +282,10 @@ int main (int argc, char *argv[])
 
   // Now add ip/tcp stack to all nodes.
   InternetStackHelper internet;
-  internet.Install (ue);
   internet.Install (enb);
   internet.SetTcp ("ns3::NscTcpL4Protocol", "Library", StringValue(nsc_stack));
   internet.Install (remote_host);
+  internet.Install (ue);
   Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_sack", StringValue ("0"));
   Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_timestamps", StringValue ("0"));
   Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_window_scaling", StringValue ("0"));
@@ -309,7 +309,7 @@ int main (int argc, char *argv[])
     ApplicationContainer serverApps;
 
    if (is_tcp == 1){
-                //LogComponentEnable("Queue",level);    //Only enable Queue monitoring for TCP to accelerate experiment speed.
+                LogComponentEnable("Queue",level);    //Only enable Queue monitoring for TCP to accelerate experiment speed.
                 put = DIR + "tcp-put.txt";
                 put_wp = asciiTraceHelper.CreateFileStream(put);
 
@@ -349,7 +349,7 @@ int main (int argc, char *argv[])
   Simulator::Schedule(Seconds(0.6) + NanoSeconds(1.0), &enable_tcp_socket_traces, remote_host->GetApplication(0));///*Note: enable_tcp_socket_traces must be scheduled after the OnOffApplication starts (OnOffApplication's socket is created after the application starts) 
   
     /****ConfigStore setting****/
-    Config::SetDefault("ns3::ConfigStore::Filename", StringValue("emulated-out.txt"));
+    Config::SetDefault("ns3::ConfigStore::Filename", StringValue("emulated-nsc.out"));
     Config::SetDefault("ns3::ConfigStore::FileFormat", StringValue("RawText"));
     Config::SetDefault("ns3::ConfigStore::Mode", StringValue("Save"));
     ConfigStore outputConfig;

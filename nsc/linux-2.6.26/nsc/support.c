@@ -841,6 +841,37 @@ int nsc_get_tcp_var(void *so, const char *var, char *result, int rlen)
         return 1;
     }
 #endif
+    //added by Binh Nguyen
+    //snd_nxt when RTO occurred.
+    else if(strcmp(var,"frto_highmark_")==0)
+    {
+ 	snprintf(result, rlen, "%u", tp->frto_highmark);
+        return 1;
+    }
+    //number of new ACKs after rto
+    else if(strcmp(var,"frto_counter_")==0)
+    {
+ 	snprintf(result, rlen, "%u", (char) tp->frto_counter);
+        return 1;
+    }
+    //retransmitted pkts out
+    else if(strcmp(var,"retrans_out_")==0)
+    {
+ 	snprintf(result, rlen, "%u", tp->retrans_out);
+        return 1;
+    }
+    //tracking retransmit started here
+    else if(strcmp(var,"undo_marker_")==0)
+    {
+ 	snprintf(result, rlen, "%u", tp->undo_marker);
+        return 1;
+    }
+    //total retransmits for entire connection
+    else if(strcmp(var,"total_retrans_")==0)
+    {
+ 	snprintf(result, rlen, "%u", tp->total_retrans);
+        return 1;
+    }
 
     return 0;
 }
