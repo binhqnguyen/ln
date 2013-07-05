@@ -84,7 +84,7 @@ std::ofstream tcpThroughput;
 std::ofstream tcpThroughput_ack;
 Ptr<ns3::FlowMonitor> monitor;
 FlowMonitorHelper flowHelper;
-double samplingInterval = 0.10;    /*sample TCP thoughput for each 50ms*/
+double samplingInterval = 0.005;    /*sample TCP thoughput for each 50ms*/
 double t = 0.0;
 uint16_t isTcp = 1;
 //topology
@@ -106,7 +106,7 @@ uint32_t numberOfPackets = 0;
 uint32_t packetSize = 900;
 double distance = 1000.0;    //With enbTxPower=5, Noise=37 and UeTxPower=50 (NEED TO BE THAT HIGH TO GUARANTEE UPLINK FOR TCP ACK FLOW), noise=9, we have roughly 1000Kb/s downlink bandwidth.
 uint16_t radioUlBandwidth = 100;  //the radio link bandwidth among UEs and EnodeB (in Resource Blocks). This is the configuration on LteEnbDevice.
-uint16_t radioDlBandwidth = 15;  //same as above, for downlink.
+uint16_t radioDlBandwidth = 100;  //same as above, for downlink.
 std::string dataRate = "100Mb/s";
 
 uint16_t isAMRLC = 0;    
@@ -116,7 +116,9 @@ static double last_tx_time = 0;
 static double last_rx_time = 0;
 static double last_tx_bytes = 0;
 static double last_rx_bytes = 0;
-
+static double tcp_delay = 0;
+static double last_delay_sum = 0;
+static double last_rx_pkts = 0;
 
 /**sending flowS stats***/
 std::map<Ipv4Address, double> meanTxRate_send;
@@ -578,6 +580,12 @@ getTcpPut(){
         meanTcpDelay_send[t.destinationAddress] = iter->second.delaySum.GetDouble()/iter->second.rxPackets/1000000;
       }
       numOfLostPackets_send[t.destinationAddress] = iter->second.lostPackets;
+	if (iter->second.rxPackets > last_rx_pkts){
+    		    tcp_delay = (iter->second.delaySum.GetDouble() - last_delay_sum) / (iter->second.rxPackets - last_rx_pkts)/(kilo*kilo);
+    		    last_delay_sum = iter->second.delaySum.GetDouble();
+    		    last_rx_pkts = iter->second.rxPackets;
+    	 }
+
       if (iter->second.lostPackets > last_lost){
 	     NS_LOG_UNCOND(Simulator::Now().GetSeconds() << " Tcp lost= " << iter->second.lostPackets - last_lost);
 	     last_lost = iter->second.lostPackets;
@@ -596,7 +604,7 @@ getTcpPut(){
       numOfLostPackets_ack[t.sourceAddress] = iter->second.lostPackets;
       if (iter->second.lostPackets > last_lost_ack){
 	NS_LOG_UNCOND(Simulator::Now().GetSeconds() << " Tcp_ack lost= " << iter->second.lostPackets - last_lost_ack);
-	last_lost_ack = iter->second.lostPackets;
+	last_lost_ack = iter->second.lostPackets;	
       }
       numOfTxPacket_ack[t.sourceAddress] = iter->second.txPackets;
     }
@@ -620,12 +628,13 @@ getTcpPut(){
                   << "x" << "\t\t"
                   << "x" << "\t\t"
                   << "x" << "\t"
-		              << (*it5).second << "\n";
+		  << (*it5).second << "\t"
+		  << tcp_delay <<  "\n";
                   ++it1;
                   ++it2;
                   ++it3;
                   ++it4;
-            		  ++it5;
+           	  ++it5;
     }
 
     while (t < simTime){
