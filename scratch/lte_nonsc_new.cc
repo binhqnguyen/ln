@@ -84,10 +84,7 @@ std::ofstream tcpThroughput;
 std::ofstream tcpThroughput_ack;
 Ptr<ns3::FlowMonitor> monitor;
 FlowMonitorHelper flowHelper;
-double samplingInterval = 0.005;    /*sample a TCP delay for each x s*/
-uint16_t PUT_SAMPLING_INTERVAL = 30; /*sample a TCP throughput for each x received pkts*/
-double put_sampling_interval = 0.050; /*sample a TCP throughput for each x s*/
-double last_put_sampling_time = 0;
+double samplingInterval = 0.01;    /*sample TCP thoughput for each 50ms*/
 double t = 0.0;
 uint16_t isTcp = 1;
 //topology
@@ -122,7 +119,7 @@ static double last_rx_bytes = 0;
 static double tcp_delay = 0;
 static double last_delay_sum = 0;
 static double last_rx_pkts = 0;
-static double last_tx_pkts = 0;
+
 /**sending flowS stats***/
 std::map<Ipv4Address, double> meanTxRate_send;
 std::map<Ipv4Address, double> meanRxRate_send;
@@ -176,7 +173,7 @@ Ptr<OutputStreamWrapper> debugger_wp;
 static void getTcpPut();
 static void init_wrappers();
 /*****************NSC*********************/
-static std::string nsc_stack="liblinux2.6.26.so";
+//static std::string nsc_stack="liblinux2.6.26.so";
 static void 
 CwndTracer (Ptr<OutputStreamWrapper> cwnd_wp, uint32_t oldval, uint32_t newval)
 {
@@ -286,7 +283,7 @@ main (int argc, char *argv[])
 
 
     /**ConfigStore setting*/
-    Config::SetDefault("ns3::ConfigStore::Filename", StringValue("lte-nsc-in.txt"));
+    Config::SetDefault("ns3::ConfigStore::Filename", StringValue("lte-nonsc-new-in.txt"));
     Config::SetDefault("ns3::ConfigStore::FileFormat", StringValue("RawText"));
     Config::SetDefault("ns3::ConfigStore::Mode", StringValue("Load"));
     ConfigStore inputConfig;
@@ -319,11 +316,11 @@ main (int argc, char *argv[])
     Ptr<Node> remoteHost = remoteHostContainer.Get (0);
     //Install Internet stack on the remoteHost.
     InternetStackHelper internet;
-    internet.SetTcp("ns3::NscTcpL4Protocol", "Library", StringValue(nsc_stack));
+    //internet.SetTcp("ns3::NscTcpL4Protocol", "Library", StringValue(nsc_stack));
     internet.Install (remoteHost);
-    Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_sack", StringValue ("0"));
-    Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_timestamps", StringValue ("0"));
-    Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_window_scaling", StringValue ("0"));
+    //Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_sack", StringValue ("0"));
+    //Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_timestamps", StringValue ("0"));
+    //Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_window_scaling", StringValue ("0"));
     
     //***************Create and install a point to point connection between the SPGW and the remoteHost*****************//
     PointToPointHelper p2ph;
@@ -466,7 +463,7 @@ main (int argc, char *argv[])
 
 
     /****ConfigStore setting****/
-    Config::SetDefault("ns3::ConfigStore::Filename", StringValue("lte-nsc.out"));
+    Config::SetDefault("ns3::ConfigStore::Filename", StringValue("lte-nonnsc-new.out"));
     Config::SetDefault("ns3::ConfigStore::FileFormat", StringValue("RawText"));
     Config::SetDefault("ns3::ConfigStore::Mode", StringValue("Save"));
     ConfigStore outputConfig;
@@ -573,8 +570,7 @@ getTcpPut(){
 
     /*sending flows, from endhost (1.0.0.2:49153) to Ues (7.0.0.2:200x)*/
     if (t.destinationPort >= 2001 && t.destinationPort <= 3000) {
-      //if (iter->second.txPackets > (last_tx_pkts + PUT_SAMPLING_INTERVAL) && iter->second.rxBytes > (last_rx_bytes + PUT_SAMPLING_INTERVAL*1500)){
-      if (Simulator::Now().GetSeconds() > last_put_sampling_time + put_sampling_interval){
+      if (iter->second.rxPackets > 5 && iter->second.txPackets > 5){
         meanTxRate_send[t.destinationAddress] = 8*(iter->second.txBytes-last_tx_bytes)/(iter->second.timeLastTxPacket.GetDouble()-last_tx_time)*ONEBIL/kilo;
         meanRxRate_send[t.destinationAddress] = 8*(iter->second.rxBytes-last_rx_bytes)/(iter->second.timeLastRxPacket.GetDouble()-last_rx_time)*ONEBIL/kilo;
         last_tx_time = iter->second.timeLastTxPacket.GetDouble();
@@ -582,8 +578,6 @@ getTcpPut(){
         last_rx_time = iter->second.timeLastRxPacket.GetDouble();
         last_rx_bytes = iter->second.rxBytes;      
         meanTcpDelay_send[t.destinationAddress] = iter->second.delaySum.GetDouble()/iter->second.rxPackets/1000000;
-	last_tx_pkts = iter->second.txPackets;
-	last_put_sampling_time = Simulator::Now().GetSeconds();
       }
       numOfLostPackets_send[t.destinationAddress] = iter->second.lostPackets;
 	if (iter->second.rxPackets > last_rx_pkts){
@@ -602,8 +596,7 @@ getTcpPut(){
 
     /*ack flow, from Ues (7.0.0.2:200x) to endhost (1.0.0.2:49153)*/
     if (t.destinationPort >= 49153){
-      //if (iter->second.rxPackets > PUT_SAMPLING_INTERVAL && iter->second.txPackets > PUT_SAMPLING_INTERVAL){
-      	if (Simulator::Now().GetSeconds() > last_put_sampling_time + put_sampling_interval){
+      if (iter->second.rxPackets > 1 && iter->second.txPackets > 1){
         meanTxRate_ack[t.sourceAddress] = 8*iter->second.txBytes/(iter->second.timeLastTxPacket.GetDouble()-iter->second.timeFirstTxPacket.GetDouble())*ONEBIL/(1024);
         meanRxRate_ack[t.sourceAddress] = 8*iter->second.rxBytes/(iter->second.timeLastRxPacket.GetDouble()-iter->second.timeFirstRxPacket.GetDouble())*ONEBIL/(1024);
         meanTcpDelay_ack[t.sourceAddress] = iter->second.delaySum.GetDouble()/iter->second.rxPackets/1000000;
