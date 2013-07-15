@@ -890,6 +890,13 @@ NscTcpSocketImpl::UpdateTcpVars()
   char retrans_out_t[32]; //retransmitted pkts out
   char undo_marker_t[32]; //tracking retransmitted started here.
   char total_retrans_t[32]; //total retransmits of the entire connection
+  //cubic tcp's paras
+  char cubic_cnt_t[32];  
+  char cubic_wmax_t[32];  
+  char cubic_loss_cwnd_t[32];  
+  char cubic_last_time_t[32];  
+  char cubic_tcp_cwnd_t[32];  
+  char cubic_bic_K_t[32];  
 
   uint32_t cwnd = 0;
   uint32_t srtt = 0;
@@ -905,7 +912,14 @@ NscTcpSocketImpl::UpdateTcpVars()
   uint32_t retrans_out = 0;
   uint32_t undo_marker = 0;
   uint32_t total_retrans = 0;
-  /*
+  //cubic tcp's paras
+  uint32_t cubic_cnt = -1;
+  uint32_t cubic_wmax = -1;
+  uint32_t cubic_loss_cwnd = -1;
+  uint32_t cubic_last_time = -1;
+  uint32_t cubic_tcp_cwnd = -1;
+  uint32_t cubic_bic_K = -1;
+
   NS_LOG_UNCOND( m_nscTcpSocket->get_var("cwnd_", cwnd_t, sizeof(cwnd_t)) <<
   m_nscTcpSocket->get_var("srtt_", srtt_t, sizeof(srtt_t)) <<
   m_nscTcpSocket->get_var("ssthresh_", ssthresh_t, sizeof(ssthresh_t)) <<
@@ -915,8 +929,13 @@ NscTcpSocketImpl::UpdateTcpVars()
   m_nscTcpSocket->get_var("frto_counter_", frto_counter_t, sizeof(frto_counter_t)) <<
   m_nscTcpSocket->get_var("retrans_out_", retrans_out_t, sizeof(retrans_out_t)) <<
   m_nscTcpSocket->get_var("undo_marker_", undo_marker_t, sizeof(undo_marker_t)) <<
-  m_nscTcpSocket->get_var("total_retrans_", total_retrans_t, sizeof(total_retrans_t)) ); 
-  */
+  m_nscTcpSocket->get_var("total_retrans_", total_retrans_t, sizeof(total_retrans_t)) <<
+  m_nscTcpSocket->get_var("cubic_wmax_", cubic_wmax_t , sizeof(cubic_wmax_t)) <<
+  m_nscTcpSocket->get_var("cubic_cnt_", cubic_cnt_t , sizeof(cubic_cnt_t)) <<
+  m_nscTcpSocket->get_var("cubic_loss_cwnd_", cubic_loss_cwnd_t , sizeof(cubic_loss_cwnd_t)) <<
+  m_nscTcpSocket->get_var("cubic_last_time_", cubic_last_time_t , sizeof(cubic_last_time_t)) <<
+  m_nscTcpSocket->get_var("cubic_tcp_cwnd_", cubic_tcp_cwnd_t , sizeof(cubic_tcp_cwnd_t)) <<
+  m_nscTcpSocket->get_var("cubic_bic_K_", cubic_bic_K_t , sizeof(cubic_bic_K_t)) );
 
   //Get socket variables
   //This function calls nsc/<linux>/nsc/sim_support.cpp/get_var() and then nsc/<linux>/nsc/support.c/nsc_get_tcp_var()
@@ -931,30 +950,48 @@ NscTcpSocketImpl::UpdateTcpVars()
   m_nscTcpSocket->get_var("frto_counter_", frto_counter_t, sizeof(frto_counter_t)) &&
   m_nscTcpSocket->get_var("retrans_out_", retrans_out_t, sizeof(retrans_out_t)) &&
   m_nscTcpSocket->get_var("undo_marker_", undo_marker_t, sizeof(undo_marker_t)) &&
-  m_nscTcpSocket->get_var("total_retrans_", total_retrans_t, sizeof(total_retrans_t)) ) 
+  m_nscTcpSocket->get_var("total_retrans_", total_retrans_t, sizeof(total_retrans_t)) &&
+  m_nscTcpSocket->get_var("cubic_wmax_", cubic_wmax_t , sizeof(cubic_wmax_t)) &&
+  m_nscTcpSocket->get_var("cubic_cnt_", cubic_cnt_t , sizeof(cubic_cnt_t)) &&
+  m_nscTcpSocket->get_var("cubic_loss_cwnd_", cubic_loss_cwnd_t , sizeof(cubic_loss_cwnd_t)) &&
+  m_nscTcpSocket->get_var("cubic_last_time_", cubic_last_time_t , sizeof(cubic_last_time_t)) &&
+  m_nscTcpSocket->get_var("cubic_tcp_cwnd_", cubic_tcp_cwnd_t , sizeof(cubic_tcp_cwnd_t)) &&
+  m_nscTcpSocket->get_var("cubic_bic_K_", cubic_bic_K_t , sizeof(cubic_bic_K_t)) )
   {
   	//Convert char* to integer.
  	cwnd = atoi(cwnd_t);
-  	srtt = atoi(srtt_t); //in ticks
+  	srtt = atof(srtt_t); //in ticks
   	ssthresh = atoi(ssthresh_t);
   	seqno = atoi(seqno_t);
  	ack = atoi(ack_t);
-  	rttvar = atoi(rttvar_t); //in ticks
+  	rttvar = atof(rttvar_t); //in ticks
   	frto_highmark = atoi(frto_highmark_t);
   	frto_counter = atoi(frto_counter_t);
   	retrans_out = atoi(retrans_out_t);
   	undo_marker = atoi(undo_marker_t);
   	total_retrans = atoi(total_retrans_t);
+	cubic_wmax = atoi(cubic_wmax_t);
+	cubic_cnt = atoi(cubic_cnt_t);
+	cubic_loss_cwnd = atoi(cubic_loss_cwnd_t);
+	cubic_last_time = atoi(cubic_last_time_t);
+	cubic_tcp_cwnd = atoi(cubic_tcp_cwnd_t);
+	cubic_bic_K = atoi(cubic_bic_K_t);
   	//convert srtt and rttvar to second
   	ticks_per_second = sysconf(_SC_CLK_TCK);
   	srtt_d = double (srtt)/ticks_per_second;
   	rttvar_d = double (rttvar)/ticks_per_second;
   
 
-	  NS_LOG_DEBUG("RemoteAdd= " << m_remoteAddress 
+	NS_LOG_DEBUG("RemoteAdd= " << m_remoteAddress 
 		      	<< " cwnd= " << cwnd 
  	      		<< " srtt= " << srtt_d
 			<< " ssthresh= " << ssthresh
+			<< " cubic_cnt= " << cubic_cnt
+			<< " cubic_wmax= " << cubic_wmax
+			<< " cubic_loss_cwnd= " << cubic_loss_cwnd
+			<< " cubic_last_time= " << cubic_last_time
+			<< " cubic_tcp_cwnd= " << cubic_tcp_cwnd
+			<< " cubic_bic_K= " << cubic_bic_K
 			<< " seqno= " << seqno
 			<< " ack= " << ack
 			<< " rttvar= " << rttvar_d

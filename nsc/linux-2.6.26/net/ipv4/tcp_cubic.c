@@ -62,6 +62,23 @@ struct bictcp {
 	u32	delayed_ack;	/* estimate the ratio of Packets/ACKs << 4 */
 };
 
+
+/*HACKED by Binh Nguyen
+ * Retrieve last_max_cwnd
+ * Since tcpbic struct is typedef defined in tcp.h, it's not possible to used tcpbic.last_max_cwnd to get the variable
+ * */
+bool get_cubic_paras(struct bictcp *ca, u32* cnt , u32* last_max_cwnd, u32* loss_cwnd, u32* last_time, u32* tcp_cwnd, u32* bic_K){
+	if (ca == NULL || cnt == NULL || last_max_cwnd == NULL || loss_cwnd == NULL || last_time == NULL || tcp_cwnd == NULL || bic_K == NULL)
+		 return false;
+	*cnt = ca->cnt;
+	*last_max_cwnd = ca->last_max_cwnd;
+	*loss_cwnd = ca->loss_cwnd;
+	*last_time = ca->last_time;
+	*tcp_cwnd = ca->tcp_cwnd;
+	*bic_K = ca->bic_K;
+	return true;
+}
+
 static inline void bictcp_reset(struct bictcp *ca)
 {
 	ca->cnt = 0;

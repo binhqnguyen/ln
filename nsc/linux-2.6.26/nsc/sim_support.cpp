@@ -206,11 +206,14 @@ private:
 
         bool get_var(const char *var, char *result, int result_len)
         {
+	    //printf("%s = %d\n",var,nsc_get_tcp_var(so,var,result,result_len));
             if(nsc_get_tcp_var(so, var, result, result_len))
                 return true;
 
             return false;
         }
+
+
     };
 
     class SCTPSocket : public TCPSocket

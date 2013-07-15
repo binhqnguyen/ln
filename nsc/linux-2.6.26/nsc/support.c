@@ -799,11 +799,42 @@ int nsc_get_tcp_var(void *so, const char *var, char *result, int rlen)
 {
     struct sock *sock = ((struct socket *)so)->sk;
     struct tcp_sock *tp = tcp_sk(sock);
-
-         if(strcmp(var, "srtt_") == 0)  // in ticks
+    struct bictcp *ca = inet_csk_ca(sock);
+    u32 cnt = -1;
+    u32 last_max_cwnd = -1;
+    u32 loss_cwnd = -1;
+    u32 last_time = -1;
+    u32 tcp_cwnd = -1;
+    u32 bic_K = -1;
+    
+    //nsc_debugf("bic_Wmax = %u\n", last_max_cwnd);
+    if (strcmp(var, "cubic_cnt_") == 0			//get cubic tcp's paras
+	|| strcmp(var, "cubic_wmax_") == 0
+	|| strcmp(var, "cubic_loss_cwnd_") == 0
+	|| strcmp(var, "cubic_last_time_") == 0
+	|| strcmp(var, "cubic_tcp_cwnd_") == 0
+	|| strcmp(var, "cubic_bic_K_") == 0
+	){
+    		if ( get_cubic_paras(ca, &cnt, &last_max_cwnd, &loss_cwnd, &last_time, &tcp_cwnd, &bic_K) ){
+			if ( strcmp(var,"cubic_cnt_") == 0 )
+				snprintf(result, rlen, "%u", cnt);
+			if ( strcmp(var,"cubic_wmax_") == 0 )
+				snprintf(result, rlen, "%u", last_max_cwnd);
+			if ( strcmp(var,"cubic_loss_cwnd_") == 0 )
+				snprintf(result, rlen, "%u", loss_cwnd);
+			if ( strcmp(var,"cubic_last_time_") == 0 )
+				snprintf(result, rlen, "%u", last_time);
+ 			if ( strcmp(var,"cubic_tcp_cwnd_") == 0 )
+				snprintf(result, rlen, "%u", tcp_cwnd);
+			if ( strcmp(var,"cubic_bic_K_") == 0 )
+				snprintf(result, rlen, "%u", bic_K);
+		}
+		return -1;
+    }
+    if(strcmp(var, "srtt_") == 0)  // in ticks
     {
-        snprintf(result, rlen, "%f", (float)(tp->srtt >> 3));
-        return 1;
+        return snprintf(result, rlen, "%f", (float)(tp->srtt >> 3));
+        //return 1;
     }
     else if(strcmp(var, "rttvar_") == 0) // in ticks
     {
@@ -816,8 +847,8 @@ int nsc_get_tcp_var(void *so, const char *var, char *result, int rlen)
     }*/
     else if(strcmp(var, "cwnd_") == 0)
     {
-        snprintf(result, rlen, "%u", tp->snd_cwnd);
-        return 1;
+        return snprintf(result, rlen, "%u", tp->snd_cwnd);
+        //return 1;
     }
     else if(strcmp(var, "ssthresh_") == 0)
     {

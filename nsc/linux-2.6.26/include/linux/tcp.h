@@ -21,6 +21,9 @@
 #include <asm/byteorder.h>
 #include <linux/socket.h>
 
+struct bictcp;
+bool get_cubic_paras(struct bictcp*, u32* cnt, u32* last_max_cwnd, u32* loss_cwnd, u32* last_time, u32* tcp_cwnd, u32* bic_K);
+
 struct tcphdr {
 	__be16	source;
 	__be16	dest;
