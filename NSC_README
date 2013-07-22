@@ -1,0 +1,27 @@
+Hacked nsc:
+By Binh Nguyen binh@cs.utah.edu
+Last modified: July 15th 2013
+=========================================
+
+1. GOALs: Retrieve information of TCP, CUBIC TCP during experiment.
+
+2. TOOLs: 
+	- Using INetStreamSocket.get_var() function. get_var() is defined in sim_interface.h which locates in ln/nsc/<linux>/nsc/ and ln/nsc/sim/ and ln/src/internet/model/ and someother places.
+	- In ns3's NSC L4 protocol implementation, there is SoftInterrupt() function that is called periodically (ln/src/internet/model/nsc-tcp-l4-protocol.h). The nsc-tcp-l4-protocol has the m_sockets array that contains all NSC sockets. SoftInterrupt() periodically scan through all sockets, and use get_var() of the sockets to retrieve TCP's info (by calling UpdateTcpVars()).
+
+3. IMPLEMENTATION:
+ 	- get_var() is implemented in ln/nsc/<linux>/nsc/sim_support.cpp/
+	- get_var() calls nsc_get_tcp_var() function.
+	- nsc_get_tcp_var() is implemented in ln/nsc/<linux>/nsc/support.c
+	- nsc_get_tcp_var() take a socket (so) as an parameter. This socket in turn is casted to tcp_sock (TCP general socket) or bictcp (CUBICTCP socket).
+	- Information that are shared among TCP versions can be retrieved by using tcp_sock-><parameters>. For more information about tcp_sock, look tcp.h.
+	- Information of CUBIC TCP (bictcp) CAN'T be retrieved by using dereferencing like tcp_sock since the struct bictcp is a typedef in tcp.h and is actually declared and implemented in ln/nsc/<linux>/net/ipv4/tcp_cubic.c (look "Opaque Pointer Wiki"). So, in order to get bictcp struct's information, a "get" function is declared in ln/nsc/<linux>/include/linux/tcp.h and implemented in tcp_cubic.c.
+	- After having the "get" function declared in ln/nsc/<linux>/include/linux/tcp.h, and by including the tcp.h file in the code, anyone can get bictcp struct's information if he/she has a bictcp struct.
+
+4. FILES TOUCHED:	
+	ln/scr/internet/model/nsc-tcp-l4-protocol.h,.cc: SoftInterrupt() modified.
+		"	     /nsc-tcp-socket-impl.h,.cc: UpdateTcpVars() added.
+	ln/nsc/<linux>/nsc/sim_support.cpp: get_var(), nothing much, just a printf().
+		"         /support.c:nsc_get_tcp_var(), added more variables to be retrieved.
+		"     /include/linux/tcp.h: added "get" function declaration.
+		"     /net/ipv4/tcp_cubic.c: added "get" function implementation.		
