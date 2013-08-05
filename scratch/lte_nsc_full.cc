@@ -104,7 +104,7 @@ uint16_t p2pLinkMtu = 1500;
 //Simulation
 uint32_t numberOfPackets = 0;
 uint32_t packetSize = 900;
-double distance = 2000.0;    //With enbTxPower=5, Noise=37 and UeTxPower=50 (NEED TO BE THAT HIGH TO GUARANTEE UPLINK FOR TCP ACK FLOW), noise=9, we have roughly 1000Kb/s downlink bandwidth.
+double distance = 1000.0;    //With enbTxPower=5, Noise=37 and UeTxPower=50 (NEED TO BE THAT HIGH TO GUARANTEE UPLINK FOR TCP ACK FLOW), noise=9, we have roughly 1000Kb/s downlink bandwidth.
 uint16_t radioUlBandwidth = 100;  //the radio link bandwidth among UEs and EnodeB (in Resource Blocks). This is the configuration on LteEnbDevice.
 uint16_t radioDlBandwidth = 100;  //same as above, for downlink.
 std::string dataRate = "100Mb/s";

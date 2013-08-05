@@ -47,6 +47,7 @@
 //#include "ns3/gtk-config-store.h"
 
 #include <map>
+#include <math.h>
 
 using namespace ns3;
 /**
@@ -88,6 +89,7 @@ double samplingInterval = 0.005;    /*sample a TCP delay for each x s*/
 uint16_t PUT_SAMPLING_INTERVAL = 30; /*sample a TCP throughput for each x received pkts*/
 double put_sampling_interval = 0.050; /*sample a TCP throughput for each x s*/
 double last_put_sampling_time = 0;
+double last_put_sampling_time_ack = 0;
 double t = 0.0;
 uint16_t isTcp = 1;
 //topology
@@ -105,16 +107,20 @@ double p2pLinkDelay = 0.015;
 uint16_t p2pLinkMtu = 1500;
 
 //Simulation
-uint32_t numberOfPackets = 0;
+uint32_t numberOfPackets = 10;
 uint32_t packetSize = 900;
 double distance = 1000.0;    //With enbTxPower=5, Noise=37 and UeTxPower=50 (NEED TO BE THAT HIGH TO GUARANTEE UPLINK FOR TCP ACK FLOW), noise=9, we have roughly 1000Kb/s downlink bandwidth.
 uint16_t radioUlBandwidth = 100;  //the radio link bandwidth among UEs and EnodeB (in Resource Blocks). This is the configuration on LteEnbDevice.
 uint16_t radioDlBandwidth = 100;  //same as above, for downlink.
 std::string dataRate = "100Mb/s";
+std::string SACK="0";
+std::string TIME_STAMP="0";
+std::string WINDOW_SCALING="0";
 
 uint16_t isAMRLC = 0;    
 
 
+/**sending flowS stats***/
 static double last_tx_time = 0;
 static double last_rx_time = 0;
 static double last_tx_bytes = 0;
@@ -123,7 +129,6 @@ static double tcp_delay = 0;
 static double last_delay_sum = 0;
 static double last_rx_pkts = 0;
 static double last_tx_pkts = 0;
-/**sending flowS stats***/
 std::map<Ipv4Address, double> meanTxRate_send;
 std::map<Ipv4Address, double> meanRxRate_send;
 std::map<Ipv4Address, double> meanTcpDelay_send;
@@ -131,12 +136,22 @@ std::map<Ipv4Address, uint64_t> numOfLostPackets_send;
 std::map<Ipv4Address, uint64_t> numOfTxPacket_send;
 double last_lost = 0;
 /***acking flowS stats***/
+static double last_tx_time_ack = 0;
+static double last_rx_time_ack = 0;
+static double last_tx_bytes_ack = 0;
+static double last_rx_bytes_ack = 0;
+static double tcp_delay_ack = 0;
+static double last_delay_sum_ack = 0;
+static double last_rx_pkts_ack = 0;
 std::map<Ipv4Address, double> meanTxRate_ack;
 std::map<Ipv4Address, double> meanRxRate_ack;
-std::map<Ipv4Address, double> meanTcpDelay_ack;
 std::map<Ipv4Address, uint64_t> numOfLostPackets_ack;
+std::map<Ipv4Address, double> meanTcpDelay_ack;
 std::map<Ipv4Address, uint64_t> numOfTxPacket_ack;
-double last_lost_ack = 0;
+
+
+
+
 Ptr<ns3::Ipv4FlowClassifier> classifier;
 std::map <FlowId, FlowMonitor::FlowStats> stats;
 
@@ -156,6 +171,7 @@ static std::string macro = DIR+"macro_output.dat";
 static std::string put_send;
 static std::string put_ack;
 static std::string debugger = "debugger.dat";
+static std::string course_change =DIR+"course_change.dat";
 
 /********wrappers**********/
 static AsciiTraceHelper asciiTraceHelper;
@@ -170,6 +186,7 @@ Ptr<OutputStreamWrapper> put_send_wp;
 Ptr<OutputStreamWrapper> put_ack_wp;
 Ptr<OutputStreamWrapper> macro_wp;
 Ptr<OutputStreamWrapper> debugger_wp;
+Ptr<OutputStreamWrapper> ue_positions_wp;
 
 /**************** Functions **************/
 
@@ -177,6 +194,19 @@ static void getTcpPut();
 static void init_wrappers();
 /*****************NSC*********************/
 static std::string nsc_stack="liblinux2.6.26.so";
+
+
+static void
+CourseChange (Ptr<OutputStreamWrapper> ue_positions_wp, Ptr<const MobilityModel> model){
+        Vector position = model->GetPosition();
+        Vector vel = model->GetVelocity();
+        *ue_positions_wp->GetStream() << Simulator::Now().GetSeconds() << " (x,y)= " << position.x << " , "
+                                   << position.y
+                                   << " v= "
+                                   << sqrt (vel.x*vel.x + vel.y*vel.y)
+                                   << std::endl;
+}
+
 static void 
 CwndTracer (Ptr<OutputStreamWrapper> cwnd_wp, uint32_t oldval, uint32_t newval)
 {
@@ -281,6 +311,9 @@ main (int argc, char *argv[])
     cmd.AddValue("isAMRLC", "Whether using AM RLC (UM RLC if false)", isAMRLC);
     cmd.AddValue("dataRate", "TCP application data rate", dataRate);
     cmd.AddValue("isTcp", "TCP application if true, Udp if false", isTcp);
+    cmd.AddValue("SACK", "TCP SACK", SACK);
+    cmd.AddValue("TIME_STAMP", "TCP TIME_STAMP", TIME_STAMP);
+    cmd.AddValue("WINDOW_SCALING", "TCP WINDOW_SCALING", WINDOW_SCALING);
 
 
 
@@ -321,9 +354,9 @@ main (int argc, char *argv[])
     InternetStackHelper internet;
     internet.SetTcp("ns3::NscTcpL4Protocol", "Library", StringValue(nsc_stack));
     internet.Install (remoteHost);
-    Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_sack", StringValue ("0"));
-    Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_timestamps", StringValue ("0"));
-    Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_window_scaling", StringValue ("0"));
+    Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_sack", StringValue (SACK));
+    Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_timestamps", StringValue (TIME_STAMP));
+    Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_window_scaling", StringValue (WINDOW_SCALING));
     
     //***************Create and install a point to point connection between the SPGW and the remoteHost*****************//
     PointToPointHelper p2ph;
@@ -380,6 +413,12 @@ main (int argc, char *argv[])
     ueMobility.SetMobilityModel ("ns3::ConstantPositionMobilityModel");
     ueMobility.Install (ueNodes);
     NetDeviceContainer ueLteDevs = lteHelper->InstallUeDevice (ueNodes); 
+    //Enable UE position and velocity traking
+    Ptr<MobilityModel> ue_mobility_model = ueNodes.Get(0)->GetObject<MobilityModel>();
+    double x = ue_mobility_model->GetPosition().x;
+    double y = ue_mobility_model->GetPosition().y;
+    NS_LOG_UNCOND("UE (x,y)= " << x << ", " << y << " d= " << sqrt(x*x+y*y));
+    ue_mobility_model->TraceConnectWithoutContext("CourseChange", MakeBoundCallback(&CourseChange, ue_positions_wp));
 
 
    
@@ -409,6 +448,8 @@ main (int argc, char *argv[])
 
     //*****************************Install and start applications on UEs and remote host****************************//
     uint16_t dlPort = 2000;
+    uint16_t ulPort = 4040;
+    //uint16_t otherPort = 9090;
     ApplicationContainer clientApps;
     ApplicationContainer serverApps;
     for (uint32_t u = 0; u < ueNodes.GetN (); ++u)
@@ -432,14 +473,29 @@ main (int argc, char *argv[])
         else{
 					/*********UDP Application********/
 					//Create a packet sink to receive packet on remoteHost
-					PacketSinkHelper sink("ns3::UdpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), dlPort));
-					serverApps.Add(sink.Install(ueNodes.Get(u)));
+					PacketSinkHelper dl_sink("ns3::UdpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), dlPort));
+					PacketSinkHelper ul_sink("ns3::UdpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), ulPort));
+				       // PacketSinkHelper packetSinkHelper ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), otherPort));
 
-					OnOffHelper onOffHelper("ns3::UdpSocketFactory", Address ( InetSocketAddress(ueIpIface.GetAddress(u), dlPort) ));
-					onOffHelper.SetConstantRate( DataRate(dataRate), packetSize );
+					serverApps.Add(dl_sink.Install(ueNodes.Get(u)));
+					serverApps.Add(ul_sink.Install(remoteHost));
+				        //serverApps.Add (packetSinkHelper.Install (ueNodes.Get(u)));
+
+
+					OnOffHelper dl_onOffHelper("ns3::UdpSocketFactory", Address ( InetSocketAddress(ueIpIface.GetAddress(u), dlPort) ));
+					dl_onOffHelper.SetConstantRate( DataRate(dataRate), packetSize );
 					if (numberOfPackets != 0)
-						onOffHelper.SetAttribute("MaxBytes",UintegerValue(packetSize*numberOfPackets));
-					clientApps.Add(onOffHelper.Install(remoteHost));
+						dl_onOffHelper.SetAttribute("MaxBytes",UintegerValue(packetSize*numberOfPackets));
+					clientApps.Add(dl_onOffHelper.Install(remoteHost));
+					
+					OnOffHelper ul_onOffHelper("ns3::UdpSocketFactory", Address ( InetSocketAddress(internetIpIfaces.GetAddress(1), ulPort) ));
+					ul_onOffHelper.SetConstantRate( DataRate(dataRate), packetSize );
+					if (numberOfPackets != 0)
+						ul_onOffHelper.SetAttribute("MaxBytes",UintegerValue(packetSize*numberOfPackets));
+					clientApps.Add(ul_onOffHelper.Install(ueNodes.Get(u)));
+
+				        //OnOffHelper clientHelper ("ns3::UdpSocketFactory", Address ( InetSocketAddress(ueIpIface.GetAddress (u),otherPort) ));
+					//clientApps.Add(clientHelper.Install(ueNodes.Get(u)));
         }
 
     }
@@ -457,7 +513,7 @@ main (int argc, char *argv[])
     lteHelper->GetPdcpStats()->SetAttribute("EpochDuration", TimeValue( Seconds (0.010)) );		//set collection interval for PDCP.
     lteHelper->GetRlcStats()->SetAttribute("EpochDuration", TimeValue ( Seconds (0.010)))	;		//same for RLC
     // Uncomment to enable PCAP tracing
-    p2ph.EnablePcapAll("lte-simplest");
+    p2ph.EnablePcapAll("/var/tmp/ln_result/radio/lte-nsc");
 
 
     monitor = flowHelper.Install(ueNodes);
@@ -508,7 +564,7 @@ main (int argc, char *argv[])
     }
 
     /*ack flow, from Ues (7.0.0.2:200x) to endhost (1.0.0.2:49153)*/
-    if (t.destinationPort >= 49153){
+    if (t.destinationPort >= 4000){
       if (iter->second.rxPackets > 1){
         meanTxRate_ack[t.sourceAddress] = 8*iter->second.txBytes/(iter->second.timeLastTxPacket.GetDouble()-iter->second.timeFirstTxPacket.GetDouble())*ONEBIL/(1024);
         meanRxRate_ack[t.sourceAddress] = 8*iter->second.rxBytes/(iter->second.timeLastRxPacket.GetDouble()-iter->second.timeFirstRxPacket.GetDouble())*ONEBIL/(1024);
@@ -568,7 +624,7 @@ getTcpPut(){
     stats = monitor->GetFlowStats();
 
     /*==============Get flows information============*/
-  for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator iter = stats.begin(); iter != stats.end(); ++iter){
+    for (std::map<FlowId, FlowMonitor::FlowStats>::const_iterator iter = stats.begin(); iter != stats.end(); ++iter){
     ns3::Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow(iter->first);
 
     /*sending flows, from endhost (1.0.0.2:49153) to Ues (7.0.0.2:200x)*/
@@ -586,6 +642,7 @@ getTcpPut(){
 	last_put_sampling_time = Simulator::Now().GetSeconds();
       }
       numOfLostPackets_send[t.destinationAddress] = iter->second.lostPackets;
+	tcp_delay = 0;
 	if (iter->second.rxPackets > last_rx_pkts){
     		    tcp_delay = (iter->second.delaySum.GetDouble() - last_delay_sum) / (iter->second.rxPackets - last_rx_pkts)/(kilo*kilo);
     		    last_delay_sum = iter->second.delaySum.GetDouble();
@@ -602,18 +659,24 @@ getTcpPut(){
 
     /*ack flow, from Ues (7.0.0.2:200x) to endhost (1.0.0.2:49153)*/
     if (t.destinationPort >= 49153){
-      //if (iter->second.rxPackets > PUT_SAMPLING_INTERVAL && iter->second.txPackets > PUT_SAMPLING_INTERVAL){
-      	if (Simulator::Now().GetSeconds() > last_put_sampling_time + put_sampling_interval){
-        meanTxRate_ack[t.sourceAddress] = 8*iter->second.txBytes/(iter->second.timeLastTxPacket.GetDouble()-iter->second.timeFirstTxPacket.GetDouble())*ONEBIL/(1024);
-        meanRxRate_ack[t.sourceAddress] = 8*iter->second.rxBytes/(iter->second.timeLastRxPacket.GetDouble()-iter->second.timeFirstRxPacket.GetDouble())*ONEBIL/(1024);
-        meanTcpDelay_ack[t.sourceAddress] = iter->second.delaySum.GetDouble()/iter->second.rxPackets/1000000;
+      	if (Simulator::Now().GetSeconds() > last_put_sampling_time_ack + put_sampling_interval){
+		meanTxRate_ack[t.sourceAddress] = 8*(iter->second.txBytes-last_tx_bytes_ack)/(iter->second.timeLastTxPacket.GetDouble()-last_tx_time_ack)*ONEBIL/kilo;
+		meanRxRate_ack[t.sourceAddress] = 8*(iter->second.rxBytes-last_rx_bytes_ack)/(iter->second.timeLastRxPacket.GetDouble()-last_rx_time_ack)*ONEBIL/kilo;
+		last_tx_time_ack = iter->second.timeLastTxPacket.GetDouble();
+		last_tx_bytes_ack = iter->second.txBytes;
+		last_rx_time_ack = iter->second.timeLastRxPacket.GetDouble();
+		last_rx_bytes_ack = iter->second.rxBytes;      
+		last_put_sampling_time_ack = Simulator::Now().GetSeconds();
       }
       numOfLostPackets_ack[t.sourceAddress] = iter->second.lostPackets;
-      if (iter->second.lostPackets > last_lost_ack){
-	NS_LOG_UNCOND(Simulator::Now().GetSeconds() << " Tcp_ack lost= " << iter->second.lostPackets - last_lost_ack);
-	last_lost_ack = iter->second.lostPackets;	
-      }
-      numOfTxPacket_ack[t.sourceAddress] = iter->second.txPackets;
+	tcp_delay_ack = 0;
+	if (iter->second.rxBytes > last_rx_bytes){
+    		    tcp_delay_ack = (iter->second.delaySum.GetDouble() - last_delay_sum_ack) / (iter->second.rxPackets - last_rx_pkts_ack)/(kilo*kilo);
+    		    last_delay_sum_ack = iter->second.delaySum.GetDouble();
+    		    last_rx_pkts_ack = iter->second.rxPackets;
+    	 }
+
+
     }
   }
 
@@ -644,6 +707,23 @@ getTcpPut(){
            	  ++it5;
     }
 
+    std::map<Ipv4Address,double>::iterator it1_a = meanRxRate_ack.begin();
+    std::map<Ipv4Address,uint64_t>::iterator it3_a = numOfLostPackets_ack.begin();
+    std::map<Ipv4Address,double>::iterator it5_a = meanTxRate_ack.begin();
+
+    for (;it1_a != meanRxRate_ack.end(); ){
+      *put_ack_wp->GetStream() << Simulator::Now().GetSeconds() << "\t\t"
+                  << (*it1_a).first << "\t\t"
+                  << (*it1_a).second << "\t\t"
+                  << (*it3_a).second << "\t\t"
+		  << (*it5_a).second << "\t"
+		  << tcp_delay_ack <<  "\n";
+                  ++it1_a;
+                  ++it3_a;
+           	  ++it5_a;
+    }
+
+
     while (t < simTime){
         t += samplingInterval;
         Simulator::Schedule(Seconds(t),&getTcpPut);
@@ -660,17 +740,20 @@ init_wrappers(){
     highest_tx_seq_wp = asciiTraceHelper.CreateFileStream(highesttxseq);
     next_tx_seq_wp = asciiTraceHelper.CreateFileStream(nexttxseq);
     // dev_queues_wp = asciiTraceHelper.CreateFileStream(queues);
-    macro_wp = asciiTraceHelper.CreateFileStream(macro);
     debugger_wp = asciiTraceHelper.CreateFileStream(debugger);
+    ue_positions_wp = asciiTraceHelper.CreateFileStream(course_change);
 
     //********************Initialize wrappers*********************/
     if (isTcp==1){
       put_send = DIR + "tcp-put.dat";
       put_ack = DIR + "tcp-put-ack.dat";
+      macro = DIR+"macro_tcp.dat";
     } else{
       put_send = DIR + "udp-put.dat";
       put_ack = DIR + "udp-put-ack.dat";
+      macro = DIR+"macro_udp.dat";
     }
+    macro_wp = asciiTraceHelper.CreateFileStream(macro);
     put_send_wp = asciiTraceHelper.CreateFileStream(put_send);
     put_ack_wp = asciiTraceHelper.CreateFileStream(put_ack);
 
