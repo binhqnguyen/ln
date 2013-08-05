@@ -2,7 +2,7 @@
 E_NAME="CUBIC_noname"
 PY_DIR="/var/tmp/ln_result/radio/"
 RE_DIR="/var/tmp/ln_result"
-SIM_TIME="100"
+SIM_TIME="50"
 IS_PEDESTRIAN="1"
 IS_FADING="1"
 
@@ -42,7 +42,7 @@ echo "running lte nsc UDP ..."
 echo "running lte nsc TCP ..."
 ./waf --run "scratch/lte_nsc_full_ues --simTime=$SIM_TIME --isTcp=1 --isPedestrian=$IS_PEDESTRIAN --isFading=$IS_FADING" > /var/tmp/ln_result/radio/TCP_LOG 2>&1 
 
-cp ~/ln/lte-nsc-full.out $RE_DIR/radio/
+cp ~/ln/lte_nsc_full_ues.out $RE_DIR/radio/
 cp ~/ln/*.pcap $RE_DIR/radio/
 cp ~/ln/{debugger.dat,course_change.dat} $RE_DIR/radio/
 cp ~/ln/DlRxPhyStats.txt $RE_DIR/radio/
