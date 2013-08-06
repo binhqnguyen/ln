@@ -104,13 +104,13 @@ uint16_t p2pLinkMtu = 1500;
 //Simulation
 uint32_t numberOfPackets = 0;
 uint32_t packetSize = 900;
-double distance = 2000.0;    //With enbTxPower=5, Noise=37 and UeTxPower=50 (NEED TO BE THAT HIGH TO GUARANTEE UPLINK FOR TCP ACK FLOW), noise=9, we have roughly 1000Kb/s downlink bandwidth.
-uint16_t radioUlBandwidth = 100;  //the radio link bandwidth among UEs and EnodeB (in Resource Blocks). This is the configuration on LteEnbDevice.
-uint16_t radioDlBandwidth = 100;  //same as above, for downlink.
+double distance = 100.0;    //With enbTxPower=5, Noise=37 and UeTxPower=50 (NEED TO BE THAT HIGH TO GUARANTEE UPLINK FOR TCP ACK FLOW), noise=9, we have roughly 1000Kb/s downlink bandwidth.
+uint16_t radioUlBandwidth = 25;  //the radio link bandwidth among UEs and EnodeB (in Resource Blocks). This is the configuration on LteEnbDevice.
+uint16_t radioDlBandwidth = 25;  //same as above, for downlink.
 std::string dataRate = "100Mb/s";
-std::string SACK="0";
+std::string SACK="1";
 std::string TIME_STAMP="0";
-std::string WINDOW_SCALING="0";
+std::string WINDOW_SCALING="1";
 std::string TCP_VERSION="cubic"; //reno,westwood,vegas,veno,yeah,illinois,htcp,hybla
 uint16_t isAMRLC = 0;    
 
@@ -163,6 +163,7 @@ static std::string put_send;
 static std::string put_ack;
 static std::string debugger = "debugger.dat";
 static std::string course_change = DIR+"course_change.dat";
+static std::string overall = "overall.out";
 
 /********wrappers**********/
 static AsciiTraceHelper asciiTraceHelper;
@@ -171,6 +172,7 @@ Ptr<OutputStreamWrapper> put_ack_wp;
 Ptr<OutputStreamWrapper> macro_wp;
 Ptr<OutputStreamWrapper> debugger_wp;
 Ptr<OutputStreamWrapper> ue_positions_wp;
+Ptr<OutputStreamWrapper> overall_wp;
 
 /**************** Functions **************/
 
@@ -180,7 +182,7 @@ static void init_wrappers();
 /*****************NSC*********************/
 static std::string nsc_stack="liblinux2.6.26.so";
 
-static uint16_t is_random_allocation = 1;  //UEs fixed position allocation by default
+static uint16_t is_random_allocation = 0;  //UEs fixed position allocation by default
 
 static void
 CourseChange (Ptr<OutputStreamWrapper> ue_positions_wp, Ptr<const MobilityModel> model){
@@ -345,7 +347,7 @@ main (int argc, char *argv[])
 	ueMobility.SetPositionAllocator ("ns3::GridPositionAllocator",
 		    "MinX", DoubleValue (distance/sqrt(2)),  //1st UE is put at a location which is "distance" meters away from eNB.
 		    "MinY", DoubleValue (distance/sqrt(2)),  
-		    "DeltaX", DoubleValue (100.0),  //distance among ENB nodes
+		    "DeltaX", DoubleValue (100.0),  //distance among UE nodes
 		    "DeltaY", DoubleValue (100.0),
 		    "GridWidth", UintegerValue (3), //number of nodes on a line
 		    "LayoutType", StringValue ("RowFirst"));
@@ -377,7 +379,7 @@ main (int argc, char *argv[])
 				     "Time", StringValue ("2s"), //change direction and speed after each 2s.
 				     "Speed", StringValue ("ns3::ConstantRandomVariable[Constant=1.0]"),  //m/s
 							   "Speed", StringValue ("ns3::ConstantRandomVariable[Constant="+ms+"]"),  //m/s
-							   "Bounds", RectangleValue (Rectangle (-5000, 5000, -5000, 5000)));  //bound
+							   "Bounds", RectangleValue (Rectangle (-50000, 50000, -50000, 50000)));  //bound
     }
     
         //Install mobility model into UEs. 
@@ -449,7 +451,7 @@ main (int argc, char *argv[])
         if (isTcp == 1){
 					/*********TCP Application********/
 					//Create a packet sink to receive packet on remoteHost
-                    LogComponentEnable("Queue",level);    //Only enable Queue monitoring for TCP to accelerate experiment speed.
+     			                LogComponentEnable("Queue",level);    //Only enable Queue monitoring for TCP to accelerate experiment speed.
 					PacketSinkHelper sink("ns3::TcpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), dlPort));
 					serverApps.Add(sink.Install(ueNodes.Get(u)));
 
@@ -559,6 +561,21 @@ main (int argc, char *argv[])
         << "Mean received bitrate " << 8*iter->second.rxBytes/(iter->second.timeLastRxPacket-iter->second.timeFirstRxPacket)*ONEBIL/(1024) << std::endl
         << "Mean transmitted bitrate " << 8*iter->second.txBytes/(iter->second.timeLastTxPacket-iter->second.timeFirstTxPacket)*ONEBIL/(1024) << std::endl;
     }
+
+    *overall_wp->GetStream() << "=========Experiment=========\n"
+    << "TCP: " << isTcp << std::endl
+    << "Distance from eNB: " << distance << std::endl 
+    << "***Flow ID: " << iter->first << " Src Addr " << t.sourceAddress << " Dst Addr " << t.destinationAddress << std::endl
+    << "Tx Packets " << iter->second.txPackets << std::endl
+    << "Rx Packets " << iter->second.rxPackets << std::endl
+    << "Lost packets " << iter->second.lostPackets << std::endl
+    << "Lost ratio " << double (iter->second.lostPackets)/(iter->second.lostPackets+iter->second.rxPackets) << std::endl;
+    if (iter->second.rxPackets > 1){
+        *overall_wp->GetStream() << "Average delay received " << iter->second.delaySum/iter->second.rxPackets/1000000 << std::endl
+        << "Mean received bitrate " << 8*iter->second.rxBytes/(iter->second.timeLastRxPacket-iter->second.timeFirstRxPacket)*ONEBIL/(1024) << std::endl
+        << "Mean transmitted bitrate " << 8*iter->second.txBytes/(iter->second.timeLastTxPacket-iter->second.timeFirstTxPacket)*ONEBIL/(1024) << std::endl;
+    }
+
   }
 
   Simulator::Destroy();
@@ -661,6 +678,7 @@ static void
 init_wrappers(){
     /* create files for wrappers */
     debugger_wp = asciiTraceHelper.CreateFileStream(debugger);
+    overall_wp = asciiTraceHelper.CreateFileStream(overall, std::ios::app);
     ue_positions_wp = asciiTraceHelper.CreateFileStream(course_change);
 
     //********************Initialize wrappers*********************/
