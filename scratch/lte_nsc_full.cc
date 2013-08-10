@@ -104,7 +104,7 @@ uint16_t p2pLinkMtu = 1500;
 //Simulation
 uint32_t numberOfPackets = 0;
 uint32_t packetSize = 900;
-double distance = 100.0;    //With enbTxPower=5, Noise=37 and UeTxPower=50 (NEED TO BE THAT HIGH TO GUARANTEE UPLINK FOR TCP ACK FLOW), noise=9, we have roughly 1000Kb/s downlink bandwidth.
+double distance = 1000.0;    //With enbTxPower=5, Noise=37 and UeTxPower=50 (NEED TO BE THAT HIGH TO GUARANTEE UPLINK FOR TCP ACK FLOW), noise=9, we have roughly 1000Kb/s downlink bandwidth.
 uint16_t radioUlBandwidth = 25;  //the radio link bandwidth among UEs and EnodeB (in Resource Blocks). This is the configuration on LteEnbDevice.
 uint16_t radioDlBandwidth = 25;  //same as above, for downlink.
 std::string dataRate = "100Mb/s";
@@ -113,6 +113,8 @@ std::string TIME_STAMP="0";
 std::string WINDOW_SCALING="1";
 std::string TCP_VERSION="cubic"; //reno,westwood,vegas,veno,yeah,illinois,htcp,hybla
 uint16_t isAMRLC = 0;    
+uint16_t isCost231 = 0;    
+uint32_t moving_bound = 50000;
 
 
 //tracefading
@@ -174,6 +176,7 @@ Ptr<OutputStreamWrapper> debugger_wp;
 Ptr<OutputStreamWrapper> ue_positions_wp;
 Ptr<OutputStreamWrapper> overall_wp;
 
+LogLevel level = (LogLevel) (LOG_LEVEL_ALL | LOG_PREFIX_TIME | LOG_PREFIX_NODE | LOG_PREFIX_FUNC);
 /**************** Functions **************/
 
 static void getTcpPut();
@@ -197,9 +200,7 @@ CourseChange (Ptr<OutputStreamWrapper> ue_positions_wp, Ptr<const MobilityModel>
 }
 
 
-int
-main (int argc, char *argv[])
-{
+void log_component_enable(){
 	//*************Enable logs********************/
     //To enable all components inside the LTE module.
 //      lteHelper->EnableLogComponents();
@@ -211,7 +212,6 @@ main (int argc, char *argv[])
     	 // LogComponentEnable("UdpServer", LOG_LEVEL_INFO);
 //		LogComponentEnable("OnOffApplication",LOG_LEVEL_INFO);
 //		LogComponentEnable("PacketSink",LOG_LEVEL_INFO);
-    LogLevel level = (LogLevel) (LOG_LEVEL_ALL | LOG_PREFIX_TIME | LOG_PREFIX_NODE | LOG_PREFIX_FUNC);
    // LogComponentEnable("TcpTahoe", level);
    // LogComponentEnable("RttEstimator",level);
    // LogComponentEnable("TcpSocketBase",level);
@@ -225,8 +225,14 @@ main (int argc, char *argv[])
     //   LogComponentEnable ("LteEnbMac", level);
 //       LogComponentEnable ("LtePdcp", level);
 //       LogComponentEnable ("LtePhy", level);
+}
+
+int
+main (int argc, char *argv[])
+{
+
+    log_component_enable();
    
-    
     // Command line arguments
     CommandLine cmd;
     cmd.AddValue("numberOfUeNodes", "Number of UeNodes", numberOfUeNodes);
@@ -274,7 +280,15 @@ main (int argc, char *argv[])
     lteHelper->SetEpcHelper (epcHelper);
     lteHelper->SetSchedulerType("ns3::PfFfMacScheduler");
     
-
+    //***************propagation model settings*****//
+    //Notice: For Cost231PropagationLossModel, 2 environments can be set: suburban (C=0) and downtown (C=3).
+    //See src/propagation/model/Cost231PropagationLossModel.cc
+    if (isCost231 == 1){
+	    P_TRACE_FILE = "~/ln/fading_traces/EPA_3kmh_100_dl_1575earfcn.fad";
+            V_TRACE_FILE = "~/ln/fading_traces/EVA_60kmh_100_dl_1575earfcn.fad";
+	    lteHelper->SetPathlossModelAttribute("Frequency",DoubleValue(1.842e9)); //frequency of transmission.
+	    lteHelper->SetPathlossModelAttribute("SSAntennaHeight",DoubleValue(1.7));	//mobile station antenna height.
+    }
     //*********************Use epcHelper to get the PGW node********************//
     Ptr<Node> pgw = epcHelper->GetPgwNode ();
     epcHelper->SetAttribute("S1uLinkDataRate", DataRateValue (DataRate (s1uLinkDataRate)));
@@ -368,7 +382,7 @@ main (int argc, char *argv[])
     }
     else {	//randomwalking enabled
 	    //*************UE random walking mobility*************//
-	    if (isPedestrian==0) moving_speed = 60;	//vehicular mobility
+	    if (isPedestrian==0) moving_speed = 50;	//vehicular mobility
 	    double speed = double (moving_speed)*1000/3600; //kmph to meter per second.
 	    *debugger_wp->GetStream() << "RandomWalk2dMobilityModel MOBILITY ... speed= " << speed << std::endl;
 	    std::stringstream mss;
@@ -379,7 +393,7 @@ main (int argc, char *argv[])
 				     "Time", StringValue ("2s"), //change direction and speed after each 2s.
 				     "Speed", StringValue ("ns3::ConstantRandomVariable[Constant=1.0]"),  //m/s
 							   "Speed", StringValue ("ns3::ConstantRandomVariable[Constant="+ms+"]"),  //m/s
-							   "Bounds", RectangleValue (Rectangle (-50000, 50000, -50000, 50000)));  //bound
+							   "Bounds", RectangleValue (Rectangle (-moving_bound, moving_bound, -moving_bound, moving_bound)));  //bound
     }
     
         //Install mobility model into UEs. 
@@ -393,6 +407,8 @@ main (int argc, char *argv[])
     *debugger_wp->GetStream() << "UE (x,y)= " << x << ", " << y << " d= " << sqrt(x*x+y*y) << std::endl;
 
     ue_mobility_model->TraceConnectWithoutContext("CourseChange", MakeBoundCallback(&CourseChange, ue_positions_wp));
+    
+
     //========================trace fading setup===================//
     if(isPedestrian==1 && isFading ==1)
 	traceFile = P_TRACE_FILE;
