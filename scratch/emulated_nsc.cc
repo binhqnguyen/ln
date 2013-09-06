@@ -56,13 +56,15 @@ NS_LOG_COMPONENT_DEFINE ("emulated_nsc");
 #define ONEBIL kilo*kilo*kilo
 
 static double timer = 0;
+static double scheduler_timer = 0;
 static uint32_t sim_time = 100;
 static uint32_t packet_size = 900;
 static std::string sending_rate = "100Mb/s"; //sending rate.
 static std::string core_network_bandwidth = "1000Mb/s"; 	//core_network_bandwidth.
 static uint32_t core_network_delay = 30;	//core_network_delay in millisenconds.
 static uint32_t core_network_mtu = 1500; 	//core_network_mte in Bytes.
-static std::string init_radio_bandwidth = "1Mb/s"; 	//radio_link_bandwidth (init).
+static double init_radio_bd = 20;
+static std::string init_radio_bandwidth = "20Mb/s"; 	//radio_link_bandwidth (init).
 static uint32_t init_radio_delay = 5;	//radio_link_delay (init) in millisenconds.
 static uint32_t init_radio_mtu = 1500; 	//radio_link_mtu (init) in Bytes.
 static uint16_t is_tcp = 1;
@@ -99,7 +101,11 @@ static Ptr<PointToPointNetDevice> enb_radio_dev; 	//device on the radio side of 
 static Ptr<PointToPointNetDevice> enb_core_dev;		//device on the core side of the enb
 static Ptr<PointToPointNetDevice> ue_dev;
 static Ptr<PointToPointNetDevice> endhost_dev;
-
+static PointToPointHelper radio_link;	
+static double rate_slope = -0.1; //increase the radio link bandwidth by "rate_slope" Mbps per "time_step"
+static double p_rate = init_radio_bd;
+static std::string current_radio_rate = "";
+static double time_step = 0.3; //time step for each increment of link rate.
 
 static double last_tx_time = 0;
 static double last_rx_time = 0;
@@ -107,95 +113,44 @@ static double last_tx_bytes = 0;
 static double last_rx_bytes = 0;
 
 /* Ascii output files name*/
+//Note: TCP's traces were obtained from nsc, stored in TCP_LOG file.
 static std::string DIR = "/var/tmp/ln_result/emulated/";
-static std::string cwnd = DIR+"cwnd.txt";
-static std::string rto = DIR+"rto_value_tmp.txt";
-static std::string rtt = DIR+"last_rtt_sample_tmp.txt";
-static std::string highesttxseq = DIR+"highest_tx_seq.txt";
-static std::string nexttxseq = DIR+"next_tx_seq.txt";
 static std::string queues = DIR+"queues.txt";
 static std::string put;
+static std::string debugger = DIR+"debugger.info";
 
 /********wrappers**********/
-Ptr<OutputStreamWrapper> cwnd_wp;
-Ptr<OutputStreamWrapper> rto_wp;
-Ptr<OutputStreamWrapper> highest_tx_seq_wp;
-Ptr<OutputStreamWrapper> next_tx_seq_wp;
-Ptr<OutputStreamWrapper> rtt_wp;
 Ptr<OutputStreamWrapper> dev_queues_wp;
 Ptr<OutputStreamWrapper> put_wp;
+Ptr<OutputStreamWrapper> debugger_wp;
 
 
 static AsciiTraceHelper asciiTraceHelper;
 /**************NSC************/
 static std::string nsc_stack="liblinux2.6.26.so";
- 
-static void 
-CwndTracer (Ptr<OutputStreamWrapper> cwnd_wp, uint32_t oldval, uint32_t newval)
-{
-  // NS_LOG_UNCOND (Simulator::Now().GetSeconds() << " cwnd_from " << oldval << " to " << newval);
-  *cwnd_wp->GetStream() << Simulator::Now().GetSeconds() << " cwnd_from " << oldval << " to " << newval << std::endl;
-}
+static std::string TCP_VERSION="cubic"; //reno,westwood,vegas,veno,yeah,illinois,htcp,hybla 
 
-static void 
-RTOTracer (Ptr<OutputStreamWrapper> rto_wp, ns3::Time oldval, ns3::Time newval)
-{
-  // NS_LOG_UNCOND (Simulator::Now().GetSeconds() << " \t RTO_value \t " << newval.GetSeconds());
-  *rto_wp->GetStream() << Simulator::Now().GetSeconds() << " \t RTO_value \t " << newval.GetSeconds() << std::endl;
-}
-
-// static void 
-// AwndTracer (uint16_t oldval, uint16_t newval)
-// {
-//   NS_LOG_UNCOND (Simulator::Now().GetSeconds() << " \t awnd_value \t " << (uint32_t) newval);
-// }
-
-// static void 
-// RemotewndTracer(Ptr<OutputStreamWrapper> rwnd_wp, uint32_t oldval, uint32_t newval)
-// {
-//   // NS_LOG_UNCOND (Simulator::Now().GetSeconds() << " \t remote_window_value \t " << newval);
-//   *rwnd_wp->GetStream() << Simulator::Now().GetSeconds() << " \t remote_window_value \t " << newval << std::endl;
-// }
-
-static void 
-LastRttTracer (Ptr<OutputStreamWrapper> rtt_wp, ns3::Time oldval, ns3::Time newval)
-{
-  // NS_LOG_UNCOND (Simulator::Now().GetSeconds() << " \t last_rtt_sample \t " << newval.GetSeconds());
-  *rtt_wp->GetStream() << Simulator::Now().GetSeconds() << " \t last_rtt_sample \t " << newval.GetSeconds() << std::endl;
-
-}
-
-
-static void 
-HighestSentSeqTracer (Ptr<OutputStreamWrapper> highest_tx_seq_wp, ns3::SequenceNumber32 oldval, ns3::SequenceNumber32 newval)
-{
-  // NS_LOG_UNCOND (Simulator::Now().GetSeconds() << " \t highest_sent_seq \t " << newval);
-  *highest_tx_seq_wp->GetStream() << Simulator::Now().GetSeconds() << " \t highest_sent_seq \t " << newval << std::endl;
-}
-
-
-static void 
-NextTxSeqTracer (Ptr<OutputStreamWrapper> next_tx_seq_wp, ns3::SequenceNumber32 oldval, ns3::SequenceNumber32 newval)
-{
-  // NS_LOG_UNCOND (Simulator::Now().GetSeconds() << " \t next_tx_seq \t " << newval);
-  *next_tx_seq_wp->GetStream() << Simulator::Now().GetSeconds() << " \t next_tx_seq \t " << newval << std::endl;
-}
-
-
-static void enable_tcp_socket_traces(Ptr<Application> app);
 static void
 getTcpPut();
 
-// static void dev_queue_droptail(Ptr<const Packet> packet){
-// 	//Ptr<Packet> pkt;
-// 	NS_LOG_UNCOND (Simulator::Now().GetSeconds() << " queue droptail");
-// 	//return pkt;
-// }
 
-// static void dev_rx(Ptr<const Packet> packet){
-//   NS_LOG_UNCOND (Simulator::Now().GetSeconds() << " device received a packet");
-//   //return pkt;
-// }
+/*
+ * Changing the radio link bandwidth every "time_step" second.
+ * The changing rate determined by "rate_slope".
+ */
+static void link_change(){
+  //p_rate = init_radio_bd + Simulator::Now().GetSeconds()*rate_slope; 
+  p_rate += rate_slope; 
+  std::stringstream ss;
+  ss << p_rate;
+  current_radio_rate = ss.str()+"Mb/s";
+  *debugger_wp->GetStream() << Simulator::Now().GetSeconds() << "s: " <<  current_radio_rate << "\n";
+  Config::Set("/NodeList/1/DeviceList/0/$ns3::PointToPointNetDevice/DataRate",StringValue(current_radio_rate));
+  while (scheduler_timer < sim_time){
+	 scheduler_timer += time_step;
+ 	 Simulator::Schedule(Seconds(scheduler_timer),&link_change);
+  }
+}
 
 
 int main (int argc, char *argv[])
@@ -225,7 +180,7 @@ int main (int argc, char *argv[])
     cmd.AddValue("is_tcp", "Transport protocol used", is_tcp);
  
     /**ConfigStore setting*/
-    Config::SetDefault("ns3::ConfigStore::Filename", StringValue("emulated-nsc-in.txt"));
+    Config::SetDefault("ns3::ConfigStore::Filename", StringValue("emulated-nsc.in"));
     Config::SetDefault("ns3::ConfigStore::FileFormat", StringValue("RawText"));
     Config::SetDefault("ns3::ConfigStore::Mode", StringValue("Load"));
     ConfigStore inputConfig;
@@ -237,13 +192,8 @@ int main (int argc, char *argv[])
 
 
    /* create files for wrappers */
-    cwnd_wp = asciiTraceHelper.CreateFileStream(cwnd);
-    rto_wp = asciiTraceHelper.CreateFileStream(rto);
-    rtt_wp = asciiTraceHelper.CreateFileStream(rtt);
-    rtt_wp = asciiTraceHelper.CreateFileStream(rtt);
-    highest_tx_seq_wp = asciiTraceHelper.CreateFileStream(highesttxseq);
-    next_tx_seq_wp = asciiTraceHelper.CreateFileStream(nexttxseq);
     dev_queues_wp = asciiTraceHelper.CreateFileStream(queues);
+    debugger_wp = asciiTraceHelper.CreateFileStream(debugger);
 
 
 
@@ -266,7 +216,6 @@ int main (int argc, char *argv[])
   core_network_link.SetChannelAttribute ("Delay", TimeValue (MilliSeconds (core_network_delay)));
   core_network_link.SetDeviceAttribute ("Mtu", UintegerValue(core_network_mtu));
  
-  PointToPointHelper radio_link;
   radio_link.SetDeviceAttribute ("DataRate", DataRateValue (DataRate (init_radio_bandwidth)));
   radio_link.SetChannelAttribute ("Delay", TimeValue (MilliSeconds (init_radio_delay)));
   radio_link.SetDeviceAttribute ("Mtu", UintegerValue(init_radio_mtu));
@@ -286,9 +235,10 @@ int main (int argc, char *argv[])
   internet.SetTcp ("ns3::NscTcpL4Protocol", "Library", StringValue(nsc_stack));
   internet.Install (remote_host);
   internet.Install (ue);
-  Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_sack", StringValue ("0"));
+  Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_sack", StringValue ("1"));
   Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_timestamps", StringValue ("0"));
-  Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_window_scaling", StringValue ("0"));
+  Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_window_scaling", StringValue ("1"));
+  Config::Set ("/NodeList/*/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_congestion_control", StringValue (TCP_VERSION));
   
   Ipv4AddressHelper ipv4;
   ipv4.SetBase ("10.1.3.0", "255.255.255.0");
@@ -312,7 +262,6 @@ int main (int argc, char *argv[])
                 LogComponentEnable("Queue",level);    //Only enable Queue monitoring for TCP to accelerate experiment speed.
                 put = DIR + "tcp-put.txt";
                 put_wp = asciiTraceHelper.CreateFileStream(put);
-
         				/*********TCP Application********/
        					PacketSinkHelper sink("ns3::TcpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), ulPort));
        					serverApps.Add(sink.Install(ue));
@@ -346,7 +295,7 @@ int main (int argc, char *argv[])
   clientApps.Start (Seconds(0.5));
 
   Simulator::ScheduleWithContext (0 ,Seconds (0.0), &getTcpPut);
-  Simulator::Schedule(Seconds(0.6) + NanoSeconds(1.0), &enable_tcp_socket_traces, remote_host->GetApplication(0));///*Note: enable_tcp_socket_traces must be scheduled after the OnOffApplication starts (OnOffApplication's socket is created after the application starts) 
+  Simulator::Schedule(Seconds(50), &link_change);
   
     /****ConfigStore setting****/
     Config::SetDefault("ns3::ConfigStore::Filename", StringValue("emulated-nsc.out"));
@@ -356,7 +305,6 @@ int main (int argc, char *argv[])
     outputConfig.ConfigureDefaults();
     outputConfig.ConfigureAttributes();
 
-  //Config::Set ("/NodeList/3/$ns3::Ns3NscStack<linux2.6.26>/net.ipv4.tcp_sack", StringValue ("0"));
 
   //core_network_link.EnablePcap("core");
   // radio_link.EnablePcapAll("emulated");
@@ -407,26 +355,6 @@ int main (int argc, char *argv[])
   }
   // NS_LOG_UNCOND ("ue ip = " << ue_ip << "endhost ip = " << endhost_ip << "enb radio/core ip = " << enb_radio_ip << "/" << enb_core_ip  );
   Simulator::Destroy ();
-}
-
-static void enable_tcp_socket_traces(Ptr<Application> app)
-{
-    Ptr<OnOffApplication> on_off_app = app->GetObject<OnOffApplication>();
-    if (on_off_app != NULL)
-    {
-        Ptr<Socket> socket = on_off_app->GetSocket();
-        socket->TraceConnectWithoutContext("CongestionWindow", MakeBoundCallback(&CwndTracer, cwnd_wp));
-        socket->TraceConnectWithoutContext("RTO", MakeBoundCallback(&RTOTracer, rto_wp));
-        //socket->TraceConnectWithoutContext("RWND", MakeBoundCallback(&RemotewndTracer, rwnd_wp));
-        socket->TraceConnectWithoutContext("RTT", MakeBoundCallback(&LastRttTracer, rtt_wp));
-        socket->TraceConnectWithoutContext("HighestSequence", MakeBoundCallback(&HighestSentSeqTracer,highest_tx_seq_wp));
-        socket->TraceConnectWithoutContext("NextTxSequence", MakeBoundCallback(&NextTxSeqTracer,next_tx_seq_wp));
-    }
-  // enb_radio_dev->TraceConnect("**EnodeB Radio Dev: ","MacTxDrop", MakeCallback(&dev_queue_droptail)); 
-  // enb_core_dev->TraceConnect("**EnodeB Core Dev: ", "PhyRxEnd", MakeCallback(&dev_queue_droptail));
-  // endhost_dev->TraceConnect("**Endhost: ","MacTxDrop", MakeCallback(&dev_queue_droptail)); 
-  // ue_dev->TraceConnectWithoutContext("PhyRxEnd", MakeCallback(&dev_rx)); 
-
 }
 
 static void
