@@ -1,12 +1,20 @@
 #!/bin/bash
 E_NAME="CUBIC_noname"
-PY_DIR="/var/tmp/ln_result/radio/"
 RE_DIR="/var/tmp/ln_result"
+PY_DIR="$REDIR/radio/"
 SIM_TIME="100"
 DISTANCE="100"
 PEDESTRIAN="1"
 lte="lte"
 processing="processing"
+
+if [ "$1" != "" ];
+	then
+	E_NAME=$1
+	else
+		echo "usage rp-..sh <name of backup folder> [<simTime> <distance> <isPedestrian>]"
+		exit;
+fi
 
 echo "removing old files....."
 rm $RE_DIR/radio/*.dat
@@ -33,13 +41,6 @@ if [ "$2" != "" ];
 		echo "t=$SIM_TIME d=$DISTANCE p=$PEDESTRIAN"
 fi
 
-if [ "$1" != "" ];
-	then
-	E_NAME=$1
-	else
-		echo "usage rp-..sh <name of backup folder> [<simTime> <distance> <isPedestrian>]"
-		exit;
-fi
 echo $E_NAME 
 echo $PY_DIR
 echo $RE_DIR

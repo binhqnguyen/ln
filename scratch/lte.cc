@@ -77,11 +77,12 @@ NS_LOG_COMPONENT_DEFINE ("lte-single-ue");
 
 
 double simTime = 100;	//simulation time for EACH application
+static double scheduler_timer=0; //timer to schedule position tracking
 std::ofstream tcpThroughput;
 Ptr<ns3::FlowMonitor> monitor;
 FlowMonitorHelper flowHelper;
 double samplingInterval = 0.005;    /*getTcp() function invoke for each x second*/
-uint16_t PUT_SAMPLING_INTERVAL = 15; /*sample a TCP throughput for each x pkts*/
+uint16_t PUT_SAMPLING_INTERVAL = 20; /*sample a TCP throughput for each x pkts*/
 double t = 0.0;
 uint16_t isTcp = 1;
 //topology
@@ -156,6 +157,7 @@ static std::string put_send;
 static std::string debugger = "debugger.dat";
 static std::string course_change = DIR+"course_change.dat";
 static std::string overall = "overall.out";
+static std::string position_tracking = DIR+"position_tracking.dat";
 
 /********wrappers**********/
 static AsciiTraceHelper asciiTraceHelper;
@@ -164,6 +166,7 @@ Ptr<OutputStreamWrapper> macro_wp;
 Ptr<OutputStreamWrapper> debugger_wp;
 Ptr<OutputStreamWrapper> ue_positions_wp;
 Ptr<OutputStreamWrapper> overall_wp;
+Ptr<OutputStreamWrapper> position_tracking_wp;
 
 LogLevel level = (LogLevel) (LOG_LEVEL_ALL | LOG_PREFIX_TIME | LOG_PREFIX_NODE | LOG_PREFIX_FUNC);
 /**************** Functions **************/
@@ -189,6 +192,21 @@ CourseChange (Ptr<OutputStreamWrapper> ue_positions_wp, Ptr<const MobilityModel>
 				   << std::endl;
 }
 
+static void
+pos_tracking (Ptr<OutputStreamWrapper> position_tracking_wp, Ptr<const MobilityModel> model){
+	Vector position = model->GetPosition();
+	Vector vel = model->GetVelocity();
+	*position_tracking_wp->GetStream() << Simulator::Now().GetSeconds() << " (x,y)= " << position.x << " , " 
+				   << position.y
+				   << " d= " << sqrt(position.x*position.x+position.y*position.y) 
+				   << " v= "
+				   << sqrt (vel.x*vel.x + vel.y*vel.y)
+				   << std::endl;
+	while (scheduler_timer <= simTime){
+		scheduler_timer += 3;
+    		Simulator::Schedule(Seconds(scheduler_timer), &pos_tracking, position_tracking_wp, model);
+	}
+}
 
 void log_component_enable(){
 	//*************Enable logs********************/
@@ -380,7 +398,7 @@ main (int argc, char *argv[])
 	    std::string ms = mss.str();
 	    ueMobility.SetMobilityModel ("ns3::RandomWalk2dMobilityModel",
 				     "Mode", StringValue ("Time"),  //change distance and speed based on TIME.
-				     "Time", StringValue ("2s"), //change direction and speed after each 2s.
+				     "Time", StringValue ("200s"), //change direction and speed after each 2s.
 				     "Speed", StringValue ("ns3::ConstantRandomVariable[Constant=1.0]"),  //m/s
 							   "Speed", StringValue ("ns3::ConstantRandomVariable[Constant="+ms+"]"),  //m/s
 							   "Bounds", RectangleValue (Rectangle (-moving_bound, moving_bound, -moving_bound, moving_bound)));  //bound
@@ -470,6 +488,7 @@ main (int argc, char *argv[])
 					clientApps.Add(onOffHelper.Install(remoteHost));
         }
         else{
+					PUT_SAMPLING_INTERVAL = PUT_SAMPLING_INTERVAL*3;
 					/*********UDP Application********/
 					//Create a packet sink to receive packet on remoteHost
 					PacketSinkHelper sink("ns3::UdpSocketFactory", InetSocketAddress(Ipv4Address::GetAny(), dlPort));
@@ -527,7 +546,7 @@ main (int argc, char *argv[])
     /*=============schedule to get TCP throughput============*/
     Time t = Seconds(0.0);
     Simulator::ScheduleWithContext (0 ,Seconds (0.0), &getTcpPut);
-
+    Simulator::Schedule(Seconds(1), &pos_tracking, position_tracking_wp, ue_mobility_model);
 
 
     /*********Start the simulation*****/
@@ -672,7 +691,9 @@ init_wrappers(){
     debugger_wp = asciiTraceHelper.CreateFileStream(debugger);
     overall_wp = asciiTraceHelper.CreateFileStream(overall, std::ios::app);
     ue_positions_wp = asciiTraceHelper.CreateFileStream(course_change);
-
+    position_tracking_wp = asciiTraceHelper.CreateFileStream(position_tracking);
+    *ue_positions_wp->GetStream() << "========================\n";
+    *position_tracking_wp->GetStream() << "========================\n";
     //********************Initialize wrappers*********************/
     if (isTcp==1){
       put_send = DIR + "tcp-put.dat";
