@@ -52,7 +52,7 @@ NS_LOG_COMPONENT_DEFINE ("emulated_nsc");
 
 #define kilo 1000
 #define KILO 1024
-#define TCP_SAMPLING_INTERVAL 0.1 //tcp flow sampling interval in second
+#define TCP_SAMPLING_INTERVAL 0.005 //tcp flow sampling interval in second
 #define ONEBIL kilo*kilo*kilo
 
 static double timer = 0;
@@ -372,7 +372,7 @@ getTcpPut(){
     /*sending flows, from endhost (1.0.0.2:49153) to Ues (7.0.0.2:200x)*/
     if (t.destinationPort >= 3000 && t.destinationPort <= 4000) {
       if (iter->second.rxPackets > 1){
-        if (last_tx_time < iter->second.timeLastTxPacket.GetDouble()){
+        if ((last_tx_time + 400000000) < iter->second.timeLastTxPacket.GetDouble()){
             meanTxRate_send = 8*(iter->second.txBytes-last_tx_bytes)/(iter->second.timeLastTxPacket.GetDouble()-last_tx_time)*ONEBIL/kilo;
             meanRxRate_send = 8*(iter->second.rxBytes-last_rx_bytes)/(iter->second.timeLastRxPacket.GetDouble()-last_rx_time)*ONEBIL/kilo;
             last_tx_time = iter->second.timeLastTxPacket.GetDouble();
@@ -448,4 +448,3 @@ getTcpPut(){
         Simulator::Schedule(Seconds(timer),&getTcpPut);
     }
 }
-

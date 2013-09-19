@@ -27,8 +27,13 @@ cat cubic_all.raw | grep "102.102.102.102" | grep "node 0" > cubic_ack.dat
 	./get_queue_time.py 
 ########calculate retrans from cubic.dat##########
 	./retrans_count.py 
+
+#######get (relative) sequence number from pcap files######
+tcpdump  -ttttt -r emulated_core-2-0.pcap | grep "length 0" > sequence_ack.raw
+tcpdump  -ttttt -r emulated_core-2-0.pcap | grep "length 1460" > sequence_send.raw
+./tcpdump.py
 ######plot and move graph files######
-	gnuplot plot-averaged.txt
+	gnuplot plot.gnu
 
 	#######backing up#########
 	cp *.svg graphs
