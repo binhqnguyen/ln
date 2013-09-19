@@ -120,7 +120,7 @@ set terminal svg
 plot "cubic.dat" using 1:7 title "cwnd" with lines,\
 "cubic.dat" using 1:(filter_1st_ssth($11)) title "ssthreshold" with lines,\
 "queues.txt" using 2:($4/PKTSIZE) title "enb_radio_queue" with lines,\
-"enb_dev_queue_drop.txt" using 1:(CONST_C) title "enb queue droptail" with points pt 6 axis x2y2,\
+"enb_dev_queue_drop.txt" using 1:(CONST_C) title "enb queue droptail" with points pt 6,\
 "retrans.dat" using 1:(0):($2) title "retransmissions" with points pt 6 ps variable
 #"enb_dev_dequeue.txt" using 1:(CONST_A) title "eNodeB's queue dequeuing pkts" axis x2y2 pt 0,\
 #"endhost_dev_dequeue.txt" using 1:(CONST_B) title "endhost's queue dequeuing pkts" axis x2y2 pt 0,\
@@ -145,10 +145,10 @@ set terminal svg
 
 
 plot "sequence_send.dat" using 1:2 title "send seq number" pt 1,\
-"sequence_send.dat" using 1:3 title "packets per send" pt 1 axis x1y2,\
 "sequence_ack.dat" using 1:2 title "ack seq number" pt 1,\
-"enb_dev_queue_drop.txt" using 1:(0) title "enb queue droptail" pt 2 axis x1y2,\
+"enb_dev_queue_drop.txt" using 1:(0) title "enb queue droptail" pt 2,\
 "retrans.dat" using 1:(0):($2) title "retransmissions" with points pt 6 ps variable
+#"sequence_send.dat" using 1:3 title "packets per send" pt 1 axis x1y2,\
 #plot "highest_sent_seq.txt" using 1:3 title "highest sent sequence #" pt 1,\
 
 

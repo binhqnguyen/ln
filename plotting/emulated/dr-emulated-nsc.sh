@@ -7,6 +7,9 @@
 	pwd
 
 	TCP='CUBIC'
+	buffer='10-pkt-buffer'
+	x1=0
+	x2=100
 
 ######### queues logs from log file ###########
 	cat < TCP_LOG | grep "Queue:" > queue
@@ -27,9 +30,10 @@ cat cubic_all.raw | grep "102.102.102.102" | grep "node 0" > cubic_ack.dat
 	./get_queue_time.py 
 ########calculate retrans from cubic.dat##########
 	./retrans_count.py 
-######plot and move graph files######
-	gnuplot plot.gnu
 
+#######get (relative) sequence number from pcap files######
+./plot.sh $CUBIC $buffer $x1 $x2
+######plot and move graph files######
 	#######backing up#########
 	cp *.svg graphs
 	cp *.* $ENV\ln_result/backup/emulated/$E_NAME
