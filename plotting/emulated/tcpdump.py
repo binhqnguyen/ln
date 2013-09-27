@@ -8,6 +8,7 @@ if __name__ == "__main__":
 	INPUT_FILE =  "sequence_send.raw" 
 	OUTPUT_FILE = "sequence_send.dat"
 	MOD = 1000
+	TIME_DIFF = 0.5 ##diff between simulation time and tcpdump timestamp
 
 	file = open (INPUT_FILE)
 	if (os.path.isfile(OUTPUT_FILE)):      ##if output file not exist
@@ -16,6 +17,7 @@ if __name__ == "__main__":
 
 	line = file.readline()
 	tokens = {}
+	last_timestamp = 0
 
 	while (line):
 		tokens = line.split()
@@ -26,7 +28,9 @@ if __name__ == "__main__":
 		hr = timestamp_bl[0]
 		min = timestamp_bl[1]
 		seconds = timestamp_bl[2]
-		timestamp_sec = float(hr)*60*60 + float(min)*60 + float(seconds)
+		timestamp_sec = float(hr)*60*60 + float(min)*60 + float(seconds) + TIME_DIFF*2
+		inter_ack = timestamp_sec - last_timestamp
+		last_timestamp = timestamp_sec
 		
 		s_len = tokens[14]
 		seq_from = long (seq_from)/ long (s_len)
@@ -36,7 +40,7 @@ if __name__ == "__main__":
 		delta = seq_to - seq_from
 		if delta < 0: 
 			delta = 1
-		outfile.write(str (timestamp_sec)+"\t"+ str (seq_from)+"\t"+str (delta)+"\n")
+		outfile.write(str (timestamp_sec)+"\t"+ str (seq_from)+"\t"+str (delta)+ "\t" + str(inter_ack) + "\n")
 		line = file.readline()
 
 	INPUT_FILE =  "sequence_ack.raw" 
@@ -50,7 +54,7 @@ if __name__ == "__main__":
 
 	line = file.readline()
 	tokens = {}
-
+	last_timestamp = 0
 	while (line):
 		tokens = line.split()
 		len = tokens[12]
@@ -63,11 +67,13 @@ if __name__ == "__main__":
 		hr = timestamp_bl[0]
 		min = timestamp_bl[1]
 		seconds = timestamp_bl[2]
-		timestamp_sec = float (hr)*60*60 + float (min)*60 + float (seconds)
+		timestamp_sec = float (hr)*60*60 + float (min)*60 + float (seconds) + TIME_DIFF*2
+		inter_ack = timestamp_sec - last_timestamp
+		last_timestamp = timestamp_sec
 		
 		seq = long (seq)/ long (s_len)
 		seq = seq % MOD
-		outfile.write(str (timestamp_sec)+"\t"+ str (seq)+"\n")
+		outfile.write(str (timestamp_sec)+"\t"+ str (seq)+ "\t" + str (inter_ack) + "\n")
 		line = file.readline()
 
 

@@ -52,7 +52,7 @@ NS_LOG_COMPONENT_DEFINE ("emulated_nsc");
 
 #define kilo 1000
 #define KILO 1024
-#define TCP_SAMPLING_INTERVAL 0.005 //tcp flow sampling interval in second
+#define TCP_SAMPLING_INTERVAL 0.001 //tcp flow sampling interval in second
 #define ONEBIL kilo*kilo*kilo
 
 static double timer = 0;
@@ -63,8 +63,8 @@ static std::string sending_rate = "100Mb/s"; //sending rate.
 static std::string core_network_bandwidth = "1000Mb/s"; 	//core_network_bandwidth.
 static uint32_t core_network_delay = 30;	//core_network_delay in millisenconds.
 static uint32_t core_network_mtu = 1500; 	//core_network_mte in Bytes.
-static double init_radio_bd = 20;
-static std::string init_radio_bandwidth = "20Mb/s"; 	//radio_link_bandwidth (init).
+static double init_radio_bd = 25;
+static std::string init_radio_bandwidth = "25Mb/s"; 	//radio_link_bandwidth (init).
 static uint32_t init_radio_delay = 5;	//radio_link_delay (init) in millisenconds.
 static uint32_t init_radio_mtu = 1500; 	//radio_link_mtu (init) in Bytes.
 static uint16_t is_tcp = 1;
@@ -128,7 +128,7 @@ Ptr<OutputStreamWrapper> debugger_wp;
 static AsciiTraceHelper asciiTraceHelper;
 /**************NSC************/
 static std::string nsc_stack="liblinux2.6.26.so";
-static std::string TCP_VERSION="cubic"; //reno,westwood,vegas,veno,yeah,illinois,htcp,hybla 
+static std::string TCP_VERSION="hybla"; //reno,westwood,vegas,veno,yeah,illinois,htcp,hybla 
 
 static void
 getTcpPut();
@@ -140,7 +140,11 @@ getTcpPut();
  */
 static void link_change(){
   //p_rate = init_radio_bd + Simulator::Now().GetSeconds()*rate_slope; 
-  p_rate += rate_slope; 
+  if (p_rate > 9 && p_rate < 10 && Simulator::Now().GetSeconds() < 60 )
+	p_rate = p_rate;
+  else if (p_rate < 0.2 || p_rate > 24)
+	p_rate = p_rate;
+  else p_rate += rate_slope; 
   std::stringstream ss;
   ss << p_rate;
   current_radio_rate = ss.str()+"Mb/s";
@@ -295,7 +299,7 @@ int main (int argc, char *argv[])
   clientApps.Start (Seconds(0.5));
 
   Simulator::ScheduleWithContext (0 ,Seconds (0.0), &getTcpPut);
-  Simulator::Schedule(Seconds(50), &link_change);
+  Simulator::Schedule(Seconds(0.1), &link_change);
   
     /****ConfigStore setting****/
     Config::SetDefault("ns3::ConfigStore::Filename", StringValue("emulated-nsc.out"));
@@ -372,7 +376,7 @@ getTcpPut(){
     /*sending flows, from endhost (1.0.0.2:49153) to Ues (7.0.0.2:200x)*/
     if (t.destinationPort >= 3000 && t.destinationPort <= 4000) {
       if (iter->second.rxPackets > 1){
-        if ((last_tx_time + 400000000) < iter->second.timeLastTxPacket.GetDouble()){
+        if ((last_tx_time + 200000000) < iter->second.timeLastTxPacket.GetDouble()){
             meanTxRate_send = 8*(iter->second.txBytes-last_tx_bytes)/(iter->second.timeLastTxPacket.GetDouble()-last_tx_time)*ONEBIL/kilo;
             meanRxRate_send = 8*(iter->second.rxBytes-last_rx_bytes)/(iter->second.timeLastRxPacket.GetDouble()-last_rx_time)*ONEBIL/kilo;
             last_tx_time = iter->second.timeLastTxPacket.GetDouble();

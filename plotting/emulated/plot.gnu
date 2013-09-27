@@ -90,7 +90,7 @@ set y2tics nomirror tc lt 2
 set terminal svg
 
 
-plot "cubic.dat" using 1:7 title "cwnd" with lines,\
+plot "cubic.dat" using 1:7 title "cwnd" pt 0,\
 "tcp-put.txt" using 1:12 title "TCP delay" pt 0 axis x2y2,\
 "retrans.dat" using 1:(0):($2) title "retransmissions" with points pt 6 ps variable,\
 "queues.txt" using 2:($4/PKTSIZE) title "enb_radio_queue" with lines lt -1,\
@@ -117,7 +117,7 @@ set y2tics nomirror tc lt 6
 
 set terminal svg
 
-plot "cubic.dat" using 1:7 title "cwnd" with lines,\
+plot "cubic.dat" using 1:7 title "cwnd" pt 0,\
 "cubic.dat" using 1:(filter_1st_ssth($11)) title "ssthreshold" with lines,\
 "queues.txt" using 2:($4/PKTSIZE) title "enb_radio_queue" with lines,\
 "enb_dev_queue_drop.txt" using 1:(CONST_C) title "enb queue droptail" with points pt 6,\
@@ -131,10 +131,10 @@ set key inside bottom right box
 set xlabel "Time (s)"
 #set xtic 10
 set ylabel "packet sequence #"
-#set y2label "queue droptail"
+set y2label "count"
 set output "sequence-".x1."-".x2.".svg"
-#set y2tics nomirror tc lt 2
-#set y2range [0:1]
+set y2tics nomirror tc lt 2
+#set y2range [0:10]
 #set yrange [0:1200]
 set xrange [x1:x2]
 #set x2range [x1:x2]
@@ -147,9 +147,12 @@ set terminal svg
 plot "sequence_send.dat" using 1:2 title "send seq number" pt 1,\
 "sequence_ack.dat" using 1:2 title "ack seq number" pt 1,\
 "enb_dev_queue_drop.txt" using 1:(0) title "enb queue droptail" pt 2,\
-"retrans.dat" using 1:(0):($2) title "retransmissions" with points pt 6 ps variable
-#"sequence_send.dat" using 1:3 title "packets per send" pt 1 axis x1y2,\
+"retrans.dat" using 1:(0):($2) title "retransmissions" with points pt 6 ps variable,\
+"queues.txt" using 2:($4/PKTSIZE) title "enb_radio_queue" pt 0 axis x1y2,\
+"cubic.dat" using 1:7 title "cwnd" pt 0 axis x1y2
+#"sequence_ack.dat" using 1:($3*1000) title "ack arrived interval" pt 1 axis x1y2
 #plot "highest_sent_seq.txt" using 1:3 title "highest sent sequence #" pt 1,\
+#"sequence_send.dat" using 1:3 title "packets per send" pt 1 axis x1y2,\
 
 
 #===========================================
