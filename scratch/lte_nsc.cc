@@ -337,7 +337,7 @@ main (int argc, char *argv[])
     ipv4h.SetBase ("1.0.0.0", "255.0.0.0");
     Ipv4InterfaceContainer internetIpIfaces = ipv4h.Assign (internetDevices);		//assign IP addresses in starting at "1.0.0.0" to the SPGW and remoteHost.
     // interface 0 is localhost, 1 is the p2p device
-    Ipv4Address remoteHostAddr = internetIpIfaces.GetAddress (1);
+    //Ipv4Address remoteHostAddr = internetIpIfaces.GetAddress (1);
     
     
     //***************************Let's the remoteHost know how to route to UE "7.0.0.0"**************************//
@@ -475,7 +475,7 @@ main (int argc, char *argv[])
 
   
     /*=============schedule to get TCP throughput============*/
-    Time t = Seconds(0.0);
+    //Time t = Seconds(0.0);
     Simulator::ScheduleWithContext (0 ,Seconds (0.0), &getTcpPut);
     Simulator::Schedule(Seconds(0.6) + NanoSeconds(1.0), &enable_tcp_socket_traces, remoteHostContainer.Get(0)->GetApplication(0));///*Note: enable_cwnd_trace must be scheduled after the OnOffApplication starts (OnOffApplication's socket is created after the application starts) 
 

@@ -67,7 +67,6 @@
 #include "ipv6.h"
 #include "loopback-net-device.h"
 #include "ndisc-cache.h"
-#include "nsc-tcp-l4-protocol.h"
 #include "rtt-estimator.h"
 #include "tcp-header.h"
 #include "tcp-l4-protocol.h"

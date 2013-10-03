@@ -1,5 +1,0 @@
-1.94293s 2 1.94293 [node 2] TcpTahoe:DupAck(): Triple Dup Ack: retransmit missing segment at 1.94293
-13.1963s 2 13.1963 [node 2] TcpTahoe:DupAck(): Triple Dup Ack: retransmit missing segment at 13.1963
-36.9095s 2 36.9095 [node 2] TcpTahoe:DupAck(): Triple Dup Ack: retransmit missing segment at 36.9095
-60.6226s 2 60.6226 [node 2] TcpTahoe:DupAck(): Triple Dup Ack: retransmit missing segment at 60.6226
-84.3357s 2 84.3357 [node 2] TcpTahoe:DupAck(): Triple Dup Ack: retransmit missing segment at 84.3357

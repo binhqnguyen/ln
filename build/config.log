@@ -1,450 +1,79 @@
-# project ns (3-dev) configured on Wed Jul  3 04:32:24 2013 by
-# waf 1.7.10 (abi 98, python 20601f0 on linux2)
-# using ./waf configure --enable-tests --enable-examples --with-nsc nsc
+# project ns (3-dev) configured on Thu Oct  3 13:00:11 2013 by
+# waf 1.7.10 (abi 98, python 20703f0 on darwin)
+# using ./waf configure
 #
 ----------------------------------------
 Setting top to
-/home/binhn/ln
+/Users/binh/Documents/ln
 ----------------------------------------
 Setting out to
-/home/binhn/ln/build
+/Users/binh/Documents/ln/build
 ----------------------------------------
 Checking for 'gcc' (c compiler)
-find program=['gcc', 'cc'] paths=['/usr/lib64/qt-3.3/bin', '/usr/kerberos/sbin', '/usr/kerberos/bin', '/usr/local/bin', '/bin', '/usr/bin', '/usr/local/sbin', '/usr/sbin', '/sbin'] var='CC' -> '/usr/bin/gcc'
-find program=['ar'] paths=['/usr/lib64/qt-3.3/bin', '/usr/kerberos/sbin', '/usr/kerberos/bin', '/usr/local/bin', '/bin', '/usr/bin', '/usr/local/sbin', '/usr/sbin', '/sbin'] var='AR' -> '/usr/bin/ar'
+find program=['gcc', 'cc'] paths=['/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin', '/opt/X11/bin', '/usr/texbin'] var='CC' -> '/usr/bin/gcc'
+find program=['ar'] paths=['/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin', '/opt/X11/bin', '/usr/texbin'] var='AR' -> '/usr/bin/ar'
 /usr/bin/gcc
 ----------------------------------------
 Checking for 'g++' (c++ compiler)
-find program=['g++', 'c++'] paths=['/usr/lib64/qt-3.3/bin', '/usr/kerberos/sbin', '/usr/kerberos/bin', '/usr/local/bin', '/bin', '/usr/bin', '/usr/local/sbin', '/usr/sbin', '/sbin'] var='CXX' -> '/usr/bin/g++'
+find program=['g++', 'c++'] paths=['/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin', '/opt/X11/bin', '/usr/texbin'] var='CXX' -> '/usr/bin/g++'
 (tool ar is already loaded, skipping)
 /usr/bin/g++
----------------------------------------------------------
-Checking for compilation flag -Wl,--soname=foo... support
-==>
-#include <stdio.h>
-int main() { return 0; }
-
-<==
-[1/2] [32mcxx: build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/test.cc -> build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/test.cc.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-Wl,--soname=foo', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cc', '-c', '-o', 'test.cc.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/test.cc.1.o -> build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cc.1.o', '-o', '/home/binhn/ln/build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-ok
----------------------------------------------------------
+----------------------------------------
 Checking for program python
-/usr/local/bin/python
-find program=['python'] paths=['/usr/lib64/qt-3.3/bin', '/usr/kerberos/sbin', '/usr/kerberos/bin', '/usr/local/bin', '/bin', '/usr/bin', '/usr/local/sbin', '/usr/sbin', '/sbin'] var='PYTHON' -> '/usr/local/bin/python'
-['/usr/local/bin/python', '-c', 'import sys\nfor x in sys.version_info: print(str(x))']
+/usr/bin/python
+find program=['python'] paths=['/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin', '/opt/X11/bin', '/usr/texbin'] var='PYTHON' -> '/usr/bin/python'
+['/usr/bin/python', '-c', 'import sys\nfor x in sys.version_info: print(str(x))']
 out: 2
-2
-2
+7
+3
 final
 0
 
----------------------------------------------------------
+['/usr/bin/python', '-c', "from distutils.sysconfig import get_config_var, get_python_lib\n\nprint(repr(get_python_lib(standard_lib=0, prefix='/usr/local') or ''))"]
+out: '/usr/local/lib/python2.7/site-packages'
+
+'/usr/local/lib/python2.7/site-packages'
+
+['/usr/bin/python', '-c', "from distutils.sysconfig import get_config_var, get_python_lib\n\nprint(repr(get_python_lib(plat_specific=1, standard_lib=0, prefix='/usr/local') or ''))"]
+out: '/usr/local/lib/python2.7/site-packages'
+
+'/usr/local/lib/python2.7/site-packages'
+
+----------------------------------------
 Checking for python version
-(2, 2, 2, 'final', 0)
-from /home/binhn/ln/bindings/python: The python version is too old, expecting (2, 3)
----------------------------------------------------------
-Checking boost includes
-1_41
----------------------------------------------------------
-Checking boost libs
-Found the boost path in /usr/lib64 with the libraries:
-    /usr/lib64/libboost_date_time-mt.a
-    /usr/lib64/libboost_date_time-mt.so
-    /usr/lib64/libboost_date_time-mt.so.5
-    /usr/lib64/libboost_date_time.a
-    /usr/lib64/libboost_date_time.so
-    /usr/lib64/libboost_date_time.so.5
-    /usr/lib64/libboost_filesystem-mt.a
-    /usr/lib64/libboost_filesystem-mt.so
-    /usr/lib64/libboost_filesystem-mt.so.5
-    /usr/lib64/libboost_filesystem.a
-    /usr/lib64/libboost_filesystem.so
-    /usr/lib64/libboost_filesystem.so.5
-    /usr/lib64/libboost_graph-mt.so
-    /usr/lib64/libboost_graph-mt.so.5
-    /usr/lib64/libboost_graph.so
-    /usr/lib64/libboost_graph.so.5
-    /usr/lib64/libboost_iostreams-mt.a
-    /usr/lib64/libboost_iostreams-mt.so
-    /usr/lib64/libboost_iostreams-mt.so.5
-    /usr/lib64/libboost_iostreams.a
-    /usr/lib64/libboost_iostreams.so
-    /usr/lib64/libboost_iostreams.so.5
-    /usr/lib64/libboost_prg_exec_monitor-mt.a
-    /usr/lib64/libboost_prg_exec_monitor-mt.so
-    /usr/lib64/libboost_prg_exec_monitor-mt.so.5
-    /usr/lib64/libboost_prg_exec_monitor.a
-    /usr/lib64/libboost_prg_exec_monitor.so
-    /usr/lib64/libboost_prg_exec_monitor.so.5
-    /usr/lib64/libboost_program_options-mt.a
-    /usr/lib64/libboost_program_options-mt.so
-    /usr/lib64/libboost_program_options-mt.so.5
-    /usr/lib64/libboost_program_options.a
-    /usr/lib64/libboost_program_options.so
-    /usr/lib64/libboost_program_options.so.5
-    /usr/lib64/libboost_python-mt.a
-    /usr/lib64/libboost_python-mt.so
-    /usr/lib64/libboost_python-mt.so.5
-    /usr/lib64/libboost_python.a
-    /usr/lib64/libboost_python.so
-    /usr/lib64/libboost_python.so.5
-    /usr/lib64/libboost_regex-mt.so
-    /usr/lib64/libboost_regex-mt.so.5
-    /usr/lib64/libboost_regex.so
-    /usr/lib64/libboost_regex.so.5
-    /usr/lib64/libboost_serialization-mt.a
-    /usr/lib64/libboost_serialization-mt.so
-    /usr/lib64/libboost_serialization-mt.so.5
-    /usr/lib64/libboost_serialization.a
-    /usr/lib64/libboost_serialization.so
-    /usr/lib64/libboost_serialization.so.5
-    /usr/lib64/libboost_signals-mt.a
-    /usr/lib64/libboost_signals-mt.so
-    /usr/lib64/libboost_signals-mt.so.5
-    /usr/lib64/libboost_signals.a
-    /usr/lib64/libboost_signals.so
-    /usr/lib64/libboost_signals.so.5
-    /usr/lib64/libboost_system-mt.a
-    /usr/lib64/libboost_system-mt.so
-    /usr/lib64/libboost_system-mt.so.5
-    /usr/lib64/libboost_system.a
-    /usr/lib64/libboost_system.so
-    /usr/lib64/libboost_system.so.5
-    /usr/lib64/libboost_test_exec_monitor-mt.a
-    /usr/lib64/libboost_test_exec_monitor.a
-    /usr/lib64/libboost_thread-mt.a
-    /usr/lib64/libboost_thread-mt.so
-    /usr/lib64/libboost_thread-mt.so.5
-    /usr/lib64/libboost_unit_test_framework-mt.a
-    /usr/lib64/libboost_unit_test_framework-mt.so
-    /usr/lib64/libboost_unit_test_framework-mt.so.5
-    /usr/lib64/libboost_unit_test_framework.a
-    /usr/lib64/libboost_unit_test_framework.so
-    /usr/lib64/libboost_unit_test_framework.so.5
-    /usr/lib64/libboost_wave-mt.a
-    /usr/lib64/libboost_wave-mt.so
-    /usr/lib64/libboost_wave-mt.so.5
-    /usr/lib64/libboost_wserialization-mt.a
-    /usr/lib64/libboost_wserialization-mt.so
-    /usr/lib64/libboost_wserialization-mt.so.5
-    /usr/lib64/libboost_wserialization.a
-    /usr/lib64/libboost_wserialization.so
-    /usr/lib64/libboost_wserialization.so.5
-Trying pattern boost_system(-gcc[0-9]{0,3})+(-1_41)+
-Trying pattern boost_system(-1_41)+
-Trying pattern boost_system(-1_41)+
-Trying pattern boost_system(-gcc[0-9]{0,3})+
-Trying pattern boost_system
-Found boost lib libboost_system-mt.a
-Trying pattern boost_signals(-gcc[0-9]{0,3})+(-1_41)+
-Trying pattern boost_signals(-1_41)+
-Trying pattern boost_signals(-1_41)+
-Trying pattern boost_signals(-gcc[0-9]{0,3})+
-Trying pattern boost_signals
-Found boost lib libboost_signals-mt.a
-Trying pattern boost_filesystem(-gcc[0-9]{0,3})+(-1_41)+
-Trying pattern boost_filesystem(-1_41)+
-Trying pattern boost_filesystem(-1_41)+
-Trying pattern boost_filesystem(-gcc[0-9]{0,3})+
-Trying pattern boost_filesystem
-Found boost lib libboost_filesystem-mt.a
-ok
----------------------------------------------------------
-Checking for boost linkage
-==>
-#include <boost/system/error_code.hpp>
-int main() { boost::system::error_code c; }
-<==
-[1/2] [32mcxx: build/.conf_check_968fbcee789046a8c143bb4a6e302895/test.cpp -> build/.conf_check_968fbcee789046a8c143bb4a6e302895/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-I/usr/include', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_968fbcee789046a8c143bb4a6e302895/testbuild/test.cpp.1.o -> build/.conf_check_968fbcee789046a8c143bb4a6e302895/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_968fbcee789046a8c143bb4a6e302895/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-L/usr/lib64', '-lboost_system-mt', '-lboost_signals-mt', '-lboost_filesystem-mt']
-err: test.cpp.1.o: In function `__static_initialization_and_destruction_0':
-/usr/local/include/boost/system/error_code.hpp:214: undefined reference to `boost::system::generic_category()'
-/usr/local/include/boost/system/error_code.hpp:215: undefined reference to `boost::system::generic_category()'
-/usr/local/include/boost/system/error_code.hpp:216: undefined reference to `boost::system::system_category()'
-test.cpp.1.o: In function `error_code':
-/usr/local/include/boost/system/error_code.hpp:315: undefined reference to `boost::system::system_category()'
-collect2: ld returned 1 exit status
+(2, 7, 3, 'final', 0)
+['/usr/bin/python', '-c', "from distutils.sysconfig import get_config_var, get_python_lib\n\nprint(repr(get_config_var('prefix') or ''))\nprint(repr(get_config_var('SO') or ''))\nprint(repr(get_config_var('LDFLAGS') or ''))\nprint(repr(get_config_var('LIBDIR') or ''))\nprint(repr(get_config_var('LIBPL') or ''))\nprint(repr(get_config_var('INCLUDEPY') or ''))\nprint(repr(get_config_var('Py_ENABLE_SHARED') or ''))\nprint(repr(get_config_var('MACOSX_DEPLOYMENT_TARGET') or ''))\nprint(repr(get_config_var('LDSHARED') or ''))\nprint(repr(get_config_var('CFLAGS') or ''))"]
+out: '/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents'
+'.so'
+'-g -arch x86_64  -L/tmp/_py/libraries/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib -headerpad_max_install_names'
+'/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib'
+'/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib/python2.7/config'
+'/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/include/python2.7'
+''
+'10.6'
+'gcc -bundle -undefined dynamic_lookup -g -arch x86_64  -L/tmp/_py/libraries/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib -headerpad_max_install_names'
+'-fno-strict-aliasing -fno-common -dynamic -arch x86_64  -DNDEBUG -g -O3  -arch x86_64  '
 
-from /home/binhn/ln/src: Test does not build: Traceback (most recent call last):
-  File "/home/binhn/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
-    bld.compile()
-  File "/home/binhn/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
-    raise Errors.BuildError(self.producer.error)
-BuildError: Build failed
- -> task in 'testprog' failed (exit status 1): 
-	{task 4146364140L: cxxprogram test.cpp.1.o -> testprog}
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_968fbcee789046a8c143bb4a6e302895/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-L/usr/lib64', '-lboost_system-mt', '-lboost_signals-mt', '-lboost_filesystem-mt']
+'/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents'
+'.so'
+'-g -arch x86_64  -L/tmp/_py/libraries/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib -headerpad_max_install_names'
+'/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib'
+'/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib/python2.7/config'
+'/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/include/python2.7'
+''
+'10.6'
+'gcc -bundle -undefined dynamic_lookup -g -arch x86_64  -L/tmp/_py/libraries/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib -headerpad_max_install_names'
+'-fno-strict-aliasing -fno-common -dynamic -arch x86_64  -DNDEBUG -g -O3  -arch x86_64  '
 
-from /home/binhn/ln/src: The configuration failed
-from /home/binhn/ln/src: Could not link against boost libraries using supplied options
-find program=['pkg-config'] paths=['/usr/lib64/qt-3.3/bin', '/usr/kerberos/sbin', '/usr/kerberos/bin', '/usr/local/bin', '/bin', '/usr/bin', '/usr/local/sbin', '/usr/sbin', '/sbin'] var='PKGCONFIG' -> '/usr/bin/pkg-config'
-['/usr/bin/pkg-config', '--atleast-version=2.12', 'gtk+-2.0']
-['/usr/bin/pkg-config', '--cflags', '--libs', 'gtk+-2.0']
-out: -I/usr/include/gtk-2.0 -I/usr/lib64/gtk-2.0/include -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12  -lgtk-x11-2.0 -lgdk-x11-2.0 -latk-1.0 -lgio-2.0 -lpangoft2-1.0 -lgdk_pixbuf-2.0 -lpangocairo-1.0 -lcairo -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lglib-2.0  
+Configuration returned from ['/usr/bin/python']:
+"prefix = '/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents'\nSO = '.so'\nLDFLAGS = '-g -arch x86_64  -L/tmp/_py/libraries/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib -headerpad_max_install_names'\nLIBDIR = '/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib'\nLIBPL = '/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib/python2.7/config'\nINCLUDEPY = '/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/include/python2.7'\nPy_ENABLE_SHARED = ''\nMACOSX_DEPLOYMENT_TARGET = '10.6'\nLDSHARED = 'gcc -bundle -undefined dynamic_lookup -g -arch x86_64  -L/tmp/_py/libraries/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib -headerpad_max_install_names'\nCFLAGS = '-fno-strict-aliasing -fno-common -dynamic -arch x86_64  -DNDEBUG -g -O3  -arch x86_64  '"
 
-['/usr/bin/pkg-config', '--atleast-version=2.7', 'libxml-2.0']
-['/usr/bin/pkg-config', '--cflags', '--libs', 'libxml-2.0']
-out: -I/usr/include/libxml2  -lxml2  
 
-==>
-#include <stdint.h>
 
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	if ((uint128_t *) 0) return 0;
-	if (sizeof (uint128_t)) return 0;
-	return 1;
-}
+# Trying default LIBPATH_PYEMBED: ['/tmp/_py/libraries/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib']
 
-<==
-[1/2] [32mcxx: build/.conf_check_656b178ce7442053dff90315b31a1cc5/test.cpp -> build/.conf_check_656b178ce7442053dff90315b31a1cc5/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-err: ../test.cpp: In function ‘int main(int, char**)’:
-../test.cpp:5: error: ‘uint128_t’ was not declared in this scope
-../test.cpp:5: error: expected primary-expression before ‘)’ token
-../test.cpp:5: error: expected ‘)’ before numeric constant
-../test.cpp:6: error: ‘uint128_t’ was not declared in this scope
-
-from /home/binhn/ln/src/core: Test does not build: Traceback (most recent call last):
-  File "/home/binhn/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
-    bld.compile()
-  File "/home/binhn/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
-    raise Errors.BuildError(self.producer.error)
-BuildError: Build failed
- -> task in 'testprog' failed (exit status 1): 
-	{task 4146535980L: cxx test.cpp -> test.cpp.1.o}
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-
-from /home/binhn/ln/src/core: The configuration failed
-==>
-#include <stdint.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	if ((__uint128_t *) 0) return 0;
-	if (sizeof (__uint128_t)) return 0;
-	return 1;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_ace1886511f08627ee2e4ca020806295/test.cpp -> build/.conf_check_ace1886511f08627ee2e4ca020806295/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_ace1886511f08627ee2e4ca020806295/testbuild/test.cpp.1.o -> build/.conf_check_ace1886511f08627ee2e4ca020806295/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_ace1886511f08627ee2e4ca020806295/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <stdint.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/test.cpp -> build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/test.cpp.1.o -> build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <inttypes.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/test.cpp -> build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/test.cpp.1.o -> build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <sys/inttypes.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_61ecbfef21667d45a28decabe37fdf64/test.cpp -> build/.conf_check_61ecbfef21667d45a28decabe37fdf64/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-err: ../test.cpp:1:26: error: sys/inttypes.h: No such file or directory
-
-from /home/binhn/ln/src/core: Test does not build: Traceback (most recent call last):
-  File "/home/binhn/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
-    bld.compile()
-  File "/home/binhn/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
-    raise Errors.BuildError(self.producer.error)
-BuildError: Build failed
- -> task in 'testprog' failed (exit status 1): 
-	{task 4146549644L: cxx test.cpp -> test.cpp.1.o}
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-
-from /home/binhn/ln/src/core: The configuration failed
-==>
-#include <sys/types.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_8d38681417ac64f5b5b7d4ca87b0e4f3/test.cpp -> build/.conf_check_8d38681417ac64f5b5b7d4ca87b0e4f3/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_8d38681417ac64f5b5b7d4ca87b0e4f3/testbuild/test.cpp.1.o -> build/.conf_check_8d38681417ac64f5b5b7d4ca87b0e4f3/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_8d38681417ac64f5b5b7d4ca87b0e4f3/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <sys/stat.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_8dd79274749d59bf459dfbeb1200c7d7/test.cpp -> build/.conf_check_8dd79274749d59bf459dfbeb1200c7d7/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_8dd79274749d59bf459dfbeb1200c7d7/testbuild/test.cpp.1.o -> build/.conf_check_8dd79274749d59bf459dfbeb1200c7d7/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_8dd79274749d59bf459dfbeb1200c7d7/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <dirent.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_c94d96928742c001335a0559791a93d8/test.cpp -> build/.conf_check_c94d96928742c001335a0559791a93d8/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_c94d96928742c001335a0559791a93d8/testbuild/test.cpp.1.o -> build/.conf_check_c94d96928742c001335a0559791a93d8/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_c94d96928742c001335a0559791a93d8/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <stdlib.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_3a82ef2f96ebcc67f6086c98d2e6291e/test.cpp -> build/.conf_check_3a82ef2f96ebcc67f6086c98d2e6291e/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_3a82ef2f96ebcc67f6086c98d2e6291e/testbuild/test.cpp.1.o -> build/.conf_check_3a82ef2f96ebcc67f6086c98d2e6291e/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_3a82ef2f96ebcc67f6086c98d2e6291e/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <signal.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_48955ac54d2136a572805353a7b9b62d/test.cpp -> build/.conf_check_48955ac54d2136a572805353a7b9b62d/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_48955ac54d2136a572805353a7b9b62d/testbuild/test.cpp.1.o -> build/.conf_check_48955ac54d2136a572805353a7b9b62d/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_48955ac54d2136a572805353a7b9b62d/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-
-#include <pthread.h>
-int main ()
-{
-   pthread_mutex_t m;
-   pthread_mutex_init (&m, NULL);
-   return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_2be466e82e703a744ee152afe2b58299/test.cpp -> build/.conf_check_2be466e82e703a744ee152afe2b58299/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-pthread', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_2be466e82e703a744ee152afe2b58299/testbuild/test.cpp.1.o -> build/.conf_check_2be466e82e703a744ee152afe2b58299/testbuild/testprog
-[0m
-['/usr/bin/g++', '-pthread', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_2be466e82e703a744ee152afe2b58299/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <stdint.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/test.cpp -> build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_INTTYPES_H=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/test.cpp.1.o -> build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_fa0c4ec9c63ac505501cc0863d9bdc48/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <inttypes.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/test.cpp -> build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/test.cpp.1.o -> build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_7c67b81911f8bf0aede92c843d0e47cf/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <sys/inttypes.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_61ecbfef21667d45a28decabe37fdf64/test.cpp -> build/.conf_check_61ecbfef21667d45a28decabe37fdf64/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-err: ../test.cpp:1:26: error: sys/inttypes.h: No such file or directory
-
-from /home/binhn/ln/src/core: Test does not build: Traceback (most recent call last):
-  File "/home/binhn/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Tools/c_config.py", line 459, in run_c_code
-    bld.compile()
-  File "/home/binhn/ln/.waf-1.7.10-4f6df1d839dc35640834d81573053140/waflib/Build.py", line 188, in compile
-    raise Errors.BuildError(self.producer.error)
-BuildError: Build failed
- -> task in 'testprog' failed (exit status 1): 
-	{task 4146656620L: cxx test.cpp -> test.cpp.1.o}
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-
-from /home/binhn/ln/src/core: The configuration failed
+-------------------------------------------------
+Checking for library python2.7 in LIBPATH_PYEMBED
 ==>
 
 int main(int argc, char **argv) {
@@ -453,188 +82,29 @@ int main(int argc, char **argv) {
 }
 
 <==
-[1/2] [32mcxx: build/.conf_check_5ef57bc0d8aa3565949b6ce1186fd4a7/test.cpp -> build/.conf_check_5ef57bc0d8aa3565949b6ce1186fd4a7/testbuild/test.cpp.1.o
+[1/2] [32mcxx: build/.conf_check_b230530015bd58972ca3fa41dbd1f106/test.cpp -> build/.conf_check_b230530015bd58972ca3fa41dbd1f106/testbuild/test.cpp.1.o
 [0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-pthread', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE___UINT128_T=1', '-DINT64X64_USE_128=1', '-DHAVE_SYS_TYPES_H=1', '-DHAVE_SYS_STAT_H=1', '-DHAVE_DIRENT_H=1', '-DHAVE_STDLIB_H=1', '-DHAVE_GETENV=1', '-DHAVE_SIGNAL_H=1', '-DHAVE_PTHREAD_H=1', '-DHAVE_STDINT_H=1', '-DHAVE_INTTYPES_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_5ef57bc0d8aa3565949b6ce1186fd4a7/testbuild/test.cpp.1.o -> build/.conf_check_5ef57bc0d8aa3565949b6ce1186fd4a7/testbuild/testprog
+['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-arch', 'x86_64', '-fno-strict-aliasing', '-fno-common', '-dynamic', '-arch', 'x86_64', '-arch', 'x86_64', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DPYTHONDIR="/usr/local/lib/python2.7/site-packages"', '-DPYTHONARCHDIR="/usr/local/lib/python2.7/site-packages"', '-DNDEBUG', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
+[2/2] [33mcxxprogram: build/.conf_check_b230530015bd58972ca3fa41dbd1f106/testbuild/test.cpp.1.o -> build/.conf_check_b230530015bd58972ca3fa41dbd1f106/testbuild/testprog
 [0m
-['/usr/bin/g++', '-pthread', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_5ef57bc0d8aa3565949b6ce1186fd4a7/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-lrt']
-==>
-#include <netpacket/packet.h>
+['/usr/bin/g++', '-arch', 'x86_64', '-arch', 'x86_64', '-arch', 'x86_64', 'test.cpp.1.o', '-o', '/Users/binh/Documents/ln/build/.conf_check_b230530015bd58972ca3fa41dbd1f106/testbuild/testprog', '-L/tmp/_py/libraries/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib', '-L/tmp/_py/libraries/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib', '-lpython2.7']
+err: ld: warning: directory not found for option '-L/tmp/_py/libraries/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib'
+ld: warning: directory not found for option '-L/tmp/_py/libraries/Applications/Canopy.app/appdata/canopy-1.0.3.1262.macosx-x86_64/Canopy.app/Contents/lib'
 
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
+yes
+------------------------------------------------------------------------------------------------
+Checking for program /usr/bin/python-config,python2.7-config,python-config-2.7,python2.7m-config
+/usr/bin/python-config
+find program=['/usr/bin/python-config', 'python2.7-config', 'python-config-2.7', 'python2.7m-config'] paths=['/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin', '/opt/X11/bin', '/usr/texbin'] var='PYTHON_CONFIG' -> '/usr/bin/python-config'
+['/usr/bin/python-config', '--includes']
+err: Traceback (most recent call last):
+  File "/usr/bin/python-config", line 26, in <module>
+    pyver = sysconfig.get_config_var('VERSION')
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/distutils/sysconfig.py", line 585, in get_config_var
+    return get_config_vars().get(name)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/distutils/sysconfig.py", line 498, in get_config_vars
+    func()
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/distutils/sysconfig.py", line 407, in _init_posix
+    raise DistutilsPlatformError(my_msg)
+distutils.errors.DistutilsPlatformError: $MACOSX_DEPLOYMENT_TARGET mismatch: now "10.6" but "10.8" during configure
 
-<==
-[1/2] [32mcxx: build/.conf_check_f00bb2460dc7019f64c1a347be5879fa/test.cpp -> build/.conf_check_f00bb2460dc7019f64c1a347be5879fa/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_f00bb2460dc7019f64c1a347be5879fa/testbuild/test.cpp.1.o -> build/.conf_check_f00bb2460dc7019f64c1a347be5879fa/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_f00bb2460dc7019f64c1a347be5879fa/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <sys/ioctl.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_ebd591dbc3bb45aa25214505e9aa0d0f/test.cpp -> build/.conf_check_ebd591dbc3bb45aa25214505e9aa0d0f/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_PACKET_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_ebd591dbc3bb45aa25214505e9aa0d0f/testbuild/test.cpp.1.o -> build/.conf_check_ebd591dbc3bb45aa25214505e9aa0d0f/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_ebd591dbc3bb45aa25214505e9aa0d0f/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <net/if.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_ab7199aa46fcaa2e15071e73776f8218/test.cpp -> build/.conf_check_ab7199aa46fcaa2e15071e73776f8218/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_PACKET_H=1', '-DHAVE_SYS_IOCTL_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_ab7199aa46fcaa2e15071e73776f8218/testbuild/test.cpp.1.o -> build/.conf_check_ab7199aa46fcaa2e15071e73776f8218/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_ab7199aa46fcaa2e15071e73776f8218/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <linux/if_tun.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_79f849e1774b3cde8897857e178c7c8c/test.cpp -> build/.conf_check_79f849e1774b3cde8897857e178c7c8c/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_PACKET_H=1', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_79f849e1774b3cde8897857e178c7c8c/testbuild/test.cpp.1.o -> build/.conf_check_79f849e1774b3cde8897857e178c7c8c/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_79f849e1774b3cde8897857e178c7c8c/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <netpacket/packet.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_f00bb2460dc7019f64c1a347be5879fa/test.cpp -> build/.conf_check_f00bb2460dc7019f64c1a347be5879fa/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_IF_TUN_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_f00bb2460dc7019f64c1a347be5879fa/testbuild/test.cpp.1.o -> build/.conf_check_f00bb2460dc7019f64c1a347be5879fa/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_f00bb2460dc7019f64c1a347be5879fa/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_74d1b323e301bc40d51cbae9ad05923e/test.cpp -> build/.conf_check_74d1b323e301bc40d51cbae9ad05923e/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_PACKET_H=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_74d1b323e301bc40d51cbae9ad05923e/testbuild/test.cpp.1.o -> build/.conf_check_74d1b323e301bc40d51cbae9ad05923e/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_74d1b323e301bc40d51cbae9ad05923e/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-ldl']
-['/usr/bin/pkg-config', '--cflags', '--libs', 'sqlite3']
-out:  -lsqlite3  
-
-==>
-#include <linux/if_tun.h>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] [32mcxx: build/.conf_check_79f849e1774b3cde8897857e178c7c8c/test.cpp -> build/.conf_check_79f849e1774b3cde8897857e178c7c8c/testbuild/test.cpp.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_DL=1', '-DHAVE_SQLITE3=1', '../test.cpp', '-c', '-o', 'test.cpp.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_79f849e1774b3cde8897857e178c7c8c/testbuild/test.cpp.1.o -> build/.conf_check_79f849e1774b3cde8897857e178c7c8c/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cpp.1.o', '-o', '/home/binhn/ln/build/.conf_check_79f849e1774b3cde8897857e178c7c8c/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-find program=['sudo'] paths=['/usr/lib64/qt-3.3/bin', '/usr/kerberos/sbin', '/usr/kerberos/bin', '/usr/local/bin', '/bin', '/usr/bin', '/usr/local/sbin', '/usr/sbin', '/sbin'] var='SUDO' -> '/usr/bin/sudo'
-find program=['valgrind'] paths=['/usr/lib64/qt-3.3/bin', '/usr/kerberos/sbin', '/usr/kerberos/bin', '/usr/local/bin', '/bin', '/usr/bin', '/usr/local/sbin', '/usr/sbin', '/sbin'] var='VALGRIND' -> '/usr/local/bin/valgrind'
-['/usr/bin/pkg-config', '--cflags', '--libs', 'gsl']
-out:  -lgsl -lgslcblas -lm  
-
-==>
-#include <stdio.h>
-int main() { return 0; }
-
-<==
-[1/2] [32mcxx: build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/test.cc -> build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/test.cc.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-Wno-error=deprecated-declarations', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_DL=1', '-DHAVE_SQLITE3=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_GSL=1', '../test.cc', '-c', '-o', 'test.cc.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/test.cc.1.o -> build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cc.1.o', '-o', '/home/binhn/ln/build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <stdio.h>
-int main() { return 0; }
-
-<==
-[1/2] [32mc: build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/test.c -> build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/test.c.1.o
-[0m
-['/usr/bin/gcc', '-Wno-error=deprecated-declarations', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_DL=1', '-DHAVE_SQLITE3=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_GSL=1', '../test.c', '-c', '-o', 'test.c.1.o']
-[2/2] [33mcprogram: build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/test.c.1.o -> build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog
-[0m
-['/usr/bin/gcc', 'test.c.1.o', '-o', '/home/binhn/ln/build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <stdio.h>
-int main() { return 0; }
-
-<==
-[1/2] [32mcxx: build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/test.cc -> build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/test.cc.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-Wno-error=deprecated-declarations', '-fstrict-aliasing', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_DL=1', '-DHAVE_SQLITE3=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_GSL=1', '../test.cc', '-c', '-o', 'test.cc.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/test.cc.1.o -> build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cc.1.o', '-o', '/home/binhn/ln/build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <stdio.h>
-int main() { return 0; }
-
-<==
-[1/2] [32mc: build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/test.c -> build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/test.c.1.o
-[0m
-['/usr/bin/gcc', '-fstrict-aliasing', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_DL=1', '-DHAVE_SQLITE3=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_GSL=1', '../test.c', '-c', '-o', 'test.c.1.o']
-[2/2] [33mcprogram: build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/test.c.1.o -> build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog
-[0m
-['/usr/bin/gcc', 'test.c.1.o', '-o', '/home/binhn/ln/build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <stdio.h>
-int main() { return 0; }
-
-<==
-[1/2] [32mcxx: build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/test.cc -> build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/test.cc.1.o
-[0m
-['/usr/bin/g++', '-O0', '-ggdb', '-g3', '-Wall', '-Werror', '-Wno-error=deprecated-declarations', '-fstrict-aliasing', '-Wstrict-aliasing', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_DL=1', '-DHAVE_SQLITE3=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_GSL=1', '../test.cc', '-c', '-o', 'test.cc.1.o']
-[2/2] [33mcxxprogram: build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/test.cc.1.o -> build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog
-[0m
-['/usr/bin/g++', 'test.cc.1.o', '-o', '/home/binhn/ln/build/.conf_check_fe0ca542f39064c5a14ee41a2e983996/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-==>
-#include <stdio.h>
-int main() { return 0; }
-
-<==
-[1/2] [32mc: build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/test.c -> build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/test.c.1.o
-[0m
-['/usr/bin/gcc', '-Wstrict-aliasing', '-DNS3_ASSERT_ENABLE', '-DNS3_LOG_ENABLE', '-DHAVE_SYS_IOCTL_H=1', '-DHAVE_IF_NETS_H=1', '-DHAVE_PACKET_H=1', '-DHAVE_DL=1', '-DHAVE_SQLITE3=1', '-DHAVE_IF_TUN_H=1', '-DHAVE_GSL=1', '../test.c', '-c', '-o', 'test.c.1.o']
-[2/2] [33mcprogram: build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/test.c.1.o -> build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog
-[0m
-['/usr/bin/gcc', 'test.c.1.o', '-o', '/home/binhn/ln/build/.conf_check_d8a2c40aecfb7c8eac7dd03fcbfb1110/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic']
-find program=['doxygen'] paths=['/usr/lib64/qt-3.3/bin', '/usr/kerberos/sbin', '/usr/kerberos/bin', '/usr/local/bin', '/bin', '/usr/bin', '/usr/local/sbin', '/usr/sbin', '/sbin'] var='DOXYGEN' -> '/usr/local/bin/doxygen'

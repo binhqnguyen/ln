@@ -40,7 +40,7 @@
 	./get_queue_time.py
 
 ######plot and move graph files######
-	gnuplot plot-averaged.txt
+	gnuplot plot.gnu
 
 	cp *.svg ../../graphs/emulated
 	rm *.svg

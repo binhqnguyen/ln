@@ -53,7 +53,6 @@
 #include "ptr.h"
 #include "random-variable-stream.h"
 #include "random-variable.h"
-#include "realtime-simulator-impl.h"
 #include "ref-count-base.h"
 #include "rng-seed-manager.h"
 #include "rng-stream.h"
@@ -83,6 +82,5 @@
 #include "unix-fd-reader.h"
 #include "unused.h"
 #include "vector.h"
-#include "wall-clock-synchronizer.h"
 #include "watchdog.h"
 #endif
