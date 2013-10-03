@@ -4,11 +4,15 @@ if [ "$1" == "" ]; then
 	exit
 fi
 
-BACKUP_FOLDER="/Users/binh/Documents/ln_result/from_cade/$2"
+CODE_DIR="/var/tmp/ln"
+BACKUP_FOLDER="/var/tmp/ln_result/backup/from_cade/$2"
 
-RESULT="/Users/binh/Documents/ln/results/tcp/data-scripts/emulated"
+RESULT="$CODE_DIR/results/emulated"
 echo "***removing old *.txt files in the result directory...."
-rm /Users/binh/Documents/ln/results/tcp/data-scripts/emulated/*.txt
+rm $RESULT/*.txt
+rm $RESULT/*.dat
+rm $RESULT/*.svg
+
 
 echo "***running emulated UDP ..."
 ./waf --run "scratch/emulated --sim_time=$1 --is_tcp=0" > $RESULT/UDP_LOG 2>&1 
@@ -21,16 +25,16 @@ echo "***making the backingup folder $BACKUP_FOLDER ..."
 mkdir $BACKUP_FOLDER
 
 echo "***plotting ..."
-cd /Users/binh/Documents/ln/results/tcp/
+cd $CODE_DIR/results/
 pwd
 ./dr-emulated.sh
 
 if [ "$2" == "" ]; then 
 	echo "copying results to $BACKUP_FOLDER ..."
 	cp $RESULT/ $BACKUP_FOLDER
-	cp /Users/binh/Documents/ln/scratch/emulated.cc $BACKUP_FOLDER
-	cp /Users/binh/Documents/ln/emulated-in.txt $BACKUP_FOLDER
-	cp /Users/binh/Documents/ln/emulated-out.txt $BACKUP_FOLDER
+	cp $CODE_DIR/scratch/emulated.cc $BACKUP_FOLDER
+	cp $CODE_DIR/emulated-in.txt $BACKUP_FOLDER
+	cp $CODE_DIR/emulated-out.txt $BACKUP_FOLDER
 fi
 
 

@@ -107,7 +107,7 @@ static double last_tx_bytes = 0;
 static double last_rx_bytes = 0;
 
 /* Ascii output files name*/
-static std::string DIR = "/Users/binh/Documents/workspace/lena/results/tcp/data-scripts/emulated/";
+static std::string DIR = "/var/tmp/ln/results/emulated/";
 static std::string cwnd = DIR+"cwnd.txt";
 static std::string rto = DIR+"rto_value_tmp.txt";
 static std::string rtt = DIR+"last_rtt_sample_tmp.txt";
@@ -206,7 +206,7 @@ int main (int argc, char *argv[])
   //  LogComponentEnable("TcpSocketImpl", LOG_LEVEL_ALL);
   //  LogComponentEnable("PacketSink", LOG_LEVEL_ALL);
   //  LogComponentEnable("TcpLargeTransfer", LOG_LEVEL_ALL);
-     // LogComponentEnable("TcpNewReno",level);
+   LogComponentEnable("TcpNewReno",level);
      // LogComponentEnable("TcpReno",level);
   LogComponentEnable("TcpTahoe",level);
   LogComponentEnable("RttEstimator",level);
