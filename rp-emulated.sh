@@ -1,11 +1,13 @@
 #!/bin/bash
 if [ "$1" == "" ]; then
-	echo "Usage ./rp-emulated.sh <sim_time> <backup folder name, no backing-up if empty>"
+	echo "Usage ./rp-emulated.sh  <backup folder name>"
 	exit
 fi
 
+SIM_TIME=1
 CODE_DIR="/var/tmp/ln"
-BACKUP_FOLDER="/var/tmp/ln_result/backup/from_cade/$2"
+BACKUP_FOLDER="/var/tmp/ln_result/backup/from_cade/$1"
+echo "$BACKUP_FOLDER"
 
 RESULT="$CODE_DIR/results/emulated"
 echo "***removing old *.txt files in the result directory...."
@@ -15,11 +17,11 @@ rm $RESULT/*.svg
 
 
 echo "***running emulated UDP ..."
-./waf --run "scratch/emulated --sim_time=$1 --is_tcp=0" > $RESULT/UDP_LOG 2>&1 
+./waf --run "scratch/emulated --sim_time=$SIM_TIME --is_tcp=0" > $RESULT/UDP_LOG 2>&1 
 
 
 echo "***running emulated TCP ..."
-./waf --run "scratch/emulated --sim_time=$1 --is_tcp=1" > $RESULT/TCP_LOG 2>&1 
+./waf --run "scratch/emulated --sim_time=$SIM_TIME --is_tcp=1" > $RESULT/TCP_LOG 2>&1 
 
 echo "***making the backingup folder $BACKUP_FOLDER ..."
 mkdir $BACKUP_FOLDER
@@ -29,13 +31,11 @@ cd $CODE_DIR/results/
 pwd
 ./dr-emulated.sh
 
-if [ "$2" == "" ]; then 
-	echo "copying results to $BACKUP_FOLDER ..."
-	cp $RESULT/ $BACKUP_FOLDER
-	cp $CODE_DIR/scratch/emulated.cc $BACKUP_FOLDER
-	cp $CODE_DIR/emulated-in.txt $BACKUP_FOLDER
-	cp $CODE_DIR/emulated-out.txt $BACKUP_FOLDER
-fi
+echo "copying results to $BACKUP_FOLDER ..."
+cp -r $RESULT/ $BACKUP_FOLDER
+cp $CODE_DIR/scratch/emulated.cc $BACKUP_FOLDER
+cp $CODE_DIR/emulated-in.txt $BACKUP_FOLDER
+cp $CODE_DIR/emulated-out.txt $BACKUP_FOLDER
 
 
 
