@@ -33,6 +33,7 @@
 
 ############# post processing: *_tmp files processing ########
 	./get_queue_time.py
+	./grep_timeout.sh
 
 ######plot and move graph files######
 	gnuplot -e "x1='0';x2='100'" plot.gnu
