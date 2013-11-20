@@ -277,6 +277,7 @@ EpcEnbApplication::RecvFromS1uSocket (Ptr<Socket> socket)
   packet->RemoveHeader (gtpu);
   uint32_t teid = gtpu.GetTeid ();
   std::map<uint32_t, EpsFlowId_t>::iterator it = m_teidRbidMap.find (teid);
+  //NS_LOG_INFO (it->first << "->(rnti=" << it->second.m_rnti << ",bid=" << it->second.m_bid << ",teid=" << teid << ")");
   NS_ASSERT (it != m_teidRbidMap.end ());
 
   // workaround for bug 231 https://www.nsnam.org/bugzilla/show_bug.cgi?id=231

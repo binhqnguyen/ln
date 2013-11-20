@@ -628,6 +628,7 @@ void
 UeManager::SendData (uint8_t bid, Ptr<Packet> p)
 {
   NS_LOG_FUNCTION (this << p << (uint16_t) bid);
+  NS_LOG_INFO("m_state= " << m_state);
    switch (m_state)
     {
     case INITIAL_RANDOM_ACCESS:
